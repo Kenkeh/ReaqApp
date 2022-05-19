@@ -1,0 +1,17 @@
+.darkener{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    background-color: black;
+    -webkit-transition: opacity 0.5s linear;
+    -moz-transition: opacity 0.5s linear;
+    -o-transition: opacity 0.5s linear;
+    transition: opacity 0.5s linear;
+}
+.translucent{
+    opacity: 0%;
+}
+.dark{
+    opacity: 50%;
+}

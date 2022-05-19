@@ -1,0 +1,6 @@
+.landing_area_grid{
+    display: grid;
+    grid-template-rows: 2fr 2fr 2fr;
+    text-align: center;
+    color: white;
+}
