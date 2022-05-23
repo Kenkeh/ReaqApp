@@ -12,8 +12,18 @@ namespace reaquisites.Managers
                 DBProjectService.connString = value;
         }}
         
-        static internal int addNewProject(string accName, Project newProject){
-            return DBProjectService.Add(accName, newProject);
+        static internal KeyValuePair<int,Project> addNewProject(string accName, NewProjectDTO newProject){
+            Project project = new Project();
+            project.Name = newProject.projectName;
+            project.Description = newProject.projectDesc;
+            project.Version = "0";
+            project.ArtefactDefs = new List<ArtefactDefinition>();
+            project.Artefacts = new List<Artefact>();
+            project.IsPublished = project.IsTemplate = false;
+            project.Visualizations = new List<Visualization>();
+            project.HistoryEntries = new List<HistoryEntry>();
+            project.HistoryEntries.Add(HEFactory.createProjectCreationEntry(project));
+            return new KeyValuePair<int, Project>(DBProjectService.Add(accName, project), project);
         }
     }
 

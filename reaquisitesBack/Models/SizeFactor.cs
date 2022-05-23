@@ -1,6 +1,9 @@
 public class SizeFactor {
     public bool Interpolated { get; set; }
+    public AttributeDefinition Definition { get; set; }
     public List<KeyValuePair<string, int>> Values { get; set; }
+    public float Weight { get; set; }
+    public List<HistoryEntry> HistoryEntries { get; set; }
 
     public override bool Equals(Object? obj)
     {

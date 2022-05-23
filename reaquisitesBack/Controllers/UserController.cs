@@ -11,7 +11,8 @@ namespace reaquisites.Controllers
     {
         public UserController(IConfiguration configuration)
         {
-            UsersManager.connString = configuration.GetConnectionString("DefaultConnection");
+            string BBDDstring = configuration.GetConnectionString("DefaultConnection");
+            UsersManager.connString = ProjectManager.connString = BBDDstring;
         }
 
         // GET actions

@@ -31,14 +31,15 @@ export default function App() {
 
   const setUser = (user) =>{
     if (user){
-      Cookies.set('ReaqLoginInfo',JSON.stringify(user));
-      setCurrentUser({
+      var userObject = {
         nick: user.nick,
         account: user.account,
         eMail: user.eMail,
         registerDate: user.registerDate,
         projects: user.projects
-      });
+      }
+      Cookies.set('ReaqLoginInfo',JSON.stringify({user: userObject, loginSession: user.loginSession}));
+      setCurrentUser(userObject);
       setCurrentLogin(user.loginSession);
     }else{
       if (Cookies.get('ReaqLoginInfo')){

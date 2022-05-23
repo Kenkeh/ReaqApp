@@ -65,7 +65,7 @@ export default function FirstLook (props) {
 
     const startNewProject = (event) =>{
         if (newProjectNameError) return;
-        fetch(ServerRouteHTTPS+'user/auth', {
+        fetch(ServerRouteHTTPS+'project/'+props.user.account+'/add', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -77,9 +77,11 @@ export default function FirstLook (props) {
             redirect: 'follow', // manual, *follow, error
             referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
             body: JSON.stringify({
-                project: {name: newProject.name, desc: newProject.description}, 
-                userLogging: props.loginSession}) // body data type must match "Content-Type" header
+                projectName: newProject.name, 
+                projectDesc: newProject.description, 
+                loginSession: props.loginSession}) // body data type must match "Content-Type" header
           }).then(res => res.json()).then( res => {
+
           });
     }
     

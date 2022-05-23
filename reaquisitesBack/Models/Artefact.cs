@@ -1,6 +1,5 @@
 public class Artefact {
     public string Name { get; set; }
-    public string Description { get; set; }
     public ArtefactDefinition Definition { get; set; }
     public List<Attribute> Attributes { get; set; }
     public List<HistoryEntry> HistoryEntries { get; set; }
@@ -28,6 +27,6 @@ public class Artefact {
         
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name,Description,Attributes,Definition);
+        return HashCode.Combine(Name,Attributes,Definition);
     }
 }

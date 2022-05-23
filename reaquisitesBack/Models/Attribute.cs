@@ -1,7 +1,6 @@
 public class Attribute {
     public string Value { get; set;}
     public AttributeDefinition Definition { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 
     public override bool Equals(Object? obj)
     {

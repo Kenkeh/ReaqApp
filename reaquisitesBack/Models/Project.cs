@@ -14,6 +14,7 @@ namespace reaquisites.Models
         public List<RelationshipDefinition> RelationshipDefs { get; set; }
         public List<Relationship> Relationships { get; set; }
         public List<HistoryEntry> HistoryEntries { get; set; }
+        public List<Visualization> Visualizations { get; set; }
 
         public override bool Equals(Object? obj)
         {

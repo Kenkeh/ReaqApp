@@ -1,6 +1,10 @@
 public class ColorFactor {
     public bool Interpolated { get; set; }
+    public AttributeDefinition Definition;
     public List<KeyValuePair<string, System.Drawing.Color>> Values { get; set; }
+    public float Weight { get; set; }
+    public List<HistoryEntry> HistoryEntries { get; set; }
+
     
     public override bool Equals(Object? obj)
     {

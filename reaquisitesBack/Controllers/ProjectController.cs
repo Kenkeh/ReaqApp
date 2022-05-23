@@ -20,19 +20,15 @@ namespace reaquisites.Controllers
         {
             if (!UsersManager.checkSession(accName,newProject.loginSession))
                 return ARFactory.createJSONMessageResult("Login session not found, please log into the application");
-            Project project = new Project();
-            project.Name = newProject.projectName;
-            project.Description = newProject.projectDesc;
-            project.Version = "0";
-            int result = ProjectManager.addNewProject(accName, project);
-            if (result<0){
-                if (result == -1)
+            KeyValuePair<int, Project> result = ProjectManager.addNewProject(accName, newProject);
+            if (result.Key<0){
+                if (result.Key == -1)
                     return ARFactory.createJSONMessageResult("User couldn't be found on database");
                 else
                     return ARFactory.createJSONMessageResult("There was a problem connecting to the database");
 
             }else{
-                return ARFactory.createJSONMessageResult("Project succesfully created");
+                return ARFactory.createJSONProjectResult(result.Value);
             }
         }
         // PUT action
