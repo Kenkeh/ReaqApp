@@ -126,7 +126,7 @@ namespace reaquisites.Managers
         }
 
         public static bool checkSession(string accName, string session){
-            if (loggedHash[session] != null){
+            if (loggedHash.ContainsKey(session)){
                 return loggedHash[session].Account == accName;
             }else{
                 return false;
