@@ -8,45 +8,30 @@ namespace reaquisites.Services.DB
         internal static string connString;
         
         
-        static internal int AddProjectHistoryEntry(int projectID, int elementType, int element, int type, string changes, DateTime date){
-
-            using (NpgsqlConnection con = new NpgsqlConnection(connString))
-            {
-                string query = "INSERT INTO reaquisites.\"HistoryEntries\" (element_type, type, element, changes, project, date) "+
-                "VALUES ( "+elementType+", "+type+", "+element+", '"+changes+"', "+projectID+", '"+date+"')";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
-                {
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            return 0;
-        }
+        
 
         static internal List<SimpleProjectDTO> GetUserProjectsSimpleDTO(int userID){
             List<SimpleProjectDTO> userProjects = new List<SimpleProjectDTO>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id, name, description, version, published FROM reaquisites.\"Projects\" where user_id = "+userID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id, name, description, version, published FROM reaquisites.\"Projects\" where user_id = "+userID+" and template = false";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return userProjects;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
                             SimpleProjectDTO project = new SimpleProjectDTO();
-                            project.Name = projectsReader[1].ToString();
-                            project.Description = projectsReader[2].ToString();
-                            project.Version = projectsReader[3].ToString();
-                            project.IsPublished = (bool) projectsReader[4];
-                            project.LastModified = GetLastModificationDate((int)projectsReader[0]);
+                            project.Name = reader[1].ToString();
+                            project.Description = reader[2].ToString();
+                            project.Version = reader[3].ToString();
+                            project.IsPublished = (bool) reader[4];
+                            project.LastModified = GetLastModificationDate((int)reader[0]);
                             userProjects.Add(project);
                         }
                     }
@@ -83,19 +68,19 @@ namespace reaquisites.Services.DB
             int projectID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"Projects\" where user_id = "+userID+" AND name = '"+projectName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"Projects\" where user_id = "+userID+" AND name = '"+projectName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return projectID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            projectID = (int)projectsReader[0];
+                            projectID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -108,19 +93,19 @@ namespace reaquisites.Services.DB
             int artDefID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"ArtefactDefs\" where project = "+projectID+" AND name = '"+artefactDefName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"ArtefactDefs\" where project = "+projectID+" AND name = '"+artefactDefName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artDefID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artDefID = (int)projectsReader[0];
+                            artDefID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -132,19 +117,19 @@ namespace reaquisites.Services.DB
             int artDefID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"RelationshipDefs\" where project = "+projectID+" AND name = '"+relationshipDefName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"RelationshipDefs\" where project = "+projectID+" AND name = '"+relationshipDefName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artDefID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artDefID = (int)projectsReader[0];
+                            artDefID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -156,19 +141,19 @@ namespace reaquisites.Services.DB
             int artAttribDefID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"ArtefactAttributeDefs\" where artefactdef = "+artDefID+" AND name = '"+artAttribName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"ArtefactAttributeDefs\" where artefactdef = "+artDefID+" AND name = '"+artAttribName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artAttribDefID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artAttribDefID = (int)projectsReader[0];
+                            artAttribDefID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -180,19 +165,19 @@ namespace reaquisites.Services.DB
             int relAttribDefID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"RelationshipAttributeDefs\" where relationshipdef = "+relDefID+" AND name = '"+artAttribName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"RelationshipAttributeDefs\" where relationshipdef = "+relDefID+" AND name = '"+artAttribName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return relAttribDefID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            relAttribDefID = (int)projectsReader[0];
+                            relAttribDefID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -205,19 +190,19 @@ namespace reaquisites.Services.DB
             int artID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID+" AND name = '"+artName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID+" AND name = '"+artName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artID = (int)projectsReader[0];
+                            artID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -229,19 +214,19 @@ namespace reaquisites.Services.DB
             int artAttribID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"ArtefactAttributes\" where artefact = "+artID+" AND artefactattributedef = "+artAttribDefID+"";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"ArtefactAttributes\" where artefact = "+artID+" AND artefactattributedef = "+artAttribDefID+"";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artAttribID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artAttribID = (int)projectsReader[0];
+                            artAttribID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -253,19 +238,19 @@ namespace reaquisites.Services.DB
             int relID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID+" AND parent = "+parentID+" AND child = "+childID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID+" AND parent = "+parentID+" AND child = "+childID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return relID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            relID = (int)projectsReader[0];
+                            relID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -278,19 +263,19 @@ namespace reaquisites.Services.DB
             int visualizationID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID+" AND name = '"+visualizationName+"'";
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID+" AND name = '"+visualizationName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return visualizationID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            visualizationID = (int)projectsReader[0];
+                            visualizationID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -302,19 +287,19 @@ namespace reaquisites.Services.DB
             int artColorFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"ArtefactColorFactors\" where artefactattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"ArtefactColorFactors\" where artefactattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artColorFactorID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artColorFactorID = (int)projectsReader[0];
+                            artColorFactorID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -326,19 +311,19 @@ namespace reaquisites.Services.DB
             int relColorFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"RelationshipColorFactors\" where relationshipattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"RelationshipColorFactors\" where relationshipattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return relColorFactorID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            relColorFactorID = (int)projectsReader[0];
+                            relColorFactorID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -350,19 +335,19 @@ namespace reaquisites.Services.DB
             int artSizeFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"ArtefactSizeFactors\" where artefactattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"ArtefactSizeFactors\" where artefactattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return artSizeFactorID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            artSizeFactorID = (int)projectsReader[0];
+                            artSizeFactorID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -374,19 +359,19 @@ namespace reaquisites.Services.DB
             int relSizeFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string projectsQuery = "SELECT id FROM reaquisites.\"RelationshipSizeFactors\" where relationshipattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
-                using (NpgsqlCommand projectsCmd = new NpgsqlCommand(projectsQuery))
+                string query = "SELECT id FROM reaquisites.\"RelationshipSizeFactors\" where relationshipattributedef = "+attribDefID+" AND visualizationtemplate = "+visualizationID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
-                    projectsCmd.Connection = con;
+                    cmd.Connection = con;
                     con.Open();
-                    using (NpgsqlDataReader projectsReader = projectsCmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if (!projectsReader.HasRows){
+                        if (!reader.HasRows){
                             return relSizeFactorID;
                         }
-                        while (projectsReader.Read())
+                        while (reader.Read())
                         {
-                            relSizeFactorID = (int)projectsReader[0];
+                            relSizeFactorID = (int)reader[0];
                         }
                     }
                     con.Close();
@@ -396,11 +381,11 @@ namespace reaquisites.Services.DB
         }
 
         //ADD ELEMENTS
-        static internal void AddProject(int userID, string projectName, string projectDescription, bool projectIsPublished, bool projectIsTemplate){
+        static internal void AddProject(int userID, string projectName, string projectDescription, bool projectIsPublished, bool projectIsTemplate, string version){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"Projects\" (name, description, published, template, user_id) "+
-                "VALUES ('"+projectName+"','"+projectDescription+"',"+projectIsPublished+", "+projectIsTemplate+", "+userID+")";
+                string query = "INSERT INTO reaquisites.\"Projects\" (name, description, published, template, version, user_id) "+
+                "VALUES ('"+projectName+"','"+projectDescription+"',"+projectIsPublished+", "+projectIsTemplate+", "+version+", "+userID+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -648,5 +633,563 @@ namespace reaquisites.Services.DB
                 }
             }
         }
+        static internal void AddProjectHistoryEntry(int projectID, int elementType, int element, int type, string changes, DateTime date){
+
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "INSERT INTO reaquisites.\"HistoryEntries\" (element_type, type, element, changes, project, date) "+
+                "VALUES ( "+elementType+", "+type+", "+element+", '"+changes+"', "+projectID+", '"+date+"')";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+
+        //ELEMENT GETTERS
+        static internal List<HistoryEntry> GetHistoryEntriesForElement(int projectID, int elementType, int elementID){
+            List<HistoryEntry> HEs = new List<HistoryEntry>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT type, changes, date FROM reaquisites.\"HistoryEntries\" where project = "+projectID+" AND element_type = "+elementType+" and element = "+elementID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return HEs;
+                        }
+                        while (reader.Read())
+                        {
+                            HistoryEntry he = new HistoryEntry();
+                            he.Type = (int)reader[0];
+                            he.Changes = reader[1].ToString();
+                            he.ChangeDate = DateTime.Parse(reader[2].ToString());
+                            HEs.Add(he);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return HEs;
+        }
+        static internal (int, Project) GetUserProject(int userID, string projectName){
+            (int, Project) userProject = (-1,new Project());
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description, published, version FROM reaquisites.\"Projects\" where user_id = "+userID+" AND name = '"+projectName+"'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return userProject;
+                        }
+                        while (reader.Read())
+                        {
+                            userProject.Item1 = (int)reader[0];
+                            userProject.Item2.Name = reader[1].ToString();
+                            userProject.Item2.Description = reader[2].ToString();
+                            userProject.Item2.IsPublished = (bool)reader[3];
+                            userProject.Item2.Version = reader[4].ToString();
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return userProject;
+        }
+        static internal List<(int, ArtefactDefinition)> GetProjectArtefactDefs(int projectID){
+            List<(int, ArtefactDefinition)> projectArtDefs = new List<(int, ArtefactDefinition)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description, shape FROM reaquisites.\"ArtefactDefs\" where project = "+projectID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectArtDefs;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            ArtefactDefinition artDef = new ArtefactDefinition();
+                            artDef.Name = reader[1].ToString();
+                            artDef.Description = reader[2].ToString();
+                            artDef.Shape = (int)reader[3];
+                            projectArtDefs.Add((id, artDef));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectArtDefs;
+        }
+        static internal Dictionary<int, AttributeDefinition> GetArtefactDefAttributeDefs(int artDefID){
+            Dictionary<int, AttributeDefinition> projectArtAttribDefs = new Dictionary<int, AttributeDefinition>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description, values FROM reaquisites.\"ArtefactAttributeDefs\" where artefactdef = "+artDefID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectArtAttribDefs;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            AttributeDefinition artAttribDef = new AttributeDefinition();
+                            artAttribDef.Name = reader[1].ToString();
+                            artAttribDef.Description = reader[2].ToString();
+                            artAttribDef.Values = reader[3].ToString();
+                            projectArtAttribDefs.Add(id, artAttribDef);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectArtAttribDefs;
+        }
+        static internal List<(int, RelationshipDefinition)> GetProjectRelationshipDefs(int projectID){
+            List<(int, RelationshipDefinition)> projectRelDefs = new List<(int, RelationshipDefinition)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description, shape FROM reaquisites.\"RelationshipDefs\" where project = "+projectID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectRelDefs;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            RelationshipDefinition artDef = new RelationshipDefinition();
+                            artDef.Name = reader[1].ToString();
+                            artDef.Description = reader[2].ToString();
+                            artDef.Shape = (int)reader[3];
+                            projectRelDefs.Add((id, artDef));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectRelDefs;
+        }
+        static internal Dictionary<int, AttributeDefinition> GetRelationshipDefAttributeDefs(int relDefID){
+            Dictionary<int, AttributeDefinition> projectRelAttribDefs = new Dictionary<int, AttributeDefinition>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description, values FROM reaquisites.\"RelationshipAttributeDefs\" where relationshipdef = "+relDefID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectRelAttribDefs;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            AttributeDefinition artAttribDef = new AttributeDefinition();
+                            artAttribDef.Name = reader[1].ToString();
+                            artAttribDef.Description = reader[2].ToString();
+                            artAttribDef.Values = reader[3].ToString();
+                            projectRelAttribDefs.Add(id, artAttribDef);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectRelAttribDefs;
+        }
+        static internal List<(int, Artefact)> GetArtefactsForDefinition(int artDefID){
+            List<(int, Artefact)> projectArtefacts = new List<(int, Artefact)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectArtefacts;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            Artefact artefact = new Artefact();
+                            artefact.Name = reader[1].ToString();
+                            projectArtefacts.Add((id, artefact));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectArtefacts;
+        }
+        static internal List<(Attribute, int)> GetArtefactAttributes(int artefactID){
+            List<(Attribute, int)> artefactAttribs = new List<(Attribute, int)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT artefactattributedef, value FROM reaquisites.\"ArtefactAttributes\" where artefact = "+artefactID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return artefactAttribs;
+                        }
+                        while (reader.Read())
+                        {
+                            int attribDefID = (int)reader[0];
+                            Attribute artefact = new Attribute();
+                            artefact.Value = reader[1].ToString();
+                            artefactAttribs.Add((artefact,attribDefID));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return artefactAttribs;
+        }
+        static internal List<(int, (int,int))> GetRelationshipsForDefinition(int relDefID){
+            List<(int, (int,int))> relationshipsForDef = new List<(int, (int,int))>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return relationshipsForDef;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            int parentID = (int)reader[1];
+                            int childID = (int)reader[2];
+                            relationshipsForDef.Add((id,(parentID,childID)));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return relationshipsForDef;
+        }
+        static internal List<(Attribute, int)> GetRelationshipAttributes(int relationshipID){
+            List<(Attribute, int)> artefactAttribs = new List<(Attribute, int)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT relationshipattributedef, value FROM reaquisites.\"RelationshipAttributes\" where relationship = "+relationshipID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return artefactAttribs;
+                        }
+                        while (reader.Read())
+                        {
+                            int attribDefID = (int)reader[0];
+                            Attribute artefact = new Attribute();
+                            artefact.Value = reader[1].ToString();
+                            artefactAttribs.Add((artefact,attribDefID));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return artefactAttribs;
+        }
+        static internal List<(int, Visualization)> GetProjectVisualizations(int projectID){
+            List<(int, Visualization)> projectVisuals = new List<(int, Visualization)>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, name, description FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectVisuals;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            Visualization visual = new Visualization();
+                            visual.Name = reader[1].ToString();
+                            visual.Description = reader[2].ToString();
+                            projectVisuals.Add((id, visual));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectVisuals;
+        }
+        static internal List<(int, (ColorFactor,int))> GetArtColorFactorsForVisual(int visualID){
+            List<(int, (ColorFactor,int))> visualColorFactors = new List<(int, (ColorFactor,int))>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, interpolate, weight, artefactattributedef FROM reaquisites.\"ArtefactColorFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return visualColorFactors;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            ColorFactor colorFactor = new ColorFactor();
+                            colorFactor.Interpolated = (bool)reader[1];
+                            colorFactor.Weight = (float)reader[2];
+                            int attribID = (int)reader[3];
+                            visualColorFactors.Add((id, (colorFactor,attribID)));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return visualColorFactors;
+        }
+        static internal Dictionary<string, System.Drawing.Color> GetArtColorFactorValues(int colorFactorID){
+            Dictionary<string, System.Drawing.Color> colorFactorValues = new Dictionary<string, System.Drawing.Color>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT defvalue, r, g, b, a FROM reaquisites.\"ArtefactColorFactorValues\" where artefactcolorfactor = "+colorFactorID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return colorFactorValues;
+                        }
+                        while (reader.Read())
+                        {
+                            string defvalue = reader[0].ToString();
+                            int r = (int)reader[1];
+                            int g = (int)reader[2];
+                            int b = (int)reader[3];
+                            int a = (int)reader[4];
+
+                            colorFactorValues.Add(defvalue, System.Drawing.Color.FromArgb(a,r,g,b));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return colorFactorValues;
+        }
+        static internal List<(int, (SizeFactor,int))> GetArtSizeFactorsForVisual(int visualID){
+            List<(int, (SizeFactor,int))> visualSizeFactors = new List<(int, (SizeFactor,int))>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, interpolate, weight, artefactattributedef FROM reaquisites.\"ArtefactSizeFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return visualSizeFactors;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            SizeFactor sizeFactor = new SizeFactor();
+                            sizeFactor.Interpolated = (bool)reader[1];
+                            sizeFactor.Weight = (float)reader[2];
+                            int attribID = (int)reader[3];
+                            visualSizeFactors.Add((id, (sizeFactor,attribID)));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return visualSizeFactors;
+        }
+        static internal Dictionary<string, int> GetArtSizeFactorValues(int sizeFactorID){
+            Dictionary<string, int> sizeFactorValues = new Dictionary<string, int>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT defvalue, value FROM reaquisites.\"ArtefactSizeFactorValues\" where artefactsizefactor = "+sizeFactorID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return sizeFactorValues;
+                        }
+                        while (reader.Read())
+                        {
+                            string defvalue = reader[0].ToString();
+                            int value = (int)reader[1];
+
+                            sizeFactorValues.Add(defvalue, value);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return sizeFactorValues;
+        }
+        static internal List<(int, (ColorFactor,int))> GetRelColorFactorsForVisual(int visualID){
+            List<(int, (ColorFactor,int))> visualColorFactors = new List<(int, (ColorFactor,int))>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, interpolate, weight, relationshipattributedef FROM reaquisites.\"RelationshipColorFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return visualColorFactors;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            ColorFactor colorFactor = new ColorFactor();
+                            colorFactor.Interpolated = (bool)reader[1];
+                            colorFactor.Weight = (float)reader[2];
+                            int attribID = (int)reader[3];
+                            visualColorFactors.Add((id, (colorFactor,attribID)));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return visualColorFactors;
+        }
+        static internal Dictionary<string, System.Drawing.Color> GetRelColorFactorValues(int colorFactorID){
+            Dictionary<string, System.Drawing.Color> colorFactorValues = new Dictionary<string, System.Drawing.Color>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT defvalue, r, g, b, a FROM reaquisites.\"RelationshipColorFactorValues\" where relationshipcolorfactor = "+colorFactorID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return colorFactorValues;
+                        }
+                        while (reader.Read())
+                        {
+                            string defvalue = reader[0].ToString();
+                            int r = (int)reader[1];
+                            int g = (int)reader[2];
+                            int b = (int)reader[3];
+                            int a = (int)reader[4];
+
+                            colorFactorValues.Add(defvalue, System.Drawing.Color.FromArgb(a,r,g,b));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return colorFactorValues;
+        }
+        static internal List<(int, (SizeFactor,int))> GetRelSizeFactorsForVisual(int visualID){
+            List<(int, (SizeFactor,int))> visualSizeFactors = new List<(int, (SizeFactor,int))>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id, interpolate, weight, artefactattributedef FROM reaquisites.\"RelationshipSizeFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return visualSizeFactors;
+                        }
+                        while (reader.Read())
+                        {
+                            int id = (int)reader[0];
+                            SizeFactor sizeFactor = new SizeFactor();
+                            sizeFactor.Interpolated = (bool)reader[1];
+                            sizeFactor.Weight = (float)reader[2];
+                            int attribID = (int)reader[3];
+                            visualSizeFactors.Add((id, (sizeFactor,attribID)));
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return visualSizeFactors;
+        }
+        static internal Dictionary<string, int> GetRelSizeFactorValues(int sizeFactorID){
+            Dictionary<string, int> sizeFactorValues = new Dictionary<string, int>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT defvalue, value FROM reaquisites.\"RelationshipSizeFactorValues\" where relationshipsizefactor = "+sizeFactorID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return sizeFactorValues;
+                        }
+                        while (reader.Read())
+                        {
+                            string defvalue = reader[0].ToString();
+                            int value = (int)reader[1];
+
+                            sizeFactorValues.Add(defvalue, value);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return sizeFactorValues;
+        }
+
+
+
     }
 }

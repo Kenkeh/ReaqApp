@@ -4,7 +4,6 @@ public class AttributeDefinition{
     public int Type { get; set; }
     public string Description { get; set; }
     public string Values { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 
     public override bool Equals(Object? obj)
     {

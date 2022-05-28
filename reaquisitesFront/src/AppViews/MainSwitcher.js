@@ -13,7 +13,7 @@ export default function MainSwitcher(props) {
     <Routes>
       {<Route path="/" element={
         props.user ? 
-        <FirstLook user={props.user} loginSession={props.loginSession}/> :
+        <FirstLook user={props.user} loginSession={props.loginSession} setProject={props.setProject}/> :
         <LandingArea/>
       }
       />}

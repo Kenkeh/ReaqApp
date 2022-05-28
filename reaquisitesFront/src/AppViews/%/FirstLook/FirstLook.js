@@ -5,6 +5,7 @@ import { useState } from "react";
 import { overTheme } from '../../../overTheme';
 import './FirstLook.css';
 import { ServerRouteHTTPS } from '../../../AppPaths';
+import { Navigate } from 'react-router-dom';
 
 
 export default function FirstLook (props) {
@@ -17,6 +18,7 @@ export default function FirstLook (props) {
     });
     const [newProjectNameError, setNewProjectNameError] = useState('Project name cannot be empty');
     const [showRecentProjects, setShowRecentProjects] = useState(false);
+    const [goToProject, setGoToProject] = useState(null);
 
 
     const toogleDropdown = (dpn) => (event) =>{
@@ -79,14 +81,19 @@ export default function FirstLook (props) {
             body: JSON.stringify({
                 projectName: newProject.name, 
                 projectDesc: newProject.description, 
-                loginSession: props.loginSession}) // body data type must match "Content-Type" header
-          }).then(res => res.json()).then( res => {
+                loginSession: props.loginSession
+            }) // body data type must match "Content-Type" header
 
-          });
+        }).then( res => res.json().then( res =>
+            {
+                props.setProject(res);
+                const projectURL = res.name.replaceAll(' ','-');
+                setGoToProject('/editproject/'+projectURL);
+            }).catch( err => console.log(err))
+        ).catch( err => console.log(err));
     }
     
 
-    const nothing = () => {return;}
     return (
         <div className="first_look_grid">
             <Button size="large" color='primary' variant={showNewProject ? 'contained' : 'outlined'} onClick={toogleDropdown(0)} 
@@ -146,6 +153,7 @@ export default function FirstLook (props) {
                 style={{transition: 'transform 0.3s', MozTransition: 'transform 0.3s', OTransition: 'transform 0.3s', WebkitTransition: 'transform 0.3s'}}/>
                 Recent Projects
             </Button>
+            {goToProject ? <Navigate to={goToProject}/> : null }
         </div>
     );
 }

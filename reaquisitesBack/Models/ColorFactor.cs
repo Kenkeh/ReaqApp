@@ -1,9 +1,8 @@
 public class ColorFactor {
     public bool Interpolated { get; set; }
     public AttributeDefinition Definition;
-    public List<KeyValuePair<string, System.Drawing.Color>> Values { get; set; }
+    public Dictionary<string, System.Drawing.Color> Values { get; set; }
     public float Weight { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 
     
     public override bool Equals(Object? obj)
@@ -25,8 +24,8 @@ public class ColorFactor {
     public override int GetHashCode()
     {
         int hash = HashCode.Combine(Interpolated);
-        for (int i=0; i<Values.Count;i++)
-            hash = HashCode.Combine(hash,Values[i]);
+        foreach (string id in Values.Keys)
+            hash = HashCode.Combine(hash,Values[id]);
         return hash;
     }
 }
