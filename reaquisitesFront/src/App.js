@@ -56,7 +56,12 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider theme={overTheme}>
         <CssBaseline />
-        <AppTopBar setUser={setUser} user={currentUser}/>
+        <AppTopBar 
+        setUser={setUser} 
+        user={currentUser} 
+        project={currentProject} 
+        setProject={setCurrentProject} 
+        login={currentLogin}/>
         <AppBG>
           <MainSwitcher 
           user={currentUser} 

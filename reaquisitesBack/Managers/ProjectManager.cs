@@ -174,6 +174,12 @@ namespace reaquisites.Managers
             if (userProject.Item1<0) return (-2, null);
             int projectID = userProject.Item1;
             Project theProject = userProject.Item2;
+            theProject.ArtefactDefs = new List<ArtefactDefinition>();
+            theProject.Artefacts = new List<Artefact>();
+            theProject.RelationshipDefs = new List<RelationshipDefinition>();
+            theProject.Relationships = new List<Relationship>();
+            theProject.Visualizations = new List<Visualization>();
+
             theProject.HistoryEntries = DBProjectService.GetHistoryEntriesForElement(projectID,0,projectID);
 
             Dictionary<int, Artefact> projectArtefacts = new Dictionary<int, Artefact>();
@@ -238,6 +244,10 @@ namespace reaquisites.Managers
             foreach ((int, Visualization) vis in projectVisualizations){
                 int visualID = vis.Item1;
                 Visualization visual = vis.Item2;
+                visual.ArtefactColorFactors = new List<ColorFactor>();
+                visual.ArtefactSizeFactors = new List<SizeFactor>();
+                visual.RelationshipColorFactors = new List<ColorFactor>();
+                visual.RelationshipSizeFactors = new List<SizeFactor>();
 
 
                 List<(int, (ColorFactor,int))> artColorFactors = DBProjectService.GetArtColorFactorsForVisual(visualID);
@@ -248,6 +258,8 @@ namespace reaquisites.Managers
 
                     colorFactor.Definition = projectArtAttributeDefs[attribDefID];
                     colorFactor.Values = DBProjectService.GetArtColorFactorValues(colorFactorID);
+
+                    visual.ArtefactColorFactors.Add(colorFactor);
                 }
 
                 List<(int, (SizeFactor,int))> artSizeFactors = DBProjectService.GetArtSizeFactorsForVisual(visualID);
@@ -258,6 +270,8 @@ namespace reaquisites.Managers
 
                     sizeFactor.Definition = projectArtAttributeDefs[attribDefID];
                     sizeFactor.Values = DBProjectService.GetArtSizeFactorValues(colorFactorID);
+
+                    visual.ArtefactSizeFactors.Add(sizeFactor);
                 }
 
                 
@@ -269,6 +283,8 @@ namespace reaquisites.Managers
 
                     colorFactor.Definition = projectRelAttributeDefs[attribDefID];
                     colorFactor.Values = DBProjectService.GetRelColorFactorValues(colorFactorID);
+
+                    visual.RelationshipColorFactors.Add(colorFactor);
                 }
 
                 List<(int, (SizeFactor,int))> relSizeFactors = DBProjectService.GetRelSizeFactorsForVisual(visualID);
@@ -279,7 +295,11 @@ namespace reaquisites.Managers
 
                     sizeFactor.Definition = projectRelAttributeDefs[attribDefID];
                     sizeFactor.Values = DBProjectService.GetRelSizeFactorValues(colorFactorID);
+
+                    visual.RelationshipSizeFactors.Add(sizeFactor);
                 }
+
+                theProject.Visualizations.Add(visual);
             }
             
 

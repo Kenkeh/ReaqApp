@@ -5,7 +5,8 @@ import Spinner from '../../MiniTools/Spinner/Spinner';
 import  {overTheme} from '../../overTheme';
 import { Button, TextField, Chip } from '@mui/material';
 import logo from '../../Elements/images/logo192.png';
-import {ServerRouteHTTPS, ServerRouteHTTP, AppName} from '../../AppPaths';
+import { userAuth } from './../../AppAPI';
+import { AppName } from '../../AppPaths';
 
 
 
@@ -68,28 +69,11 @@ export default function Login(props) {
     setLogginPhase(1);
     setLogginPhaseText('Checking credentials...');
 
-    fetch(ServerRouteHTTPS+'user/auth', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify({logName: logginName, logPass: password}) // body data type must match "Content-Type" header
-    }).then(res => res.json()).then( res => {
-      if (res.error!=undefined){
+    userAuth({logName: logginName, logPass: password}).then( res => {
+      if (res.error){
         setLogginPhase(0);
-        if (res.error>0){
-          setPasswordError(true);
-          setPasswordErrorText('Provided password not matching');
-        }else{
-          setLogginNameError(true);
-          setLogginNameErrorText('Account or user name not found.');
-        }
+        setPasswordError(true);
+        setLogginNameErrorText(res.message);
       }else{
         setLogginPhase(2);
         props.setUser(res);

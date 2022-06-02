@@ -47,7 +47,15 @@ namespace reaquisites.Controllers
             if (loggedUser.Key!=null){
                 return loggedUser.Key;
             }else{
-                return ARFactory.createJSONErrorResult(loggedUser.Value);
+                switch (loggedUser.Value){
+                    case 0:
+                        return ARFactory.createJSONErrorResult(loggedUser.Value, "Provided password not matching");
+                    case 1: 
+                        return ARFactory.createJSONErrorResult(loggedUser.Value, "Provided password not matching");
+                    default:
+                        return ARFactory.createJSONErrorResult(loggedUser.Value, "UNKOWN SERVER ERROR");
+
+                }
             }
         }
 

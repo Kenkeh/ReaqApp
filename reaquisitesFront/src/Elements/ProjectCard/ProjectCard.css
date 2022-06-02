@@ -1,0 +1,82 @@
+.projectCardContainer{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 59, 107, 0.2);
+	border: 2px solid white;
+	border-radius: 1px;
+	transition: background-color 1s ease;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 20px 10px 40px 20px 30px;
+}
+
+.projectCardContainer:hover{
+	background-color: rgba(0, 59, 107, 1);
+}
+
+.projectCardTitle{
+	text-align: center;
+	padding: 4px 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	grid-row: 1;
+}
+.projectCardVersion{
+	text-align: center;
+	padding: 4px 4px;
+	grid-column: 1;
+	grid-row: 2;
+}
+.projectCardPublished{
+	text-align: center;
+	padding: 4px 4px;
+	grid-column: 2;
+	grid-row: 2;
+}
+.projectCardDescription{
+	text-align: center;
+	padding: 4px 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	grid-row: 3;
+}
+.projectCardLastModified{
+	padding: 4px 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	grid-row: 4;
+}
+.projectCardVisualizeButton{
+	padding: 4px 4px;
+	grid-column: 1;
+	grid-row: 5;
+}
+.projectCardEditButton{
+	padding: 4px 4px;
+	grid-column: 2;
+	grid-row: 5;
+}
+
+.titleSmall{
+	font-size: 12px;
+	font-weight: bold;
+}
+.textSmall{
+	font-size: 9px;
+}
+.descSmall{
+	font-style: italic;
+	font-size: 9px;
+}
+.dateSmall{
+	font-size: 10px;
+}

@@ -1,15 +1,17 @@
-import { Button, TextField, Select, MenuItem } from '@mui/material';
+import { Button, TextField, Select, MenuItem, useAutocomplete } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowDropdownIcon from '@mui/icons-material/ArrowDropDown'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { overTheme } from '../../../overTheme';
 import './FirstLook.css';
 import { ServerRouteHTTPS } from '../../../AppPaths';
 import { Navigate } from 'react-router-dom';
+import ProjectCard from '../../../Elements/ProjectCard/ProjectCard';
 
 
 export default function FirstLook (props) {
 
+    const maxRecentProjectsSize = 5;
     const [showNewProject, setShowNewProject] = useState(false);
     const [newProject, setNewProject] = useState({
         name: '',
@@ -18,8 +20,24 @@ export default function FirstLook (props) {
     });
     const [newProjectNameError, setNewProjectNameError] = useState('Project name cannot be empty');
     const [showRecentProjects, setShowRecentProjects] = useState(false);
-    const [goToProject, setGoToProject] = useState(null);
+    const [recentProjects, setRecentProjects] = useState([]);
+    const [showFavoriteProjects, setShowFavoriteProjects] = useState(false);
 
+
+    useEffect(()=>{
+        var recProjects = props.user.projects;
+        recProjects.sort((a,b)=>{
+            if (a.lastModified > b.lastModified){
+                return 1;
+            }else if (a.lastModified < b.lastModified){
+                return -11;
+            }else{
+                return 0;
+            }
+        });
+        recProjects = recProjects.slice(0,(Math.min(maxRecentProjectsSize,recProjects.length)));
+        setRecentProjects(recProjects);
+    },[]);
 
     const toogleDropdown = (dpn) => (event) =>{
         switch(dpn){
@@ -29,15 +47,21 @@ export default function FirstLook (props) {
             case 1:
                 setShowRecentProjects(prev => !prev);
                 break;
+            case 2:
+                setShowFavoriteProjects(prev => !prev);
+                break;
             default:
                 break;
         }
     }
 
+
     const changeNewProjectName = (event) =>{
         const newName = event.target.value;
         if (newName==''){
             setNewProjectNameError('Project name cannot be empty');
+        }else if(newName.includes('_')){
+            setNewProjectNameError('Project name cannot contain \'_\' char');
         }else{
             var found = false;
             for (var i=0; i<props.user.projects.length; i++){
@@ -86,11 +110,17 @@ export default function FirstLook (props) {
 
         }).then( res => res.json().then( res =>
             {
-                props.setProject(res);
-                const projectURL = res.name.replaceAll(' ','-');
-                setGoToProject('/editproject/'+projectURL);
-            }).catch( err => console.log(err))
-        ).catch( err => console.log(err));
+                if (res.error!==undefined){
+                    console.log("Server error: "+res.message);
+                }else{
+                    props.setProject(res);
+                    const projectURL = res.name.replaceAll(' ','_');
+                    document.location.pathname = '/edit/'+projectURL;
+                }
+            })
+        ).catch(err=>{
+            console.log("Error on request: "+err);
+        });
     }
     
 
@@ -148,12 +178,27 @@ export default function FirstLook (props) {
                 </div>
             </div>
             <Button size="large" color='primary' variant={showRecentProjects ? 'contained' : 'outlined'} onClick={toogleDropdown(1)}
-            style={{width: '100%', height: '100px', color: 'white', margin: '5px'}}>
+            style={{width: '100%', height: '100px', color: 'white', margin: '5px 5px 0px'}}>
                 <ArrowDropdownIcon className={ showRecentProjects ? 'dpa_open' : 'dpa_closed'}
                 style={{transition: 'transform 0.3s', MozTransition: 'transform 0.3s', OTransition: 'transform 0.3s', WebkitTransition: 'transform 0.3s'}}/>
                 Recent Projects
             </Button>
-            {goToProject ? <Navigate to={goToProject}/> : null }
+            <div className={showRecentProjects ? 'fl_new_project_container fl_npc_open' : 'fl_new_project_container fl_npc_closed'} 
+            style={{backgroundColor: overTheme.palette.primary.main}}>
+                <div className='fl_recent_projects_flex'>
+                    {recentProjects.map((project, index)=>{
+                        return  <div className='fl_rp_card_container' style={{gridColumn: index+1}}>
+                                    <ProjectCard textSize={0} project={project}/>
+                                </div>
+                    })}
+                </div>
+            </div>
+            <Button size="large" color='primary' variant={showFavoriteProjects ? 'contained' : 'outlined'} onClick={toogleDropdown(2)}
+            style={{width: '100%', height: '100px', color: 'white', margin: '5px 5px 0px'}}>
+                <ArrowDropdownIcon className={ showFavoriteProjects ? 'dpa_open' : 'dpa_closed'}
+                style={{transition: 'transform 0.3s', MozTransition: 'transform 0.3s', OTransition: 'transform 0.3s', WebkitTransition: 'transform 0.3s'}}/>
+                Favorite Projects
+            </Button>
         </div>
     );
 }

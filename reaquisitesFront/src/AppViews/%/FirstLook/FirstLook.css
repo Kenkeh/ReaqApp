@@ -67,3 +67,15 @@
     display: grid;
     grid-template-rows: 1fr 1fr;
 }
+.fl_recent_projects_flex{
+    display: grid;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+}
+
+.fl_rp_card_container{
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+}

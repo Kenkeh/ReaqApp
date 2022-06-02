@@ -1,14 +1,18 @@
 import './UserProfile.css';
 import React from 'react';
 import Centerer from '../../MiniTools/Centerer/Centerer';
-import ReaqLogo from '../../Elements/ReaqLogo/ReaqLogo';
-import { Button } from '@mui/material'
+import { Button } from '@mui/material';
 import  {overTheme} from '../../overTheme';
 
 
 
 export default function UserProfile(props){
 
+
+  const logOut = () =>{
+    props.logOutUser();
+    document.location.pathname = "/";
+  }
 
   return(
     <div className={props.className}>
@@ -28,7 +32,7 @@ export default function UserProfile(props){
               <span><b>Register Date:</b> {(new Date(props.user.registerDate)).toLocaleString()}</span>
             </Centerer>
             <Centerer>
-              <Button variant="contained" onClick={props.logOutUser}>
+              <Button variant="contained" onClick={logOut}>
                 LOG OUT
               </Button>
             </Centerer>
