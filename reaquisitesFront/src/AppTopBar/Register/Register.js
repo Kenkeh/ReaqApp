@@ -251,6 +251,7 @@ export default function Register(props) {
                 onChange={handleInfoChange('accname')}
                 error={accNameError}
                 helperText= {accNameErrorText}
+                style={{width: '400px'}}
               />
             </Centerer>
           </div>
@@ -264,6 +265,7 @@ export default function Register(props) {
                 onChange={handleInfoChange('nickname')}
                 error={userNameError}
                 helperText= {userNameErrorText}
+                style={{width: '400px'}}
               />
             </Centerer>
           </div>
@@ -276,6 +278,7 @@ export default function Register(props) {
                   onChange={handleInfoChange('password')}
                   error={passwordError}
                   helperText= {passwordErrorText}
+                  style={{width: '400px'}}
                 />
             </Centerer>
           </div>
@@ -289,6 +292,7 @@ export default function Register(props) {
               value={eMail}
               helperText={eMailErrorText}
               error={eMailError}
+              style={{width: '400px'}}
               />
             </Centerer>
           </div>
@@ -301,7 +305,7 @@ export default function Register(props) {
 
           <div className="register_form_field_container">
             <Centerer>
-              <Button variant="contained" disableElevation onClick={handleRegister}>
+              <Button variant="contained" disableElevation onClick={handleRegister} style={{width: '300px'}}>
                 REGISTER
               </Button>
             </Centerer>

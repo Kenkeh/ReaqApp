@@ -28,7 +28,7 @@ export default function RedirectionPage(props) {
     }
   },[]);
   return (
-    <div className="redirection_page_container" style={{height: 'calc( 100% - '+props.topBarHeight+'px )', backgroundColor: overTheme.palette.primary.dark}}>
+    <div className="redirection_page_container" style={{backgroundColor: overTheme.palette.primary.dark}}>
       <div className="redirection_page_img_container">
         <Spinner msCycle="10000ms" left>
           <Centerer>

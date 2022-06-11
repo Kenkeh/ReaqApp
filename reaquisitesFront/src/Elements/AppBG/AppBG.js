@@ -5,7 +5,7 @@ import Centerer from '../../MiniTools/Centerer/Centerer';
 
 export default function AppBG(props){
     return (
-        <div className="reaqBackgroundContainer" style={{width: props.width, height: props.height}}>
+        <div className="reaqBackgroundContainer" style={{height: 'calc(100% - '+props.topBarHeight+'px)'}}>
             <Centerer>
                 <div className="reaqBGGradient">
                     {props.children}

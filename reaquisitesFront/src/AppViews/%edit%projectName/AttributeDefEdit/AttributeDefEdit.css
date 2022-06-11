@@ -1,0 +1,80 @@
+.attribDefEditContainer{
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 55px calc(100% - 125px) 55px;
+    gap: 5px;
+}
+
+.attribDefEditAttrName{
+    grid-column: 1;
+    grid-row: 1;
+}
+.attribDefEditDesc{
+    grid-column: 2;
+    grid-row: 1;
+}
+.attribDefEditType{
+    grid-column: 1;
+    grid-row: 2;
+    display: table;
+}
+.attribDefEditValues{
+    grid-column: 2;
+    grid-row: 2;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+
+.attribDefEditEnumValues{
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    position: relative;
+}
+.attribDefEditEnumControl{
+    height: 120px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 55px 55px;
+    gap: 5px;
+}
+.attribDefEditEnumInput{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 1;
+}
+.attribDefEditEnumList{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    height: calc(100% - 120px);
+    max-height: calc(100% - 120px);
+    overflow: auto;
+}
+.attribDefEditEnumValue{
+    margin: 5px;
+    height: 55px;
+    width: calc(100% - 10px);
+    border-radius: 5px;
+}
+
+.attribDefEditIntegerValues{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.adivIntegerElem{
+    margin: 5px 15px;
+    width: calc(100% - 30px);
+    height: 45px;
+    color: rgba(0, 0, 0, 0.6);
+}
+.adivInputElem{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}

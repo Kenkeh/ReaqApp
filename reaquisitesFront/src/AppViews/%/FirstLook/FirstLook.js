@@ -25,6 +25,9 @@ export default function FirstLook (props) {
 
 
     useEffect(()=>{
+        if (props.currentProject){
+            props.setProject(undefined);
+        }
         var recProjects = props.user.projects;
         recProjects.sort((a,b)=>{
             if (a.lastModified > b.lastModified){
@@ -187,7 +190,7 @@ export default function FirstLook (props) {
             style={{backgroundColor: overTheme.palette.primary.main}}>
                 <div className='fl_recent_projects_flex'>
                     {recentProjects.map((project, index)=>{
-                        return  <div className='fl_rp_card_container' style={{gridColumn: index+1}}>
+                        return  <div key={index} className='fl_rp_card_container' style={{gridColumn: index+1}}>
                                     <ProjectCard textSize={0} project={project}/>
                                 </div>
                     })}

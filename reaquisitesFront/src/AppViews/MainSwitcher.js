@@ -5,7 +5,7 @@ import RejIcon from '../Elements/images/red_cancel.png';
 import RedirectionPage from './RedirectionPage/RedirectionPage';
 import LandingArea from './%/LandingArea/LandingArea';
 import FirstLook from './%/FirstLook/FirstLook';
-import ProjecEdit from './%edit%projectName/ProjectEdit';
+import ProjecEdit from './%edit%projectName/ProjectEdit/ProjectEdit';
 
 
 
@@ -14,20 +14,22 @@ export default function MainSwitcher(props) {
     <Routes>
       <Route path="/" element={
         props.user ? 
-        <FirstLook user={props.user} loginSession={props.loginSession} setProject={props.setProject}/> :
+        <FirstLook 
+        user={props.user} 
+        loginSession={props.loginSession} 
+        setProject={props.setProject} 
+        currentProject={props.project}/> :
         <LandingArea/>
       }
       />
       <Route path="/register-exp" element={
-        <RedirectionPage 
-          topBarHeight={props.topBarHeight} 
+        <RedirectionPage
           message="Ups! It seems that link has expired..." 
           icon={RejIcon}/>
         } 
       />
       <Route path="/register-acc" element={
-        <RedirectionPage 
-          topBarHeight={props.topBarHeight} 
+        <RedirectionPage
           message="Congratulations, your register is completed! You can now log in!"
           icon={AccIcon}
         />} 

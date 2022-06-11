@@ -141,6 +141,7 @@ export default function Login(props) {
                 onChange={handleInfoChange('logname')}
                 error={logginNameError}
                 helperText= {logginNameErrorText}
+                style={{width: '400px'}}
               />
             </Centerer>
           </div>
@@ -153,6 +154,7 @@ export default function Login(props) {
                     onChange={handleInfoChange('password')}
                     error={passwordError}
                     helperText= {passwordErrorText}
+                    style={{width: '400px'}}
                   />
             </Centerer>
           </div>
@@ -162,7 +164,7 @@ export default function Login(props) {
 
           <div className="login_form_field_container">
             <Centerer>
-              <Button variant="contained" disableElevation onClick={handleLogin}>
+              <Button variant="contained" disableElevation onClick={handleLogin} style={{width: '300px'}}>
                 LOGIN
               </Button>
             </Centerer>

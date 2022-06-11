@@ -62,13 +62,12 @@ export default function App() {
         project={currentProject} 
         setProject={setCurrentProject} 
         login={currentLogin}/>
-        <AppBG>
+        <AppBG topBarHeight={topBarSize}>
           <MainSwitcher 
           user={currentUser} 
           project={currentProject} 
           setProject={setCurrentProject}
-          loginSession={currentLogin} 
-          topBarHeight={topBarSize} 
+          loginSession={currentLogin}  
           />
         </AppBG>
       </ThemeProvider>
