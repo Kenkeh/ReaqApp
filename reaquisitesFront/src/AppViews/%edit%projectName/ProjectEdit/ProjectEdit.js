@@ -49,7 +49,8 @@ export default function ProjectEdit (props) {
                 return <ArtDefsEdit 
                 inactiveButtonStyle={elemsButtonsStyle} 
                 activeButtonStyle={elemsButtonsStyleHiglighted}
-                projectArtDefs={props.activeProject.artefactDefs}
+                project={props.activeProject}
+                setProject={props.setActiveProject}
                 />
             default:
                 return <></>

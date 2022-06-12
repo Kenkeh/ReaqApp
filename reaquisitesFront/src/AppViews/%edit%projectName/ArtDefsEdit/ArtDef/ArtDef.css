@@ -1,4 +1,4 @@
-.attrDefContainer{
+.artDefContainer{
     width: 100%;
     border-radius: 5px;
     border: 1px solid gainsboro;
@@ -18,7 +18,8 @@
 }
 
 
-.attrDefHeadersContainer{
+
+.artDefHeadersContainer{
     width: 100%;
     border-radius: 5px;
     border: 1px solid gainsboro;
@@ -39,21 +40,21 @@
     height: 47px;
     min-height: 47px;
 }
-.attrDefHeaders{
+.artDefHeaders{
     display: flex;
     flex-direction: row;
 }
-.attrDefValuesHeader{
+.artDefValuesHeader{
     height: 100%;
     width: 100px;
 }
-.attrDefDescHeader{
+.artDefDescHeader{
     height: 100%;
     width: calc(100% - 100px);
 }
 
 
-.attrDefShowInfo{
+.artDefShowInfo{
     height: 45px;
     min-height: 45px;
     width: 100%;
@@ -62,20 +63,20 @@
     display: flex;
     flex-direction: row;
 }
-.attrDefShowInfo :hover{
+.artDefShowInfo :hover{
     cursor: pointer;
 }
-.attrDefType{
+.artDefShape{
     height: 100%;
     width: 100px;
 }
-.attrDefName{
+.artDefName{
     height: 100%;
     width: calc(100% - 100px);
 }
 
 
-.attrDefExtraInfo{
+.artDefExtraInfo{
     height: calc(100% - 65px);
     width: 100%;
     padding: 5px 10px;
@@ -84,11 +85,11 @@
     overflow: hidden;
     text-align: center;
 }
-.attrDefValuesInfo{
+.artDefAttributesInfo{
     height: 100%;
     width: 100px;
 }
-.attrDefDescInfo{
+.artDefDescInfo{
     height: 100%;
     width: calc(100% - 100px);
 }

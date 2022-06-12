@@ -31,14 +31,13 @@ import { useEffect, useState } from 'react';
 import { overTheme } from '../../../../overTheme';
 import './ArtDefEdit.css';
 import AttributeDef from '../../AttributeDef/AttributeDef';
-import Centerer from '../../../../MiniTools/Centerer/Centerer';
 import AttributeDefEdit from '../../AttributeDefEdit/AttributeDefEdit';
 
 
 export default function ArtDefEdit (props) {
 
     const [currentArtDef, setCurrentArtDef] = useState({
-        icon: 0,
+        shape: 0,
         name: '',
         description: '',
         attributeDefinitions: []
@@ -58,18 +57,18 @@ export default function ArtDefEdit (props) {
     };
 
     useEffect(() =>{
-        if (props.artDef){
-            setCurrentArtDef({...props.artDef});
+        if (props.artDefToEdit){
+            setCurrentArtDef(props.artDefToEdit);
             setCurrentArtDefNameError('');
         }
-    },[]);
+    },[props.artDefToEdit]);
 
     const setArtDefInfo = (info, value) =>{
         switch (info){
             case 'name':
                 if (value==''){
                     setCurrentArtDefNameError('Artefact Definition name cannot be empty');
-                }else if (props.projectArtDefs.find(artDef => artDef.name == value)){
+                }else if (props.otherArtDefs.find(artDef => artDef.name == value)){
                     setCurrentArtDefNameError('Artefact Definition already exists');
                 }else{
                     setCurrentArtDefNameError('');
@@ -77,7 +76,7 @@ export default function ArtDefEdit (props) {
                 setCurrentArtDef({...currentArtDef, name: value});
                 break;
             case 'icon':
-                setCurrentArtDef({...currentArtDef, icon: value});
+                setCurrentArtDef({...currentArtDef, shape: value});
                 break;
             case 'description':
                 setCurrentArtDef({...currentArtDef, description: value});
@@ -87,7 +86,7 @@ export default function ArtDefEdit (props) {
 
     const restartInfo = () =>{
         setCurrentArtDef({
-            icon: 0,
+            shape: 0,
             name: '',
             description: '',
             attributeDefinitions: []
@@ -95,17 +94,27 @@ export default function ArtDefEdit (props) {
         setCurrentArtDefNameError('Artefact Definition name cannot be empty');
     }
 
-    const cancelArtDefEdit = () =>{
-        restartInfo();
-        props.cancelArtDefEdition();
-    }
-    
-
     const deleteAttribute = () =>{
         var newAttribList = [...currentArtDef.attributeDefinitions];
         newAttribList.splice(selectedAttributeDef,1);
         setCurrentArtDef({...currentArtDef, attributeDefinitions: newAttribList});
         setSelectedAttributeDef(-1);
+    }
+    
+
+    const cancelArtDefEdit = () =>{
+        restartInfo();
+        props.cancelArtDefEdition();
+    }
+
+    const validateArtDefEdit = () =>{
+        if (props.artDefToEdit){
+            props.validateArtDefEdition(currentArtDef, props.artDefToEditIndex);
+        }else{
+            props.validateArtDefEdition(currentArtDef);
+        }
+        restartInfo();
+        props.cancelArtDefEdition();
     }
 
     return (
@@ -115,10 +124,9 @@ export default function ArtDefEdit (props) {
                     Icon
                 </div>
                 <div className='currentArtDefValue'>
-                    <Select value={currentArtDef.icon} 
+                    <Select value={currentArtDef.shape} 
                     MenuProps={{style: newArtDefIconGridStyle}} 
                     onChange={(event) => setArtDefInfo('icon', event.target.value)}>
-                        
                         <MenuItem value={0}><TaskTwoToneIcon/></MenuItem>
                         <MenuItem value={1}><AddTaskTwoToneIcon/></MenuItem>
                         <MenuItem value={2}><TaskAltTwoToneIcon/></MenuItem>
@@ -180,9 +188,7 @@ export default function ArtDefEdit (props) {
                 </div>
                 <div className='currentArtDefAttrDel'>
                     <IconButton disabled={selectedAttributeDef==-1} onClick={deleteAttribute}>
-                        <ClearIcon 
-                        style={selectedAttributeDef==-1 ? {color: 'grey'} : {color: overTheme.palette.primary.light}}
-                        />
+                        <ClearIcon style={selectedAttributeDef==-1 ? {color: 'grey'} : {color: overTheme.palette.primary.light}}/>
                     </IconButton>
                 </div>
                 <div className='currentArtDefAttrAdd'>
@@ -221,8 +227,9 @@ export default function ArtDefEdit (props) {
             </div>
             <div className='currentArtDefCreateContainer'>
                 <Button
-                color={ currentArtDefNameError=='' ? 'secondary' : 'error'} 
+                color={currentArtDefNameError=='' ? 'secondary' : 'error'} 
                 variant={currentArtDefNameError=='' ? 'contained' : 'outlined'}
+                onClick={currentArtDefNameError=='' ? validateArtDefEdit : null}
                 >
                     {currentArtDefNameError != '' ? currentArtDefNameError : 'CREATE'}
                 </Button>

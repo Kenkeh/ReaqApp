@@ -74,6 +74,8 @@
 }
 .artDefListTitleContainer{
     height: 50px;
+    display: grid;
+    grid-template-columns: 50px calc(100% - 100px) 50px;
 }
 .artDefListTitle{
     font-weight: bold;
