@@ -32,6 +32,7 @@ import { overTheme } from '../../../../overTheme';
 import './ArtDefEdit.css';
 import AttributeDef from '../../AttributeDef/AttributeDef';
 import AttributeDefEdit from '../../AttributeDefEdit/AttributeDefEdit';
+import { currentDate } from '../../../../AppConsts';
 
 
 export default function ArtDefEdit (props) {
@@ -109,6 +110,15 @@ export default function ArtDefEdit (props) {
 
     const validateArtDefEdit = () =>{
         if (props.artDefToEdit){
+            var creationHistoryEntry = {
+                type: 2,
+                changeDate: currentDate(),
+                changes: JSON.stringify({
+                    oldArtefact: props.artDefToEdit,
+                    newArtefact: currentArtDef
+                })
+            }
+            setCurrentArtDef({...currentArtDef, historyEntries: [...currentArtDef.historyEntries, creationHistoryEntry]});
             props.validateArtDefEdition(currentArtDef, props.artDefToEditIndex);
         }else{
             props.validateArtDefEdition(currentArtDef);

@@ -8,6 +8,7 @@ import Centerer from '../../../MiniTools/Centerer/Centerer';
 import { overTheme } from '../../../overTheme';
 import './ArtDefsEdit.css';
 import ArtDef from './ArtDef/ArtDef';
+import { currentDate } from '../../../AppConsts';
 
 
 export default function ArtDefsEdit (props) {
@@ -18,13 +19,35 @@ export default function ArtDefsEdit (props) {
     
 
     const addArtDef = (newArtDef) => {
-        props.setProject({...props.project, artefactDefs: [...props.project.artefactDefs, newArtDef]});
+        var creationHistoryEntry = {
+            type: 1,
+            changeDate: currentDate(),
+            changes: JSON.stringify({
+                elementType: 1,
+                newArtefactDef: newArtDef
+            })
+        }
+        props.setProject({...props.project, 
+            artefactDefs: [...props.project.artefactDefs, newArtDef], 
+            historyEntries: [...props.project.historyEntries, creationHistoryEntry]
+        });
     }
 
     const deleteArtDef = () =>{
         var artDefs = [...props.project.artefactDefs];
-        artDefs.splice(selectedArtDef,1);
-        props.setProject({...props.project, artefactDefs: artDefs});
+        const removedArtDef = artDefs.splice(selectedArtDef,1);
+        var deletionHistoryEntry = {
+            type: 3,
+            changeDate: currentDate(),
+            changes: JSON.stringify({
+                elementType: 1,
+                deletedArtefatcDef: removedArtDef
+            })
+        }
+        props.setProject({...props.project, 
+            artefactDefs: artDefs,
+            historyEntries: [...props.project.historyEntries, deletionHistoryEntry]
+        });
         setSelectedArtDef(-1);
     }
 
