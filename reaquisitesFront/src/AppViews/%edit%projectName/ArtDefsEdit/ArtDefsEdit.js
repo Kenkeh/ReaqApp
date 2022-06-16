@@ -31,6 +31,7 @@ export default function ArtDefsEdit (props) {
             artefactDefs: [...props.project.artefactDefs, newArtDef], 
             historyEntries: [...props.project.historyEntries, creationHistoryEntry]
         });
+        props.setProjectModified(true);
     }
 
     const deleteArtDef = () =>{
@@ -49,6 +50,7 @@ export default function ArtDefsEdit (props) {
             historyEntries: [...props.project.historyEntries, deletionHistoryEntry]
         });
         setSelectedArtDef(-1);
+        props.setProjectModified(true);
     }
 
     const startEditingArtDef = () =>{
@@ -60,6 +62,7 @@ export default function ArtDefsEdit (props) {
         var newArtDefs = [...props.project.artefactDefs];
         newArtDefs[index] = editedArtDef;
         props.setProject({...props.project, artefactDefs: newArtDefs});
+        props.setProjectModified(true);
     }
 
     const cancelArtDefAdd = () =>{

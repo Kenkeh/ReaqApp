@@ -4,6 +4,7 @@ import { getUserProject } from '../../../AppAPI';
 import { overTheme } from '../../../overTheme';
 import { Button } from '@mui/material';
 import ArtDefsEdit from '../ArtDefsEdit/ArtDefsEdit';
+import RelDefsEdit from '../RelDefsEdit/RelDefsEdit';
 
 
 export default function ProjectEdit (props) {
@@ -46,12 +47,21 @@ export default function ProjectEdit (props) {
     const elementEditionPanel = (panel) =>{
         switch (panel){
             case 0:
-                return <ArtDefsEdit 
-                inactiveButtonStyle={elemsButtonsStyle} 
-                activeButtonStyle={elemsButtonsStyleHiglighted}
-                project={props.activeProject}
-                setProject={props.setActiveProject}
-                />
+                return  <ArtDefsEdit 
+                            inactiveButtonStyle={elemsButtonsStyle} 
+                            activeButtonStyle={elemsButtonsStyleHiglighted}
+                            project={props.activeProject}
+                            setProject={props.setActiveProject}
+                            setProjectModified={props.setActiveProjectModified}
+                        />
+            case 1:
+                return  <RelDefsEdit
+                            inactiveButtonStyle={elemsButtonsStyle} 
+                            activeButtonStyle={elemsButtonsStyleHiglighted}
+                            project={props.activeProject}
+                            setProject={props.setActiveProject}
+                            setProjectModified={props.setActiveProjectModified}
+                        />
             default:
                 return <></>
         }

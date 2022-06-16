@@ -67,3 +67,8 @@ export const currentDate = () =>{
     // After this construct a string with the above results as below
     return day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
 }
+
+export const cytoscapeArrowHeads = [ 
+    'triangle', 'chevron', 'circle', 'circle-triangle', 'diamond', 'square', 'tee',
+    'triangle-backcurve', 'triangle-tee', 'triangle-cross', 'vee'
+]

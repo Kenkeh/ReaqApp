@@ -10,18 +10,31 @@ export default function TopBar(props){
 
   return(
     <div className='topbar'>
+
       <Button 
       variant='contained' 
       style={{position: "absolute", left: 5, top: 5, bottom: 5, width: "70px", fontSize: "8px", fontWeight: "bold"}}
       color="secondary"
       disableElevation
       >
-      Explore
+        {props.project ? 'OPEN' : 'EXPLORE'}
       </Button>
+
+      { props.project &&
+        <Button 
+        variant={props.projectEdited ? 'contained' : 'outlined'}
+        style={{position: "absolute", left: 80, top: 5, bottom: 5, width: "70px", fontSize: "8px", fontWeight: "bold"}}
+        color={props.projectEdited ? 'secondary' : 'error'}
+        disableElevation
+        >
+          SAVE
+        </Button>
+      }
 
       <Centerer>
         <ReaqLogo style={{height: "30px"}}/>
       </Centerer>
+
       { !props.user ?
         <>
           <Button 

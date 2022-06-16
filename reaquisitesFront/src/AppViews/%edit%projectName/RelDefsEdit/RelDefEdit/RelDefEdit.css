@@ -1,0 +1,83 @@
+.currentRelDefContainer{
+    height: 100%;
+    border-radius: 5px;
+    display: grid;
+    grid-template-rows: 75px 75px calc(100% - 150px);
+    grid-template-columns: 1fr 3fr 1fr;
+    overflow: hidden;
+    color: white;
+}
+.currentRelDefContainer > div{
+    margin: 5px;
+}
+.currentRelDefIconContainer{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.currentRelDefTitle{
+    height: 20px;
+}
+.currentRelDefValue{
+    height: 45px;
+}
+
+.currentRelDefIconGrid{
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.currentRelDefNameContainer{
+    grid-column: 2;
+    grid-row: 1;
+}
+.currentRelDefDescContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 2;
+}
+.currentRelDefCreateContainer{
+    grid-column: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+.currentRelDefCancelContainer{
+    grid-column: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+.currentRelDefAttrListContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 40px 40px;
+    grid-template-rows: 20px calc(100% - 25px);
+    row-gap: 5px;
+}
+.currentRelDefAttrListTitle{
+    grid-column: 1;
+    grid-row: 1;
+}
+.currentRelDefAttrDel{
+    grid-column: 2;
+    grid-row: 1;
+}
+.currentRelDefAttrAdd{
+    grid-column: 3;
+    grid-row: 1;
+}
+.currentRelDefAttrList{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row: 2;
+    border-radius: 5px;
+    border: 1px solid white;
+    overflow: hidden;
+}
+

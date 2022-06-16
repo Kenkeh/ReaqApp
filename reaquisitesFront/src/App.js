@@ -20,6 +20,7 @@ export default function App() {
   const [currentUser,setCurrentUser] = useState(undefined);
   const [currentLogin, setCurrentLogin] = useState('');
   const [currentProject, setCurrentProject] = useState(undefined);
+  const [currentProjectHasBeenEdited, setCurrentProjectHasBeenEdited] = useState(false);
 
   useEffect(()=>{
     var login = Cookies.get('ReaqLoginInfo');
@@ -59,14 +60,15 @@ export default function App() {
         <AppTopBar 
         setUser={setUser} 
         user={currentUser} 
-        project={currentProject} 
-        setProject={setCurrentProject} 
+        project={currentProject}
+        projectEdited={currentProjectHasBeenEdited}
         login={currentLogin}/>
         <AppBG topBarHeight={topBarSize}>
           <MainSwitcher 
           user={currentUser} 
           project={currentProject} 
           setProject={setCurrentProject}
+          setProjectEdited = {setCurrentProjectHasBeenEdited}
           loginSession={currentLogin}  
           />
         </AppBG>
