@@ -23,7 +23,13 @@ namespace reaquisites.Managers
             project.Relationships = new List<Relationship>();
             project.Visualizations = new List<Visualization>();
             project.HistoryEntries = new List<HistoryEntry>();
-            project.HistoryEntries.Add(HEFactory.createProjectCreationEntry(project));
+            HistoryEntry he = new HistoryEntry();
+            he.ChangeType = 1;
+            he.ElementType = 0;
+            he.ElementId = 0;
+            he.Changes = "Project created with name: \""+project.Name+"\" and description: \""+project.Description+"\"";
+            he.ChangeDate = DateTime.Now;
+            project.HistoryEntries.Add(he);
             return new KeyValuePair<int, Project>(AddProjectToUser(accName, project), project);
         }
         
@@ -48,9 +54,7 @@ namespace reaquisites.Managers
                     int artAttribDefID = DBProjectService.GetArtefactAttributeDefID(artDefID, artAttribDef.Name);
                     attribDefs.Add(artAttribDef,artAttribDefID);
                 }
-                foreach (HistoryEntry he in artDef.HistoryEntries){
-                    DBProjectService.AddProjectHistoryEntry(projectID,1,artDefID, he.Type, he.Changes, he.ChangeDate);
-                }
+
                 artDefs.Add(artDef,artDefID);
             }
 
@@ -65,9 +69,7 @@ namespace reaquisites.Managers
                     int artAttribDefID = DBProjectService.GetRelationshipAttributeDefID(relDefID, artAttribDef.Name);
                     attribDefs.Add(artAttribDef,artAttribDefID);
                 }
-                foreach (HistoryEntry he in relDef.HistoryEntries){
-                    DBProjectService.AddProjectHistoryEntry(projectID,2,relDefID, he.Type, he.Changes, he.ChangeDate);
-                }
+
                 relDefs.Add(relDef,relDefID);
             }
             
@@ -75,7 +77,7 @@ namespace reaquisites.Managers
             Dictionary<Artefact, int> artefacts = new Dictionary<Artefact, int>();
             foreach (Artefact artefact in project.Artefacts){
                 int artDefID = artDefs[artefact.Definition];
-                DBProjectService.AddArtefact(artefact.Name, artDefID);
+                DBProjectService.AddArtefact(artefact.Name, artefact.Description, artDefID);
                 int artID = DBProjectService.GetArtefactID(projectID, artefact.Name);
                 if (artID<0) return -5;
                 foreach (Attribute attrib in artefact.Attributes){
@@ -83,9 +85,6 @@ namespace reaquisites.Managers
                     DBProjectService.AddArtefactAttribute(artID,attributeDefID,attrib.Value);
                 }
 
-                foreach (HistoryEntry he in artefact.HistoryEntries){
-                    DBProjectService.AddProjectHistoryEntry(projectID,3,artID, he.Type, he.Changes, he.ChangeDate);
-                }
                 artefacts.Add(artefact,artID);
             }
 
@@ -94,15 +93,12 @@ namespace reaquisites.Managers
                 int relDefID = relDefs[relation.Definition];
                 int parentID = artefacts[relation.Parent];
                 int childID = artefacts[relation.Child];
-                DBProjectService.AddRelationship(relDefID,parentID,childID);
+                DBProjectService.AddRelationship(relDefID,relation.Description, parentID,childID);
                 int relID = DBProjectService.GetRelationshipID(relDefID, parentID, childID);
                 if (relID<0) return -6;
                 foreach (Attribute attrib in relation.Attributes){
                     int attributeDefID = attribDefs[attrib.Definition];
                     DBProjectService.AddRelationshipAttribute(relID, attributeDefID, attrib.Value);
-                }
-                foreach (HistoryEntry he in relation.HistoryEntries){
-                    DBProjectService.AddProjectHistoryEntry(projectID,4,relID, he.Type, he.Changes, he.ChangeDate);
                 }
             }
 
@@ -156,21 +152,20 @@ namespace reaquisites.Managers
                         DBProjectService.AddRelationshipSizeFactorValue(sizeFactorID,points.Key,points.Value);
                     }
                 }
-                foreach (HistoryEntry he in visual.HistoryEntries){
-                    DBProjectService.AddProjectHistoryEntry(projectID,5,visualID,he.Type,he.Changes,he.ChangeDate);
-                }
             }
+
             foreach (HistoryEntry he in project.HistoryEntries){
-                DBProjectService.AddProjectHistoryEntry(projectID,0,projectID,he.Type,he.Changes,he.ChangeDate);
+                DBProjectService.AddProjectHistoryEntry(projectID, he.ElementType, he.ElementId, he.ChangeType, he.Changes, he.ChangeDate);
             }
+
             return 0;
         }
 
 
-        static internal (int, Project) getUserProject(string account, string projectName){
+        static internal (int, Project) getUserProject(string account, int projectId){
             int userID = DBUserService.GetUserId(account);
             if (userID<0) return (-1, null);
-            (int, Project) userProject = DBProjectService.GetUserProject(userID, projectName);
+            (int, Project) userProject = DBProjectService.GetUserProject(userID, projectId);
             if (userProject.Item1<0) return (-2, null);
             int projectID = userProject.Item1;
             Project theProject = userProject.Item2;
@@ -180,15 +175,12 @@ namespace reaquisites.Managers
             theProject.Relationships = new List<Relationship>();
             theProject.Visualizations = new List<Visualization>();
 
-            theProject.HistoryEntries = DBProjectService.GetHistoryEntriesForElement(projectID,0,projectID);
-
             Dictionary<int, Artefact> projectArtefacts = new Dictionary<int, Artefact>();
             Dictionary<int, AttributeDefinition> projectArtAttributeDefs = new Dictionary<int, AttributeDefinition>();
             Dictionary<int, AttributeDefinition> projectRelAttributeDefs = new Dictionary<int, AttributeDefinition>();
 
             List<(int, ArtefactDefinition)> projectArtDefs = DBProjectService.GetProjectArtefactDefs(projectID);
             foreach ((int, ArtefactDefinition) artDef in  projectArtDefs){
-                artDef.Item2.HistoryEntries = DBProjectService.GetHistoryEntriesForElement(projectID, 1, artDef.Item1);
 
                 Dictionary<int, AttributeDefinition> artAttribDefs = DBProjectService.GetArtefactDefAttributeDefs(artDef.Item1);
                 artDef.Item2.AttributeDefinitions = new List<AttributeDefinition>();
@@ -198,7 +190,6 @@ namespace reaquisites.Managers
                 }
                 List<(int, Artefact)> artefactsForDef = DBProjectService.GetArtefactsForDefinition(artDef.Item1);
                 foreach((int, Artefact) artDefArtefact in artefactsForDef){
-                    artDefArtefact.Item2.HistoryEntries = DBProjectService.GetHistoryEntriesForElement(projectID, 3, artDefArtefact.Item1);
                     artDefArtefact.Item2.Definition = artDef.Item2;
                     artDefArtefact.Item2.Attributes = new List<Attribute>();
                     List<(Attribute, int)> artefactAttrs = DBProjectService.GetArtefactAttributes(artDefArtefact.Item1);
@@ -214,7 +205,6 @@ namespace reaquisites.Managers
 
             List<(int, RelationshipDefinition)> projectRelDefs = DBProjectService.GetProjectRelationshipDefs(projectID);
             foreach ((int, RelationshipDefinition) relDef in  projectRelDefs){
-                relDef.Item2.HistoryEntries = DBProjectService.GetHistoryEntriesForElement(projectID, 2, relDef.Item1);
 
                 Dictionary<int, AttributeDefinition> relAttribDefs = DBProjectService.GetRelationshipDefAttributeDefs(relDef.Item1);
                 relDef.Item2.AttributeDefinitions = new List<AttributeDefinition>();
@@ -222,12 +212,14 @@ namespace reaquisites.Managers
                     projectRelAttributeDefs.Add(attribDef.Key,attribDef.Value);
                     relDef.Item2.AttributeDefinitions.Add(attribDef.Value);
                 }
-                List<(int, (int,int))> relsForDef = DBProjectService.GetRelationshipsForDefinition(relDef.Item1);
-                foreach ((int, (int,int)) relation in relsForDef){
+                List<(int, (int,int,string,int))> relsForDef = DBProjectService.GetRelationshipsForDefinition(relDef.Item1);
+                foreach ((int, (int,int,string,int)) relation in relsForDef){
                     Relationship rel = new Relationship();
                     rel.Definition = relDef.Item2;
                     rel.Parent = projectArtefacts[relation.Item2.Item1];
                     rel.Parent = projectArtefacts[relation.Item2.Item2];
+                    rel.Description = relation.Item2.Item3;
+                    rel.ID = relation.Item2.Item4;
                     rel.Attributes = new List<Attribute>();
                     List<(Attribute, int)> relationAttrs = DBProjectService.GetRelationshipAttributes(relation.Item1);
                     foreach ((Attribute, int) attr in relationAttrs){
@@ -301,10 +293,19 @@ namespace reaquisites.Managers
 
                 theProject.Visualizations.Add(visual);
             }
-            
-
+            theProject.HistoryEntries = DBProjectService.GetAllProjectHistoryEntries(projectID);
             return (0,theProject);
         }
+
+        static internal int SaveProject(string userAccount, int projectID, Project updatedProject){
+            int userID = DBUserService.GetUserId(userAccount);
+            if (userID<0) return 1;
+            (int, Project) userProject = DBProjectService.GetUserProject(userID, projectID);
+            if (userProject.Item1<0) return 2;
+
+            return 0;
+        }
+
     }
 
 }

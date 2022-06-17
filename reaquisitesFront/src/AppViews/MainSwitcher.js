@@ -37,7 +37,7 @@ export default function MainSwitcher(props) {
       {
         props.user &&
         props.user.projects.map( (proj, index) => 
-          <Route key={index} path={"/edit/"+proj.name.replaceAll(' ','_')} element={
+          <Route key={index} path={"/edit/"+proj.id} element={
             <ProjecEdit
               user = {props.user} 
               editingProject = {proj}

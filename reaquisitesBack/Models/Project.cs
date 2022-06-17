@@ -8,6 +8,7 @@ namespace reaquisites.Models
         public string Version { get; set; }
         public string Description { get; set; }
         public bool IsPublished { get; set; }
+        public int ProjectId { get; set; }
         public List<ArtefactDefinition> ArtefactDefs { get; set; }
         public List<Artefact> Artefacts { get; set; }
         public List<RelationshipDefinition> RelationshipDefs { get; set; }

@@ -1,8 +1,9 @@
 public class Artefact {
+    public int ID { get; set; }
     public string Name { get; set; }
+    public string? Description { get; set; }
     public ArtefactDefinition Definition { get; set; }
     public List<Attribute> Attributes { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 
     public override bool Equals(Object? obj)
     {

@@ -3,5 +3,6 @@ public class SimpleProjectDTO{
         public string Version { get; set; }
         public string Description { get; set; }
         public bool IsPublished { get; set; }
+        public int Id { get; set; }
         public DateTime LastModified { get; set; }
 }

@@ -12,9 +12,8 @@ export default function ProjectEdit (props) {
     const [activeLabel, setActiveLabel] = useState(undefined);
 
     useEffect( () => {
-        if (!props.activeProject || props.editingProject.name != props.activeProject.name){
-            const projectName = props.editingProject.name.replaceAll(' ','_');
-            getUserProject(props.user.account,projectName).then(project =>{
+        if (!props.activeProject || props.editingProject.id != props.activeProject.id){
+            getUserProject(props.user.account,props.editingProject.id).then(project =>{
                 if (project.error){
                     console.log(project.message);
                 }else{

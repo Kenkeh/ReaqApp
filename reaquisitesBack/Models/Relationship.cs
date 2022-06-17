@@ -1,9 +1,10 @@
 public class Relationship{
+    public int ID { get; set; }
+    public string? Description { get; set; }
     public RelationshipDefinition Definition { get; set; }
     public Artefact Parent { get; set; }
     public Artefact Child { get; set; }
     public List<Attribute> Attributes { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 
     public override bool Equals(Object? obj)
     {

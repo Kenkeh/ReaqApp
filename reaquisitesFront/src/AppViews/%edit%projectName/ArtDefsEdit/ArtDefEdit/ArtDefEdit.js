@@ -119,8 +119,8 @@ export default function ArtDefEdit (props) {
                 })
             }
             setCurrentArtDef({...currentArtDef, 
-                historyEntries: currentRelDef.historyEntries ? 
-                    [...currentRelDef.historyEntries, editionHistoryEntry]
+                historyEntries: currentArtDef.historyEntries ? 
+                    [...currentArtDef.historyEntries, editionHistoryEntry]
                     :
                     [editionHistoryEntry]});
             props.validateArtDefEdition(currentArtDef, props.artDefToEditIndex);

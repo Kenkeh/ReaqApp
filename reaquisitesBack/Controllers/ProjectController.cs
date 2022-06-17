@@ -15,14 +15,14 @@ namespace reaquisites.Controllers
         }
 
         // POST action
-        [HttpGet("{accName}/Get/{projectName}")] //we use path param to be able to generate urls for emails
-        public ActionResult<Project> GetProjectFromUser(string accName, string projectName/*, [FromBody] string loginSession*/)
+        [HttpGet("{accName}/Get/{projectId}")] 
+        public ActionResult<Project> GetProjectFromUser(string accName, int projectId/*, [FromBody] string loginSession*/)
         {
             // USE TO ENABLE LOGGIN SESSION
             //if (!UsersManager.checkSession(accName, loginSession))
             //    return ARFactory.createJSONErrorResult(0,"Login session not found, please log into the application");
-            projectName = projectName.Replace('_',' ');
-            (int, Project) theProject = ProjectManager.getUserProject(accName,projectName);
+            
+            (int, Project) theProject = ProjectManager.getUserProject(accName,projectId);
             if (theProject.Item1<0){
                 switch (theProject.Item1){
                     case -1:
@@ -52,6 +52,23 @@ namespace reaquisites.Controllers
 
             }else{
                 return result.Value;
+            }
+        }
+        // POST action
+        [HttpPost("{accName}/Save/{projectID}")]
+        public ActionResult SaveProject(string accName, int projectID, [FromBody] Project toUpdate)
+        {
+            // USE TO ENABLE LOGGIN SESSION
+            //if (!UsersManager.checkSession(accName,newProject.loginSession))
+            //    return ARFactory.createJSONErrorResult(0,"Login session not found, please log into the application");
+            
+            switch(ProjectManager.SaveProject(accName, projectID, toUpdate)){
+                case 0:
+                    return Ok();
+                case 1:
+                    return BadRequest("User not found");
+                default:
+                    return BadRequest();
             }
         }
         // PUT action

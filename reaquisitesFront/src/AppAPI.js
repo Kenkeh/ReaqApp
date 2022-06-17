@@ -16,8 +16,8 @@ export const userAuth = (credentials) => {
   })
   .then(res => res.json());
 }
-export const getUserProject = (accountName, projectName) =>{
-  return fetch(ServerRouteHTTPS+'project/'+accountName+'/get/'+projectName, {
+export const getUserProject = (accountName, projectId) =>{
+  return fetch(ServerRouteHTTPS+'project/'+accountName+'/get/'+projectId, {
     method: 'GET', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

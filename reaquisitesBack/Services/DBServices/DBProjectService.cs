@@ -14,7 +14,7 @@ namespace reaquisites.Services.DB
             List<SimpleProjectDTO> userProjects = new List<SimpleProjectDTO>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name, description, version, published FROM reaquisites.\"Projects\" where user_id = "+userID+" and template = false";
+                string query = "SELECT id, name, description, version, published, ref FROM reaquisites.\"Projects\" where user_id = "+userID+" and template = false";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -32,6 +32,7 @@ namespace reaquisites.Services.DB
                             project.Version = reader[3].ToString();
                             project.IsPublished = (bool) reader[4];
                             project.LastModified = GetLastModificationDate((int)reader[0]);
+                            project.Id = (int)reader[5];
                             userProjects.Add(project);
                         }
                     }
@@ -384,8 +385,9 @@ namespace reaquisites.Services.DB
         static internal void AddProject(int userID, string projectName, string projectDescription, bool projectIsPublished, bool projectIsTemplate, string version){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"Projects\" (name, description, published, template, version, user_id) "+
-                "VALUES ('"+projectName+"','"+projectDescription+"',"+projectIsPublished+", "+projectIsTemplate+", "+version+", "+userID+")";
+                string query = "INSERT INTO reaquisites.\"Projects\" (name, description, published, template, version, user_id, ref) "+
+                "VALUES ('"+projectName+"','"+projectDescription+"',"+projectIsPublished+", "+projectIsTemplate+", "+version+", "+userID+","+
+                "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Projects\" where user_id="+userID+"))";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -398,8 +400,9 @@ namespace reaquisites.Services.DB
         static internal void AddArtefactDefinition(int projectID, string artDefName, string artDefDescription, int artDefShape){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"ArtefactDefs\" (project, name, description, shape) "+
-                "VALUES ("+projectID+", '"+artDefName+"', '"+artDefDescription+"', "+artDefShape+")";
+                string query = "INSERT INTO reaquisites.\"ArtefactDefs\" (project, name, description, shape, ref) "+
+                "VALUES ("+projectID+", '"+artDefName+"', '"+artDefDescription+"', "+artDefShape+", "+
+                "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Projects\" where project="+projectID+"))";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -426,8 +429,9 @@ namespace reaquisites.Services.DB
         static internal void AddRelationshipDefinition(int projectID, string relDefName, string relDefDescription, int relDefShape){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipDef\" (project, name, description, shape) "+
-                "VALUES ("+projectID+", '"+relDefName+"', '"+relDefDescription+"', "+relDefShape+")";
+                string query = "INSERT INTO reaquisites.\"RelationshipDef\" (project, name, description, shape, ref) "+
+                "VALUES ("+projectID+", '"+relDefName+"', '"+relDefDescription+"', "+relDefShape+", "+
+                "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Projects\" where project="+projectID+"))";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -451,11 +455,12 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddArtefact(string artName, int artDefID){
+        static internal void AddArtefact(string artName, string? artDesc, int artDefID){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"Artefacts\" (name, artefactdef) "+
-                "VALUES ('"+artName+"', "+artDefID+")";
+                string query = "INSERT INTO reaquisites.\"Artefacts\" (name, artefactdef, description, ref) "+
+                "VALUES ('"+artName+"', "+artDefID+", "+artDesc+", "+
+                "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Projects\" where artefactdef="+artDefID+"))";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -479,11 +484,12 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddRelationship(int relDefID, int parentID, int childID){
+        static internal void AddRelationship(int relDefID, string? relDesc, int parentID, int childID){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"Relationships\" (parent, child, relationshipdef) "+
-                "VALUES ("+parentID+", "+childID+", "+relDefID+")";
+                string query = "INSERT INTO reaquisites.\"Relationships\" (parent, child, relationshipdef, description, ref) "+
+                "VALUES ("+parentID+", "+childID+", "+relDefID+", "+relDesc+", "+
+                "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Projects\" where relationshipdef="+relDefID+"))";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -650,11 +656,11 @@ namespace reaquisites.Services.DB
         }
 
         //ELEMENT GETTERS
-        static internal List<HistoryEntry> GetHistoryEntriesForElement(int projectID, int elementType, int elementID){
+        static internal List<HistoryEntry> GetAllProjectHistoryEntries(int projectID){
             List<HistoryEntry> HEs = new List<HistoryEntry>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT type, changes, date FROM reaquisites.\"HistoryEntries\" where project = "+projectID+" AND element_type = "+elementType+" and element = "+elementID;
+                string query = "SELECT type, changes, date, element_type, element FROM reaquisites.\"HistoryEntries\" where project = "+projectID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -667,9 +673,11 @@ namespace reaquisites.Services.DB
                         while (reader.Read())
                         {
                             HistoryEntry he = new HistoryEntry();
-                            he.Type = (int)reader[0];
+                            he.ChangeType = (int)reader[0];
                             he.Changes = reader[1].ToString();
                             he.ChangeDate = DateTime.Parse(reader[2].ToString());
+                            he.ElementType = (int)reader[3];
+                            he.ElementId = (int)reader[4];
                             HEs.Add(he);
                         }
                     }
@@ -678,11 +686,11 @@ namespace reaquisites.Services.DB
             }
             return HEs;
         }
-        static internal (int, Project) GetUserProject(int userID, string projectName){
+        static internal (int, Project) GetUserProject(int userID, int projectId){
             (int, Project) userProject = (-1,new Project());
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name, description, published, version FROM reaquisites.\"Projects\" where user_id = "+userID+" AND name = '"+projectName+"'";
+                string query = "SELECT id, name, description, published, version, ref FROM reaquisites.\"Projects\" where user_id = "+userID+" AND ref = "+projectId;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -699,6 +707,8 @@ namespace reaquisites.Services.DB
                             userProject.Item2.Description = reader[2].ToString();
                             userProject.Item2.IsPublished = (bool)reader[3];
                             userProject.Item2.Version = reader[4].ToString();
+                            userProject.Item2.ProjectId = (int)reader[5];
+                            userProject.Item2.ProjectId = projectId;
                         }
                     }
                     con.Close();
@@ -710,7 +720,7 @@ namespace reaquisites.Services.DB
             List<(int, ArtefactDefinition)> projectArtDefs = new List<(int, ArtefactDefinition)>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name, description, shape FROM reaquisites.\"ArtefactDefs\" where project = "+projectID;
+                string query = "SELECT id, name, description, shape, ref FROM reaquisites.\"ArtefactDefs\" where project = "+projectID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -725,8 +735,9 @@ namespace reaquisites.Services.DB
                             int id = (int)reader[0];
                             ArtefactDefinition artDef = new ArtefactDefinition();
                             artDef.Name = reader[1].ToString();
-                            artDef.Description = reader[2].ToString();
+                            artDef.Description = reader[2] !=null ? reader[2].ToString() : null;
                             artDef.Shape = (int)reader[3];
+                            artDef.ID = (int)reader[4];
                             projectArtDefs.Add((id, artDef));
                         }
                     }
@@ -768,7 +779,7 @@ namespace reaquisites.Services.DB
             List<(int, RelationshipDefinition)> projectRelDefs = new List<(int, RelationshipDefinition)>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name, description, shape FROM reaquisites.\"RelationshipDefs\" where project = "+projectID;
+                string query = "SELECT id, name, description, shape, ref FROM reaquisites.\"RelationshipDefs\" where project = "+projectID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -781,11 +792,12 @@ namespace reaquisites.Services.DB
                         while (reader.Read())
                         {
                             int id = (int)reader[0];
-                            RelationshipDefinition artDef = new RelationshipDefinition();
-                            artDef.Name = reader[1].ToString();
-                            artDef.Description = reader[2].ToString();
-                            artDef.Shape = (int)reader[3];
-                            projectRelDefs.Add((id, artDef));
+                            RelationshipDefinition relDef = new RelationshipDefinition();
+                            relDef.Name = reader[1].ToString();
+                            relDef.Description = reader[2] !=null ? reader[2].ToString() : null;
+                            relDef.Shape = (int)reader[3];
+                            relDef.ID = (int)reader[4];
+                            projectRelDefs.Add((id, relDef));
                         }
                     }
                     con.Close();
@@ -826,7 +838,7 @@ namespace reaquisites.Services.DB
             List<(int, Artefact)> projectArtefacts = new List<(int, Artefact)>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID;
+                string query = "SELECT id, name, description, ref FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -841,6 +853,8 @@ namespace reaquisites.Services.DB
                             int id = (int)reader[0];
                             Artefact artefact = new Artefact();
                             artefact.Name = reader[1].ToString();
+                            artefact.Description = reader[2] !=null ? reader[2].ToString() : null;
+                            artefact.ID = (int)reader[3];
                             projectArtefacts.Add((id, artefact));
                         }
                     }
@@ -876,11 +890,11 @@ namespace reaquisites.Services.DB
             }
             return artefactAttribs;
         }
-        static internal List<(int, (int,int))> GetRelationshipsForDefinition(int relDefID){
-            List<(int, (int,int))> relationshipsForDef = new List<(int, (int,int))>();
+        static internal List<(int, (int,int,string?,int))> GetRelationshipsForDefinition(int relDefID){
+            List<(int, (int,int,string?,int))> relationshipsForDef = new List<(int, (int,int,string?,int))>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID;
+                string query = "SELECT id, parent, child, description, ref FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -895,7 +909,9 @@ namespace reaquisites.Services.DB
                             int id = (int)reader[0];
                             int parentID = (int)reader[1];
                             int childID = (int)reader[2];
-                            relationshipsForDef.Add((id,(parentID,childID)));
+                            string? description = reader[3] !=null ? reader[3].ToString() : null;
+                            int relID = (int)reader[4];
+                            relationshipsForDef.Add((id, (parentID,childID,description,relID)));
                         }
                     }
                     con.Close();
@@ -1188,7 +1204,6 @@ namespace reaquisites.Services.DB
             }
             return sizeFactorValues;
         }
-
 
 
     }
