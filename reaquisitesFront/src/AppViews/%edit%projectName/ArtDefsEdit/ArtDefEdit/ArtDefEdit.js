@@ -111,19 +111,16 @@ export default function ArtDefEdit (props) {
     const validateArtDefEdit = () =>{
         if (props.artDefToEdit){
             const editionHistoryEntry = {
-                type: 2,
+                elementType: 1,
+                elementId: currentArtDef.ref,
+                changeType: 2,
                 changeDate: currentDate(),
                 changes: JSON.stringify({
-                    oldArtefact: props.artDefToEdit,
-                    newArtefact: currentArtDef
+                    old: props.artDefToEdit,
+                    new: currentArtDef
                 })
             }
-            setCurrentArtDef({...currentArtDef, 
-                historyEntries: currentArtDef.historyEntries ? 
-                    [...currentArtDef.historyEntries, editionHistoryEntry]
-                    :
-                    [editionHistoryEntry]});
-            props.validateArtDefEdition(currentArtDef, props.artDefToEditIndex);
+            props.validateArtDefEdition(currentArtDef, props.artDefToEditIndexm, editionHistoryEntry);
         }else{
             props.validateArtDefEdition(currentArtDef);
         }

@@ -303,6 +303,9 @@ namespace reaquisites.Managers
             (int, Project) userProject = DBProjectService.GetUserProject(userID, projectID);
             if (userProject.Item1<0) return 2;
 
+            List<HistoryEntry> oldHEs = DBProjectService.GetAllProjectHistoryEntries(userProject.Item1);
+            List<HistoryEntry> newHEs = updatedProject.HistoryEntries.Except(oldHEs).ToList();
+            List<HistoryEntry>[] editedElems = newHEs.GroupBy(he => (he.ElementType, he.ElementId)).Select(heGroup => heGroup.ToList()).ToArray();
             return 0;
         }
 

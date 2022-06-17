@@ -13,6 +13,7 @@ import CJSArrowShow from './CJSArrowShow/CJSArrowShow';
 export default function RelDefEdit (props) {
 
     const [currentRelDef, setCurrentRelDef] = useState({
+        ref: 0,
         shape: 0,
         name: '',
         description: '',
@@ -63,6 +64,7 @@ export default function RelDefEdit (props) {
 
     const restartInfo = () =>{
         setCurrentRelDef({
+            ref:0,
             shape: 0,
             name: '',
             description: '',
@@ -87,20 +89,17 @@ export default function RelDefEdit (props) {
     const validateRelDefEdit = () =>{
         if (props.relDefToEdit){
             const editionHistoryEntry = {
-                type: 2,
+                elementType: 2,
+                elementId: currentRelDef.ref,
+                changeType: 2,
                 changeDate: currentDate(),
                 changes: JSON.stringify({
-                    oldRelationship: props.relDefToEdit,
-                    newRelationship: currentRelDef
+                    old: props.relDefToEdit,
+                    new: currentRelDef
                 })
             }
 
-            setCurrentRelDef({...currentRelDef, 
-                historyEntries: currentRelDef.historyEntries ? 
-                    [...currentRelDef.historyEntries, editionHistoryEntry]
-                    :
-                    [editionHistoryEntry]});
-            props.validateRelDefEdition(currentRelDef, props.relDefToEditIndex);
+            props.validateRelDefEdition(currentRelDef, props.relDefToEditIndex, editionHistoryEntry);
         }else{
             props.validateRelDefEdition(currentRelDef);
         }

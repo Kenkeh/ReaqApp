@@ -55,7 +55,7 @@ namespace reaquisites.Controllers
             }
         }
         // POST action
-        [HttpPost("{accName}/Save/{projectID}")]
+        [HttpPost("{accName}/Update/{projectID}")]
         public ActionResult SaveProject(string accName, int projectID, [FromBody] Project toUpdate)
         {
             // USE TO ENABLE LOGGIN SESSION
@@ -67,6 +67,8 @@ namespace reaquisites.Controllers
                     return Ok();
                 case 1:
                     return BadRequest("User not found");
+                case 2:
+                    return BadRequest("Project not found");
                 default:
                     return BadRequest();
             }

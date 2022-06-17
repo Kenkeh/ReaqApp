@@ -19,13 +19,11 @@ export default function ArtDefsEdit (props) {
     
 
     const addArtDef = (newArtDef) => {
-        var creationHistoryEntry = {
-            type: 1,
+        const creationHistoryEntry = {
+            elementType: 1,
+            changeType: 1,
             changeDate: currentDate(),
-            changes: JSON.stringify({
-                elementType: 1,
-                newArtefactDef: newArtDef
-            })
+            changes: JSON.stringify(newArtDef)
         }
         props.setProject({...props.project, 
             artefactDefs: [...props.project.artefactDefs, newArtDef], 
@@ -37,13 +35,12 @@ export default function ArtDefsEdit (props) {
     const deleteArtDef = () =>{
         var artDefs = [...props.project.artefactDefs];
         const removedArtDef = artDefs.splice(selectedArtDef,1);
-        var deletionHistoryEntry = {
-            type: 3,
+        const deletionHistoryEntry = {
+            elementType: 1,
+            elementId: removedArtDef.ref,
+            changeType: 3,
             changeDate: currentDate(),
-            changes: JSON.stringify({
-                elementType: 1,
-                deletedArtefatcDef: removedArtDef
-            })
+            changes: JSON.stringify(removedArtDef)
         }
         props.setProject({...props.project, 
             artefactDefs: artDefs,
@@ -58,10 +55,13 @@ export default function ArtDefsEdit (props) {
         setCurrentArtDefPanel(true);
     }
 
-    const editArtDef = (editedArtDef, index) =>{
+    const editArtDef = (editedArtDef, index, editionHistoryEntry) =>{
         var newArtDefs = [...props.project.artefactDefs];
         newArtDefs[index] = editedArtDef;
-        props.setProject({...props.project, artefactDefs: newArtDefs});
+        props.setProject({...props.project, 
+            artefactDefs: newArtDefs,
+            historyEntries: [...props.project.historyEntries, editionHistoryEntry]
+        });
         props.setProjectModified(true);
     }
 

@@ -19,13 +19,11 @@ export default function RelDefsEdit (props) {
     
 
     const addRelDef = (newRelDef) => {
-        var creationHistoryEntry = {
-            type: 1,
+        const creationHistoryEntry = {
+            elementType: 2,
+            changeType: 1,
             changeDate: currentDate(),
-            changes: JSON.stringify({
-                elementType: 1,
-                newRelationshipDef: newRelDef
-            })
+            changes: JSON.stringify(newRelDef)
         }
         props.setProject({...props.project, 
             relationshipDefs: [...props.project.relationshipDefs, newRelDef], 
@@ -37,13 +35,12 @@ export default function RelDefsEdit (props) {
     const deleteRelDef = () =>{
         var relDefs = [...props.project.relationshipDefs];
         const removedRelDef = relDefs.splice(selectedRelDef,1);
-        var deletionHistoryEntry = {
-            type: 3,
+        const deletionHistoryEntry = {
+            elementType: 2,
+            elementId: removedRelDef.ref,
+            changeType: 3,
             changeDate: currentDate(),
-            changes: JSON.stringify({
-                elementType: 1,
-                deletedRelefatcDef: removedRelDef
-            })
+            changes: JSON.stringify(removedRelDef)
         }
         props.setProject({...props.project, 
             relationshipDefs: relDefs,
@@ -58,10 +55,13 @@ export default function RelDefsEdit (props) {
         setCurrentRelDefPanel(true);
     }
 
-    const editRelDef = (editedRelDef, index) =>{
+    const editRelDef = (editedRelDef, index, editionHistoryEntry) =>{
         var newRelDefs = [...props.project.relationshipDefs];
         newRelDefs[index] = editedRelDef;
-        props.setProject({...props.project, relationshipDefs: newRelDefs});
+        props.setProject({...props.project, 
+            relationshipDefs: newRelDefs,
+            historyEntries: [...props.project.historyEntries, editionHistoryEntry]
+        });
         props.setProjectModified(true);
     }
 
