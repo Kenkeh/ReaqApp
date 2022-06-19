@@ -64,8 +64,23 @@ export const currentDate = () =>{
     var minute = date.getMinutes(); // yields minutes
     var second = date.getSeconds(); // yields seconds
 
+    if (day<10){
+        day = '0'+day;
+    }
+    if (month<10){
+        month = '0'+month;
+    }
+    if (hour<10){
+        hour = '0'+hour;
+    }
+    if (minute<10){
+        minute = '0'+minute;
+    }
+    if (second<10){
+        second = '0'+second;
+    }
     // After this construct a string with the above results as below
-    return day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
+    return year + "-" + month + "-" + day + "T" + hour + ':' + minute + ':' + second;
 }
 
 export const cytoscapeArrowHeads = [ 

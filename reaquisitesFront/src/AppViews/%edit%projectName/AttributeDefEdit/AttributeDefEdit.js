@@ -50,7 +50,7 @@ export default function AttributeDefEdit (props) {
                 props.validateAttribDefEdition({...attribDef, values: integerValues});
                 break;
             default:
-                props.validateAttribDefEdition({...attribDef, values: undefined});
+                props.validateAttribDefEdition({...attribDef, values: ''});
                 break;
         }
         cancelAttribDefEdit();
@@ -129,7 +129,7 @@ export default function AttributeDefEdit (props) {
             }
             if (!found) setAttribDefNameError('');
         }
-        setAttribDef({...attribDef,name: value});
+        setAttribDef({...attribDef, name: value});
     }
 
     

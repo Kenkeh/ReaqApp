@@ -38,6 +38,7 @@ import { currentDate } from '../../../../AppConsts';
 export default function ArtDefEdit (props) {
 
     const [currentArtDef, setCurrentArtDef] = useState({
+        id: 0,
         shape: 0,
         name: '',
         description: '',
@@ -87,6 +88,7 @@ export default function ArtDefEdit (props) {
 
     const restartInfo = () =>{
         setCurrentArtDef({
+            id: 0,
             shape: 0,
             name: '',
             description: '',
@@ -112,7 +114,7 @@ export default function ArtDefEdit (props) {
         if (props.artDefToEdit){
             const editionHistoryEntry = {
                 elementType: 1,
-                elementId: currentArtDef.ref,
+                elementId: currentArtDef.id,
                 changeType: 2,
                 changeDate: currentDate(),
                 changes: JSON.stringify({

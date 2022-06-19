@@ -69,6 +69,22 @@ namespace reaquisites.Controllers
                     return BadRequest("User not found");
                 case 2:
                     return BadRequest("Project not found");
+                case 3:
+                    return BadRequest("Artefact edited from an Artefact Definition not found");
+                case 4:
+                    return BadRequest("Artefact edited to an Artefact Definition not found");
+                case 5:
+                    return BadRequest("Relationship edited from an Relationship Definition not found");
+                case 6:
+                    return BadRequest("Relationship edited to an Relationship Definition not found");
+                case 7:
+                    return BadRequest("Relationship parent implicated edited to an Artefact from an Artefact Definition not found");
+                case 8:
+                    return BadRequest("Relationship parent implicated edited to an Artefact not found");
+                case 9:
+                    return BadRequest("Relationship child implicated edited to an Artefact from an Artefact Definition not found");
+                case 10:
+                    return BadRequest("Relationship child implicated edited to an Artefact not found");
                 default:
                     return BadRequest();
             }

@@ -57,12 +57,12 @@ export default function ArtDef (props) {
             <div className='artDefExtraInfo'>
                 <div className='artDefAttributesInfo'>
                     <Centerer>
-                        {props.artDef.attributeDefinitions.length ? artDefAttributesParse : 'NO ATTRIBUTES'}
+                        {props.artDef.attributeDefinitions.length ? artDefAttributesParse() : 'NO ATTRIBUTES'}
                     </Centerer>
                 </div>
                 <div className='artDefDescInfo'>
                     <Centerer>
-                        {props.artDef.description=='' ? 'NO DESCRIPTION' : props.artDef.description}
+                        {props.artDef.description=='' ? 'NO DESCRIPTION' : props.artDef.Description}
                     </Centerer>
                 </div>
             </div>

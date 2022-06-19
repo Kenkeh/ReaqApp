@@ -3,6 +3,7 @@ import React from 'react';
 import Centerer from '../../MiniTools/Centerer/Centerer';
 import ReaqLogo from '../../Elements/ReaqLogo/ReaqLogo';
 import { Button } from '@mui/material';
+import { saveProject } from '../../AppAPI';
 
 
 
@@ -25,6 +26,7 @@ export default function TopBar(props){
         variant={props.projectEdited ? 'contained' : 'outlined'}
         style={{position: "absolute", left: 80, top: 5, bottom: 5, width: "70px", fontSize: "8px", fontWeight: "bold"}}
         color={props.projectEdited ? 'secondary' : 'error'}
+        onClick={props.projectEdited ? () => saveProject(props.user.account,props.project) : undefined}
         disableElevation
         >
           SAVE
