@@ -58,11 +58,22 @@ export default function AppTopBar (props) {
 
     return (
         <div className='app_topbar'>
-            <TopBar tooglePanel={tooglePanel} user={props.user} project={props.project} projectEdited={props.projectEdited}/>
+            <TopBar 
+                tooglePanel={tooglePanel} 
+                user={props.user} 
+                project={props.project} 
+                projectEdited={props.projectEdited}
+                currentView={props.currentScreen}
+            />
             <Darkener dark={showPanel!==0} hidden={hideDarkener} onClick={tooglePanel}/>
             {/*No renderizamos condicional, sería feo esconder la pantalla de login justo después de loggear */}
             <Register resetRef={registerResetRef} className={ "center_panel " + (showPanel===1 ? "panel_below_topbar " : "center_panel_up ")}/>
-            <Login resetRef={loginResetRef} className={"center_panel " + (showPanel===2 ? "panel_below_topbar " : "center_panel_up ")} setUser={props.setUser}/>
+            <Login 
+                resetRef={loginResetRef} 
+                className={"center_panel " + (showPanel===2 ? "panel_below_topbar " : "center_panel_up ")} 
+                setUser={props.setUser}
+                goToPage={props.switchToPage}
+            />
             <UserProfile user={props.user} logOutUser={logOutUser} className={ "user_panel " + (showPanel===3 ? "panel_below_topbar " : "user_panel_up ")}/>
             
         </div>

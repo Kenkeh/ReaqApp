@@ -77,6 +77,7 @@ export default function Login(props) {
       }else{
         setLogginPhase(2);
         props.setUser(res);
+        props.goToPage(1);
       }
     }
     ).catch(err =>{

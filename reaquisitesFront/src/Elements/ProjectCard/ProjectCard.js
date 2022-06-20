@@ -25,7 +25,7 @@ export default function ProjectCard(props){
             </div>
             <div className="projectCardEditButton">
                 <Centerer>
-                    <IconButton sx={{color: 'white'}} >
+                    <IconButton sx={{color: 'white'}} onClick={props.editClick}>
                         <Edit/>
                     </IconButton>
                 </Centerer>

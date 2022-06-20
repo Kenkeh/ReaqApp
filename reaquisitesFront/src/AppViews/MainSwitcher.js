@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AccIcon from '../Elements/images/green_valid.png';
 import RejIcon from '../Elements/images/red_cancel.png';
 import RedirectionPage from './RedirectionPage/RedirectionPage';
@@ -10,17 +10,33 @@ import ProjecEdit from './%edit%projectName/ProjectEdit/ProjectEdit';
 
 
 export default function MainSwitcher(props) {
+
+  const currentPage = (number) =>{
+    switch (number){
+      case 0:
+        return <LandingArea/>
+      case 1:
+        return  <FirstLook 
+                  user={props.user}
+                  setUser={props.setUser} 
+                  loginSession={props.loginSession} 
+                  setProject={props.setProject} 
+                  currentProject={props.project}
+                  openProjectEdition={() => props.setPageNumber(2)}
+                />
+      case 2: 
+        return <ProjecEdit
+                user = {props.user}
+                activeProject = {props.project}
+                setActiveProject = {props.setProject}
+                setActiveProjectModified = {props.setProjectEdited}
+              />
+    }
+  }
+
   return (
     <Routes>
-      <Route path="/" element={
-        props.user ? 
-        <FirstLook 
-        user={props.user} 
-        loginSession={props.loginSession} 
-        setProject={props.setProject} 
-        currentProject={props.project}/> :
-        <LandingArea/>
-      }
+      <Route path="/" element={currentPage(props.pageNumber)}
       />
       <Route path="/register-exp" element={
         <RedirectionPage
@@ -34,9 +50,9 @@ export default function MainSwitcher(props) {
           icon={AccIcon}
         />} 
       />
-      {
-        props.user &&
-        props.user.projects.map( (proj, index) => 
+      {/* was a nice try but it complicates things out
+        editRoutes &&
+        editRoutes.map( (proj, index) => 
           <Route key={index} path={"/edit/"+proj.id} element={
             <ProjecEdit
               user = {props.user} 
@@ -47,6 +63,7 @@ export default function MainSwitcher(props) {
             />
           }/>
         )
+        */
       }
     </Routes>
   );

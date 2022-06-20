@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { overTheme } from '../../../overTheme';
 import './FirstLook.css';
 import { ServerRouteHTTPS } from '../../../AppPaths';
-import { Navigate } from 'react-router-dom';
 import ProjectCard from '../../../Elements/ProjectCard/ProjectCard';
+import { getUserProject } from '../../../AppAPI';
 
 
 export default function FirstLook (props) {
@@ -25,22 +25,19 @@ export default function FirstLook (props) {
 
 
     useEffect(()=>{
-        if (props.currentProject){
-            props.setProject(undefined);
-        }
         var recProjects = props.user.projects;
         recProjects.sort((a,b)=>{
             if (a.lastModified > b.lastModified){
-                return 1;
+                return -1;
             }else if (a.lastModified < b.lastModified){
-                return -11;
+                return 1;
             }else{
                 return 0;
             }
         });
         recProjects = recProjects.slice(0,(Math.min(maxRecentProjectsSize,recProjects.length)));
         setRecentProjects(recProjects);
-    },[]);
+    },[props.user.projects]);
 
     const toogleDropdown = (dpn) => (event) =>{
         switch(dpn){
@@ -63,8 +60,6 @@ export default function FirstLook (props) {
         const newName = event.target.value;
         if (newName==''){
             setNewProjectNameError('Project name cannot be empty');
-        }else if(newName.includes('_')){
-            setNewProjectNameError('Project name cannot contain \'_\' char');
         }else{
             var found = false;
             for (var i=0; i<props.user.projects.length; i++){
@@ -111,21 +106,43 @@ export default function FirstLook (props) {
                 loginSession: props.loginSession
             }) // body data type must match "Content-Type" header
 
-        }).then( res => res.json().then( res =>
+        }).then( res => res.json() ).then( res =>
             {
                 if (res.error!==undefined){
                     console.log("Server error: "+res.message);
                 }else{
                     props.setProject(res);
-                    const projectURL = res.name.replaceAll(' ','_');
-                    document.location.pathname = '/edit/'+projectURL;
+                    props.setUser({...props.user, projects: [...props.user.projects, {
+                        name: res.name,
+                        description: res.description,
+                        version: res.version,
+                        isPublished: res.isPublished,
+                        id: res.projectId,
+                        lastModified: Date.now()
+                    }]});
+                    props.openProjectEdition();
                 }
-            })
-        ).catch(err=>{
+            }).catch(err=>{
+            console.log("Error treating request: "+err);
+        }).catch(err=>{
+            console.log("Error parsing request: "+err);
+        }).catch(err=>{
             console.log("Error on request: "+err);
         });
     }
     
+    const goToEditProject = (projectRef) =>{
+        getUserProject(props.user.account, projectRef).then((project) =>{
+            props.setProject(project);
+            props.openProjectEdition();
+        }).catch(err=>{
+            console.log("Error treating request: "+err);
+        }).catch(err=>{
+            console.log("Error parsing request: "+err);
+        }).catch(err=>{
+            console.log("Error on request: "+err);
+        });
+    }
 
     return (
         <div className="first_look_grid">
@@ -191,7 +208,7 @@ export default function FirstLook (props) {
                 <div className='fl_recent_projects_flex'>
                     {recentProjects.map((project, index)=>{
                         return  <div key={index} className='fl_rp_card_container' style={{gridColumn: index+1}}>
-                                    <ProjectCard textSize={0} project={project}/>
+                                    <ProjectCard textSize={0} project={project} editClick = {() => goToEditProject(project.projectId)}/>
                                 </div>
                     })}
                 </div>

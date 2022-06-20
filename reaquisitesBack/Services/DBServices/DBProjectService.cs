@@ -89,6 +89,54 @@ namespace reaquisites.Services.DB
             }
             return projectID;
         }
+        static internal int GetProjectRef(int userID, int projectId){
+            int projectID = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT ref FROM reaquisites.\"Projects\" where user_id = "+userID+" AND id = "+projectId;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectID;
+                        }
+                        while (reader.Read())
+                        {
+                            projectID = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectID;
+        }
+        static internal int GetLastProjectID(int userID){
+            int projectID = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id FROM reaquisites.\"Projects\" where user_id = "+userID+" order by ref desc limit 1";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return projectID;
+                        }
+                        while (reader.Read())
+                        {
+                            projectID = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return projectID;
+        }
 
         static internal int GetArtefactDefID(int projectID, int artefactDefRef){
             int artDefID = -1;

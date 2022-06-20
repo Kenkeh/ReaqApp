@@ -17,17 +17,20 @@ export default function App() {
   
   const topBarSize = 40;
 
+  const [currentPage, setCurrentPage] = useState(0);
   const [currentUser,setCurrentUser] = useState(undefined);
   const [currentLogin, setCurrentLogin] = useState('');
   const [currentProject, setCurrentProject] = useState(undefined);
   const [currentProjectHasBeenEdited, setCurrentProjectHasBeenEdited] = useState(false);
 
   useEffect(()=>{
-    var login = Cookies.get('ReaqLoginInfo');
-    if (login){
-      login = JSON.parse(login);
-      setCurrentUser(login.user);
-      setCurrentLogin(login.loginSession);
+    var appInfo = Cookies.get('ReaqInfo');
+    if (appInfo){
+      appInfo = JSON.parse(appInfo);
+      setCurrentUser(appInfo.user);
+      setCurrentLogin(appInfo.loginSession);
+      setCurrentPage(appInfo.currentPage);
+      setCurrentProject(appInfo.currentProject);
     }
   },[]);
 
@@ -40,16 +43,44 @@ export default function App() {
         registerDate: user.registerDate,
         projects: user.projects
       }
-      Cookies.set('ReaqLoginInfo',JSON.stringify({user: userObject, loginSession: user.loginSession}));
+      const oldInfo = Cookies.get('ReaqInfo');
+      if (oldInfo){
+        const appInfo = JSON.parse(oldInfo);
+        Cookies.set('ReaqInfo',JSON.stringify({...appInfo, user: userObject, loginSession: user.loginSession}));
+      }else{
+        Cookies.set('ReaqInfo',JSON.stringify({currentPage: 1, currentProject: undefined, user: userObject, loginSession: user.loginSession}));
+      }
       setCurrentUser(userObject);
       setCurrentLogin(user.loginSession);
     }else{
-      if (Cookies.get('ReaqLoginInfo')){
-        Cookies.remove('ReaqLoginInfo');
+      if (Cookies.get('ReaqInfo')){
+        Cookies.remove('ReaqInfo');
       }
       setCurrentUser(undefined);
       setCurrentLogin('');
+      setCurrentPage(0);
+      setCurrentProject(undefined);
     }
+  }
+  const setProject = (project) =>{
+    const oldInfo = Cookies.get('ReaqInfo');
+    if (oldInfo){
+      const appInfo = JSON.parse(oldInfo);
+      Cookies.set('ReaqInfo',JSON.stringify({...appInfo, currentProject: project}));
+    }else{
+      //ERROR
+    }
+    setCurrentProject(project);
+  }
+  const setPage = (number) =>{
+    const oldInfo = Cookies.get('ReaqInfo');
+    if (oldInfo){
+      const appInfo = JSON.parse(oldInfo);
+      Cookies.set('ReaqInfo', JSON.stringify({...appInfo, currentPage: number}));
+    }else{
+      //ERROR
+    }
+    setCurrentPage(number);
   }
   
 
@@ -58,16 +89,22 @@ export default function App() {
       <ThemeProvider theme={overTheme}>
         <CssBaseline />
         <AppTopBar 
-        setUser={setUser} 
-        user={currentUser} 
-        project={currentProject}
-        projectEdited={currentProjectHasBeenEdited}
-        login={currentLogin}/>
-        <AppBG topBarHeight={topBarSize}>
-          <MainSwitcher 
+          setUser={setUser} 
           user={currentUser} 
+          project={currentProject}
+          projectEdited={currentProjectHasBeenEdited}
+          login={currentLogin}
+          currentScreen={currentPage}
+          switchToPage={setPage}
+        />
+        <AppBG topBarHeight={topBarSize}>
+          <MainSwitcher
+          pageNumber={currentPage}
+          setPageNumber={setPage} 
+          user={currentUser} 
+          setUser={setUser}
           project={currentProject} 
-          setProject={setCurrentProject}
+          setProject={setProject}
           setProjectEdited = {setCurrentProjectHasBeenEdited}
           loginSession={currentLogin}  
           />

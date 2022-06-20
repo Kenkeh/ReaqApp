@@ -31,7 +31,10 @@ namespace reaquisites.Managers
             he.Changes = "Project created with name: \""+project.Name+"\" and description: \""+project.Description+"\"";
             he.ChangeDate = DateTime.Now;
             project.HistoryEntries.Add(he);
-            return new KeyValuePair<int, Project>(AddProjectToUser(accName, project), project);
+            int projectRef = AddProjectToUser(accName, project);
+            //si es menor que 0 el controller captura el error
+            project.ProjectId = projectRef;
+            return new KeyValuePair<int, Project>(projectRef, project);
         }
         
         static internal int AddProjectToUser(string userAccount, Project project)
@@ -39,7 +42,7 @@ namespace reaquisites.Managers
             int userID = DBUserService.GetUserId(userAccount);
             if (userID<0) return -1;
             DBProjectService.AddProject(userID, project.Name, project.Description,project.IsPublished, false, project.Version);
-            int projectID = DBProjectService.GetProjectID(userID,project.ProjectId);
+            int projectID = DBProjectService.GetLastProjectID(userID);
             if (projectID<0) return -2;
 
             Dictionary<AttributeDefinition, int> attribDefs = new Dictionary<AttributeDefinition, int>();
@@ -48,7 +51,7 @@ namespace reaquisites.Managers
             Dictionary<ArtefactDefinition, int> artDefs = new Dictionary<ArtefactDefinition, int>();
             foreach (ArtefactDefinition artDef in project.ArtefactDefs){
                 DBProjectService.AddArtefactDefinition(projectID,artDef.Name,artDef.Description,artDef.Shape);
-                int artDefID = DBProjectService.GetArtefactDefID(projectID, artDef.ID);
+                int artDefID = DBProjectService.GetLastArtefactDefID(projectID);
                 if (artDefID<0) return -3;
                 foreach(AttributeDefinition artAttribDef in artDef.AttributeDefinitions){
                     DBProjectService.AddArtefactAttributeDefinition(artAttribDef.Name, artAttribDef.Type, artAttribDef.Description,artAttribDef.Values,artDefID);
@@ -63,7 +66,7 @@ namespace reaquisites.Managers
             Dictionary<RelationshipDefinition, int> relDefs = new Dictionary<RelationshipDefinition, int>();
             foreach (RelationshipDefinition relDef in project.RelationshipDefs){
                 DBProjectService.AddRelationshipDefinition(projectID, relDef.Name, relDef.Description, relDef.Shape);
-                int relDefID = DBProjectService.GetRelationshipDefID(projectID, relDef.ID);
+                int relDefID = DBProjectService.GetLastRelationshipDefID(projectID);
                 if (relDefID<0) return -4;
                 foreach(AttributeDefinition artAttribDef in relDef.AttributeDefinitions){
                     DBProjectService.AddRelationshipAttributeDefinition(artAttribDef.Name, artAttribDef.Type, artAttribDef.Description,artAttribDef.Values, relDefID);
@@ -79,7 +82,7 @@ namespace reaquisites.Managers
             foreach (Artefact artefact in project.Artefacts){
                 int artDefID = artDefs[artefact.Definition];
                 DBProjectService.AddArtefact(artefact.Name, artefact.Description, artDefID);
-                int artID = DBProjectService.GetArtefactID(projectID, artefact.ID);
+                int artID = DBProjectService.GetLastArtefactID(projectID);
                 if (artID<0) return -5;
                 foreach (Attribute attrib in artefact.Attributes){
                     int attributeDefID = attribDefs[attrib.Definition];
@@ -95,7 +98,7 @@ namespace reaquisites.Managers
                 int parentID = artefacts[relation.Parent];
                 int childID = artefacts[relation.Child];
                 DBProjectService.AddRelationship(relDefID,relation.Description, parentID,childID);
-                int relID = DBProjectService.GetRelationshipID(relDefID, relation.ID);
+                int relID = DBProjectService.GetLastRelationshipID(relDefID);
                 if (relID<0) return -6;
                 foreach (Attribute attrib in relation.Attributes){
                     int attributeDefID = attribDefs[attrib.Definition];
@@ -124,7 +127,7 @@ namespace reaquisites.Managers
                 //RELATIONSHIP COLOR FACTOR
                 foreach (ColorFactor colorFactor in visual.RelationshipColorFactors){
                     int attribDefID = attribDefs[colorFactor.Definition];
-                    DBProjectService.AddArtefactColorFactor(attribDefID,visualID,colorFactor.Weight);
+                    DBProjectService.AddRelationshipColorFactor(attribDefID,visualID,colorFactor.Weight);
                     int colorFactorID = DBProjectService.GetRelationshipColorFactorID(visualID,attribDefID);
                     if (colorFactorID<0) return -9;
                     foreach (KeyValuePair<string, System.Drawing.Color> points in colorFactor.Values){
@@ -158,8 +161,9 @@ namespace reaquisites.Managers
             foreach (HistoryEntry he in project.HistoryEntries){
                 DBProjectService.AddProjectHistoryEntry(projectID, he.ElementType, he.ElementId, he.ChangeType, he.Changes, he.ChangeDate);
             }
+            
 
-            return 0;
+            return DBProjectService.GetProjectRef(userID,projectID);
         }
 
 
