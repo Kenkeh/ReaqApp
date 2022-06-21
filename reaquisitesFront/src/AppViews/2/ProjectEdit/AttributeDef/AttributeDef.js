@@ -1,7 +1,5 @@
-import { style } from '@mui/system';
-import { useEffect, useState } from 'react';
-import Centerer from '../../../MiniTools/Centerer/Centerer';
-import { overTheme } from '../../../overTheme';
+import Centerer from '../../../../MiniTools/Centerer/Centerer';
+import { overTheme } from '../../../../overTheme';
 import './AttributeDef.css';
 
 

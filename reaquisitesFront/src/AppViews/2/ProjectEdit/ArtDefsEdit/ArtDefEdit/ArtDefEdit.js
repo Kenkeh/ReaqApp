@@ -28,11 +28,11 @@ import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwo
 import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import WorkOffTwoToneIcon from '@mui/icons-material/WorkOffTwoTone';
 import { useEffect, useState } from 'react';
-import { overTheme } from '../../../../overTheme';
+import { overTheme } from '../../../../../overTheme';
 import './ArtDefEdit.css';
 import AttributeDef from '../../AttributeDef/AttributeDef';
 import AttributeDefEdit from '../../AttributeDefEdit/AttributeDefEdit';
-import { currentDate } from '../../../../AppConsts';
+import { currentDate } from '../../../../../AppConsts';
 
 
 export default function ArtDefEdit (props) {

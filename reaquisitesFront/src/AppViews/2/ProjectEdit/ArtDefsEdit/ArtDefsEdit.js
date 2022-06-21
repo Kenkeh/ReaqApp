@@ -4,11 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useEffect, useState } from 'react';
 import ArtDefEdit from './ArtDefEdit/ArtDefEdit';
-import Centerer from '../../../MiniTools/Centerer/Centerer';
-import { overTheme } from '../../../overTheme';
+import Centerer from '../../../../MiniTools/Centerer/Centerer';
+import { overTheme } from '../../../../overTheme';
 import './ArtDefsEdit.css';
 import ArtDef from './ArtDef/ArtDef';
-import { currentDate } from '../../../AppConsts';
+import { currentDate } from '../../../../AppConsts';
 
 
 export default function ArtDefsEdit (props) {

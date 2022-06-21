@@ -2,11 +2,11 @@ import { Button, IconButton, MenuItem, Select, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useEffect, useState, useCallback } from 'react';
-import { overTheme } from '../../../../overTheme';
+import { overTheme } from '../../../../../overTheme';
 import './RelDefEdit.css';
 import AttributeDef from '../../AttributeDef/AttributeDef';
 import AttributeDefEdit from '../../AttributeDefEdit/AttributeDefEdit';
-import { currentDate, cytoscapeArrowHeads } from '../../../../AppConsts';
+import { currentDate, cytoscapeArrowHeads } from '../../../../../AppConsts';
 import CJSArrowShow from './CJSArrowShow/CJSArrowShow';
 
 

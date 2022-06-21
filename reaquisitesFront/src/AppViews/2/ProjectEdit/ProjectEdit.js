@@ -3,8 +3,8 @@ import './ProjectEdit.css';
 import { getUserProject } from '../../../AppAPI';
 import { overTheme } from '../../../overTheme';
 import { Button } from '@mui/material';
-import ArtDefsEdit from '../ArtDefsEdit/ArtDefsEdit';
-import RelDefsEdit from '../RelDefsEdit/RelDefsEdit';
+import ArtDefsEdit from './ArtDefsEdit/ArtDefsEdit';
+import RelDefsEdit from './RelDefsEdit/RelDefsEdit';
 
 
 export default function ProjectEdit (props) {

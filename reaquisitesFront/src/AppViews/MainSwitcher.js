@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import AccIcon from '../Elements/images/green_valid.png';
 import RejIcon from '../Elements/images/red_cancel.png';
 import RedirectionPage from './RedirectionPage/RedirectionPage';
-import LandingArea from './%/LandingArea/LandingArea';
-import FirstLook from './%/FirstLook/FirstLook';
-import ProjecEdit from './%edit%projectName/ProjectEdit/ProjectEdit';
+import LandingArea from './1/LandingArea/LandingArea';
+import FirstLook from './1/FirstLook/FirstLook';
+import ProjecEdit from './2/ProjectEdit/ProjectEdit';
 
 
 

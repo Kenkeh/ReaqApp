@@ -1,7 +1,7 @@
-import { overTheme } from '../../../../overTheme';
+import { overTheme } from '../../../../../overTheme';
 import './ArtDef.css';
-import Centerer from '../../../../MiniTools/Centerer/Centerer';
-import { ArtefactIcons } from '../../../../AppConsts';
+import Centerer from '../../../../../MiniTools/Centerer/Centerer';
+import { ArtefactIcons } from '../../../../../AppConsts';
 
 
 export default function ArtDef (props) {

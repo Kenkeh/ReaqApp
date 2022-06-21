@@ -1,8 +1,8 @@
 import { Button, MenuItem, Select, Slider, TextField } from '@mui/material';
 import { useState } from 'react';
 import './AttributeDefEdit.css';
-import { overTheme } from '../../../overTheme';
-import Centerer from '../../../MiniTools/Centerer/Centerer';
+import { overTheme } from '../../../../overTheme';
+import Centerer from '../../../../MiniTools/Centerer/Centerer';
 
 
 export default function AttributeDefEdit (props) {
