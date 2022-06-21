@@ -62,7 +62,7 @@ export default function ArtDef (props) {
                 </div>
                 <div className='artDefDescInfo'>
                     <Centerer>
-                        {props.artDef.description=='' ? 'NO DESCRIPTION' : props.artDef.Description}
+                        {props.artDef.description=='' ? 'NO DESCRIPTION' : props.artDef.description}
                     </Centerer>
                 </div>
             </div>

@@ -5,5 +5,4 @@ public class LoggedUserDTO {
     public string EMail { get; set; }
     public DateTime RegisterDate {get; set; }
     public string LoginSession { get; set; }
-    public List<SimpleProjectDTO> Projects { get; set; }
 }

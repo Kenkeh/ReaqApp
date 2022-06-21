@@ -30,6 +30,17 @@ namespace reaquisites.Controllers
             }
         }
 
+        // GET action
+        [HttpGet("{accountName}/projects")]
+        public ActionResult<List<SimpleProjectDTO>> GetProjectsPreview(string accountName)
+        {
+            KeyValuePair<int,List<SimpleProjectDTO>> result = UsersManager.allUserProjectsPreview(accountName);
+            if (result.Key>0){
+                return result.Value;
+            }else{
+                return BadRequest("User not found");
+            }
+        }
 
         
         // POST action

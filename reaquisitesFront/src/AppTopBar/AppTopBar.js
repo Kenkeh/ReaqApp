@@ -64,6 +64,8 @@ export default function AppTopBar (props) {
                 project={props.project} 
                 projectEdited={props.projectEdited}
                 currentView={props.currentScreen}
+                setCurrentView={props.switchToPage}
+                saveProject={props.saveProject}
             />
             <Darkener dark={showPanel!==0} hidden={hideDarkener} onClick={tooglePanel}/>
             {/*No renderizamos condicional, sería feo esconder la pantalla de login justo después de loggear */}
@@ -72,6 +74,7 @@ export default function AppTopBar (props) {
                 resetRef={loginResetRef} 
                 className={"center_panel " + (showPanel===2 ? "panel_below_topbar " : "center_panel_up ")} 
                 setUser={props.setUser}
+                setProjectsList={props.setProjectsList}
                 goToPage={props.switchToPage}
             />
             <UserProfile user={props.user} logOutUser={logOutUser} className={ "user_panel " + (showPanel===3 ? "panel_below_topbar " : "user_panel_up ")}/>

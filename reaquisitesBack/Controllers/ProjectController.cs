@@ -14,7 +14,9 @@ namespace reaquisites.Controllers
             UsersManager.connString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // POST action
+        
+
+        // GET action
         [HttpGet("{accName}/Get/{projectId}")] 
         public ActionResult<Project> GetProjectFromUser(string accName, int projectId/*, [FromBody] string loginSession*/)
         {

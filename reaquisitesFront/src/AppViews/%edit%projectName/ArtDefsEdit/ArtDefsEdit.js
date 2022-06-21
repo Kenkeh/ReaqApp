@@ -13,6 +13,7 @@ import { currentDate } from '../../../AppConsts';
 
 export default function ArtDefsEdit (props) {
 
+    
     const [currentArtDefPanel, setCurrentArtDefPanel] = useState(false);
     const [selectedArtDef, setSelectedArtDef] = useState(-1);
     const [editingArtDef, setEditingArtDef] = useState(undefined);
@@ -34,10 +35,10 @@ export default function ArtDefsEdit (props) {
 
     const deleteArtDef = () =>{
         var artDefs = [...props.project.artefactDefs];
-        const removedArtDef = artDefs.splice(selectedArtDef,1);
+        const removedArtDef = artDefs.splice(selectedArtDef,1)[0];
         const deletionHistoryEntry = {
             elementType: 1,
-            elementId: removedArtDef.ref,
+            elementId: removedArtDef.id,
             changeType: 3,
             changeDate: currentDate(),
             changes: JSON.stringify(removedArtDef)

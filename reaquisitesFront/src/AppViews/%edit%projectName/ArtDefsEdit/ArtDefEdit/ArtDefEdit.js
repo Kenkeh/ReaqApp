@@ -122,7 +122,7 @@ export default function ArtDefEdit (props) {
                     new: currentArtDef
                 })
             }
-            props.validateArtDefEdition(currentArtDef, props.artDefToEditIndexm, editionHistoryEntry);
+            props.validateArtDefEdition(currentArtDef, props.artDefToEditIndex, editionHistoryEntry);
         }else{
             props.validateArtDefEdition(currentArtDef);
         }
@@ -244,7 +244,7 @@ export default function ArtDefEdit (props) {
                 variant={currentArtDefNameError=='' ? 'contained' : 'outlined'}
                 onClick={currentArtDefNameError=='' ? validateArtDefEdit : null}
                 >
-                    {currentArtDefNameError != '' ? currentArtDefNameError : 'CREATE'}
+                    {currentArtDefNameError != '' ? currentArtDefNameError : props.artDefToEdit ? 'UPDATE' : 'CREATE'}
                 </Button>
             </div>
         </div>

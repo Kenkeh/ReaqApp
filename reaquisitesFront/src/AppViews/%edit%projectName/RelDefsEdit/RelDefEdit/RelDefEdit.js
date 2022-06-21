@@ -177,10 +177,10 @@ export default function RelDefEdit (props) {
                 <div className='currentRelDefAttrList'>
                     {creatingAttribDef ?
                     <AttributeDefEdit
-                    cancelAttribDefEdition={() => setCreatingAttribDef(false)}
-                    currentAttribDefs={currentRelDef.attributeDefinitions}
-                    validateAttribDefEdition={(newAttrib) => 
-                        setCurrentRelDef({...currentRelDef, attributeDefinitions: [...currentRelDef.attributeDefinitions, newAttrib]})}
+                        cancelAttribDefEdition={() => setCreatingAttribDef(false)}
+                        currentAttribDefs={currentRelDef.attributeDefinitions}
+                        validateAttribDefEdition={(newAttrib) => 
+                            setCurrentRelDef({...currentRelDef, attributeDefinitions: [...currentRelDef.attributeDefinitions, newAttrib]})}
                     />
                     : 
                     currentRelDef.attributeDefinitions.map((attrDef, index)=>{
@@ -209,7 +209,7 @@ export default function RelDefEdit (props) {
                 variant={currentRelDefNameError=='' ? 'contained' : 'outlined'}
                 onClick={currentRelDefNameError=='' ? validateRelDefEdit : null}
                 >
-                    {currentRelDefNameError != '' ? currentRelDefNameError : 'CREATE'}
+                    {currentRelDefNameError != '' ? currentRelDefNameError : props.relDefToEdit ? 'UPDATE' : 'CREATE'}
                 </Button>
             </div>
         </div>

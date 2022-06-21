@@ -5,7 +5,7 @@ import Spinner from '../../MiniTools/Spinner/Spinner';
 import  {overTheme} from '../../overTheme';
 import { Button, TextField, Chip } from '@mui/material';
 import logo from '../../Elements/images/logo192.png';
-import { userAuth } from './../../AppAPI';
+import { userAuth, userProjectList } from './../../AppAPI';
 import { AppName } from '../../AppPaths';
 
 
@@ -77,7 +77,17 @@ export default function Login(props) {
       }else{
         setLogginPhase(2);
         props.setUser(res);
-        props.goToPage(1);
+        userProjectList(res.account).then(projectList =>{
+          props.setProjectsList(projectList);
+          props.goToPage(1);
+        }).catch(err =>{
+          setLogginPhaseText('There was an error parsing server response...');
+          setServerError(true);
+        })
+        .catch(err =>{
+          setLogginPhaseText('There was an error connecting to the server...');
+          setServerError(true);
+        });
       }
     }
     ).catch(err =>{

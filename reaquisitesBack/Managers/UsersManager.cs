@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 namespace reaquisites.Managers
 {
-    public static class UsersManager
+    static internal class UsersManager
     {
         const int registerStringsLength = 20;
         const int registerValidMinutes = 5;
@@ -20,7 +20,7 @@ namespace reaquisites.Managers
                 DBUserService.connString = value;
         }}
 
-        public static void sendRegisterMessage(RegisterInfo user){
+        static internal void sendRegisterMessage(RegisterInfo user){
             string registerString = "";
             Random randy = new Random();
             for (int i=0; i<registerStringsLength; i++){
@@ -45,7 +45,7 @@ namespace reaquisites.Managers
             registerTickets[user] = ticket;
         }
 
-        public static bool checkRegister(string registerString){
+        static internal bool checkRegister(string registerString){
             foreach(RegisterInfo registerInfo in registerTickets.Keys){
                 if (registerTickets[registerInfo].Ticket == registerString){
                     User newUser = new User();
@@ -78,7 +78,7 @@ namespace reaquisites.Managers
             return sb.ToString();
         }
 
-        public static void checkTickets(){
+        static internal void checkTickets(){
             foreach(RegisterInfo user in registerTickets.Keys){
                 if (registerTickets[user].CreationDate - DateTime.Now > TimeSpan.FromMinutes(registerValidMinutes)){
                     registerTickets.Remove(user);
@@ -86,7 +86,7 @@ namespace reaquisites.Managers
             }
         }
 
-        public static KeyValuePair<LoggedUserDTO,int> checkUserLogging(string logName, string logPass){
+        static internal KeyValuePair<LoggedUserDTO,int> checkUserLogging(string logName, string logPass){
             List<KeyValuePair<User, int>> allUsers = DBUserService.GetAllWithID();
             User userFound = null;
             int userID = -1;
@@ -114,7 +114,6 @@ namespace reaquisites.Managers
                     userDTO.EMail = userFound.EMail;
                     userDTO.RegisterDate = userFound.RegisterDate;
                     userDTO.LoginSession = logHash;
-                    userDTO.Projects = DBProjectService.GetUserProjectsSimpleDTO(userID);
                     loggedHash.Add(logHash,userFound);
                     return new KeyValuePair<LoggedUserDTO, int>(userDTO, 0);
                 }else{
@@ -125,7 +124,7 @@ namespace reaquisites.Managers
             }
         }
 
-        public static bool checkSession(string accName, string session){
+        static internal bool checkSession(string accName, string session){
             if (loggedHash.ContainsKey(session)){
                 return loggedHash[session].Account == accName;
             }else{
@@ -133,6 +132,12 @@ namespace reaquisites.Managers
             }
         }
         
+        
+        static internal KeyValuePair<int,List<SimpleProjectDTO>> allUserProjectsPreview(string accountName){
+            int userID = DBUserService.GetUserId(accountName);
+            if (userID<0) return new KeyValuePair<int,List<SimpleProjectDTO>>(-1, null);
+            return new KeyValuePair<int,List<SimpleProjectDTO>>(userID, DBProjectService.GetUserProjectsSimpleDTO(userID));
+        }
     }
 
 }

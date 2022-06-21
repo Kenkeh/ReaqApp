@@ -63,7 +63,7 @@ export default function RelDef (props) {
             <div className='relDefExtraInfo'>
                 <div className='relDefAttributesInfo'>
                     <Centerer>
-                        {props.relDef.attributeDefinitions.length ? relDefAttributesParse : 'NO ATTRIBUTES'}
+                        {props.relDef.attributeDefinitions.length ? relDefAttributesParse() : 'NO ATTRIBUTES'}
                     </Centerer>
                 </div>
                 <div className='relDefDescInfo'>

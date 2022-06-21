@@ -17,16 +17,16 @@ export default function MainSwitcher(props) {
         return <LandingArea/>
       case 1:
         return  <FirstLook 
-                  user={props.user}
-                  setUser={props.setUser} 
-                  loginSession={props.loginSession} 
+                  account={props.userAccount}
+                  projectList={props.userProjectsPreview}
+                  setProjectList={props.setProjecPreviewList}
+                  //loginSession={props.loginSession} 
                   setProject={props.setProject} 
                   currentProject={props.project}
                   openProjectEdition={() => props.setPageNumber(2)}
                 />
       case 2: 
         return <ProjecEdit
-                user = {props.user}
                 activeProject = {props.project}
                 setActiveProject = {props.setProject}
                 setActiveProjectModified = {props.setProjectEdited}

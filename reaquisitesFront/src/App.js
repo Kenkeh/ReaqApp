@@ -9,6 +9,8 @@ import { ThemeProvider } from '@mui/material';
 import { overTheme } from './overTheme';
 import MainSwitcher from './AppViews/MainSwitcher';
 import { BrowserRouter } from 'react-router-dom';
+import { getUserProject, saveProject, userProjectList } from './AppAPI';
+import LoadingFrame from './LoadingFrame/LoadingFrame';
 
 
 
@@ -20,17 +22,45 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentUser,setCurrentUser] = useState(undefined);
   const [currentLogin, setCurrentLogin] = useState('');
+  const [currentUserProjectList, setCurrentUserProjectList] = useState(undefined);
   const [currentProject, setCurrentProject] = useState(undefined);
+  const [currentProjectId, setCurrentProjectId] = useState(-1);
   const [currentProjectHasBeenEdited, setCurrentProjectHasBeenEdited] = useState(false);
+  const [loadingInfo, setLoadingInfo] = useState(2);
+
 
   useEffect(()=>{
     var appInfo = Cookies.get('ReaqInfo');
     if (appInfo){
       appInfo = JSON.parse(appInfo);
       setCurrentUser(appInfo.user);
+
+      userProjectList(appInfo.user.account).then(projectList =>{
+        setCurrentUserProjectList(projectList);
+        setLoadingInfo(prev => prev-1);
+      }).catch(err =>{
+        //parse error
+      })
+      .catch(err =>{
+        //connection error
+      });
+
       setCurrentLogin(appInfo.loginSession);
       setCurrentPage(appInfo.currentPage);
-      setCurrentProject(appInfo.currentProject);
+      if (appInfo.currentProject>=0){
+        getUserProject(appInfo.user.account,appInfo.currentProject).then(project =>{
+          setCurrentProject(project);
+          setLoadingInfo(prev => prev-1);
+        }).catch(err =>{
+          //parse error
+        })
+        .catch(err =>{
+          //connection error
+        });
+      }
+      setCurrentProjectId(appInfo.currentProject);
+    }else{
+      setLoadingInfo(0);
     }
   },[]);
 
@@ -60,13 +90,15 @@ export default function App() {
       setCurrentLogin('');
       setCurrentPage(0);
       setCurrentProject(undefined);
+      setCurrentProjectId(-1);
+      setCurrentUserProjectList(undefined);
     }
   }
   const setProject = (project) =>{
     const oldInfo = Cookies.get('ReaqInfo');
     if (oldInfo){
       const appInfo = JSON.parse(oldInfo);
-      Cookies.set('ReaqInfo',JSON.stringify({...appInfo, currentProject: project}));
+      Cookies.set('ReaqInfo',JSON.stringify({...appInfo, currentProject: project.projectId}));
     }else{
       //ERROR
     }
@@ -82,6 +114,15 @@ export default function App() {
     }
     setCurrentPage(number);
   }
+  const saveCurrentProject = () =>{
+    setLoadingInfo(1);
+    saveProject(currentUser.account, currentProject).then(res =>{
+      setLoadingInfo(0);
+      setCurrentProjectHasBeenEdited(false);
+    }).catch(err=>{
+      //server error
+    });
+  }
   
 
   return (
@@ -89,26 +130,30 @@ export default function App() {
       <ThemeProvider theme={overTheme}>
         <CssBaseline />
         <AppTopBar 
-          setUser={setUser} 
+          setUser={setUser}
+          setProjectsList={setCurrentUserProjectList} 
           user={currentUser} 
           project={currentProject}
           projectEdited={currentProjectHasBeenEdited}
-          login={currentLogin}
+          //login={currentLogin}
           currentScreen={currentPage}
           switchToPage={setPage}
+          saveProject={saveCurrentProject}
         />
         <AppBG topBarHeight={topBarSize}>
           <MainSwitcher
-          pageNumber={currentPage}
-          setPageNumber={setPage} 
-          user={currentUser} 
-          setUser={setUser}
-          project={currentProject} 
-          setProject={setProject}
-          setProjectEdited = {setCurrentProjectHasBeenEdited}
-          loginSession={currentLogin}  
+            pageNumber={currentPage}
+            setPageNumber={setPage} 
+            userAccount={currentUser ? currentUser.account : undefined}
+            userProjectsPreview={currentUserProjectList}
+            setProjecPreviewList={setCurrentUserProjectList}
+            project={currentProject}
+            setProject={setProject}
+            setProjectEdited = {setCurrentProjectHasBeenEdited}
+            //loginSession={currentLogin}  
           />
         </AppBG>
+        {loadingInfo>0 && <LoadingFrame topBarHeight={topBarSize}/>}
       </ThemeProvider>
     </BrowserRouter>
   );

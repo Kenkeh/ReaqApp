@@ -79,10 +79,19 @@ export default function TopBar(props){
                   variant={props.projectEdited ? 'contained' : 'outlined'}
                   style={{position: "absolute", left: 80, top: 5, bottom: 5, width: "70px", fontSize: "8px", fontWeight: "bold"}}
                   color={props.projectEdited ? 'secondary' : 'error'}
-                  onClick={props.projectEdited ? () => saveProject(props.user.account,props.project) : undefined}
+                  onClick={props.projectEdited ? () => props.saveProject() : undefined}
                   disableElevation
                   >
                     SAVE
+                  </Button>
+                  <Button 
+                    variant='contained' 
+                    style={{position: "absolute", left: 155, top: 5, bottom: 5, width: "140px", fontSize: "8px", fontWeight: "bold",
+                      display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                    color="secondary"
+                    disableElevation
+                  >
+                    {props.project ? props.project.name : 'Loading...'}
                   </Button>
                   <Button 
                     variant='contained' 
@@ -93,11 +102,15 @@ export default function TopBar(props){
                     >
                     USER
                   </Button>
-                  <div style={{position: "absolute", right: 80, top: 5, bottom: 5, width: "250px", textAlign: "right"}}>
-                    <span style={{display: "inline-block", verticalAlign: "middle"}}>
-                      Welcome {props.user.nick}!
-                    </span>
-                  </div>
+                  <Button 
+                    variant='contained' 
+                    style={{position: "absolute", right: 80, top: 5, bottom: 5, width: "70px", fontSize: "10px", fontWeight: "bold"}}
+                    color="secondary"
+                    disableElevation
+                    onClick={() => props.setCurrentView(1)}
+                    >
+                    BACK
+                  </Button>
                 </>;
       default:
         return <></>;

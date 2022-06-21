@@ -11,21 +11,6 @@ export default function ProjectEdit (props) {
 
     const [activeLabel, setActiveLabel] = useState(undefined);
 
-    /*useEffect( () => {
-        if (!props.activeProject || props.editingProject.id != props.activeProject.id){
-            getUserProject(props.user.account,props.editingProject.id).then(project =>{
-                if (project.error){
-                    console.log(project.message);
-                }else{
-                    props.setActiveProject(project);
-                }
-            }).catch(err=>{
-                //parsing error
-            }).catch(err =>{
-                //server error
-            });
-        }
-    },[]);*/
     
     const elemsButtonsStyleHiglighted = {
         borderRadius: '5px',

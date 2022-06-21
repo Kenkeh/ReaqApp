@@ -34,10 +34,10 @@ export default function RelDefsEdit (props) {
 
     const deleteRelDef = () =>{
         var relDefs = [...props.project.relationshipDefs];
-        const removedRelDef = relDefs.splice(selectedRelDef,1);
+        const removedRelDef = relDefs.splice(selectedRelDef,1)[0];
         const deletionHistoryEntry = {
             elementType: 2,
-            elementId: removedRelDef.ref,
+            elementId: removedRelDef.id,
             changeType: 3,
             changeDate: currentDate(),
             changes: JSON.stringify(removedRelDef)

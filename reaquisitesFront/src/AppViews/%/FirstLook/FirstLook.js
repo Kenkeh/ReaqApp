@@ -25,19 +25,21 @@ export default function FirstLook (props) {
 
 
     useEffect(()=>{
-        var recProjects = props.user.projects;
-        recProjects.sort((a,b)=>{
-            if (a.lastModified > b.lastModified){
-                return -1;
-            }else if (a.lastModified < b.lastModified){
-                return 1;
-            }else{
-                return 0;
-            }
-        });
-        recProjects = recProjects.slice(0,(Math.min(maxRecentProjectsSize,recProjects.length)));
-        setRecentProjects(recProjects);
-    },[props.user.projects]);
+        if (props.projectList){
+            var recProjects = props.projectList;
+            recProjects.sort((a,b)=>{
+                if (a.lastModified > b.lastModified){
+                    return -1;
+                }else if (a.lastModified < b.lastModified){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            });
+            recProjects = recProjects.slice(0,(Math.min(maxRecentProjectsSize,recProjects.length)));
+            setRecentProjects(recProjects);
+        }
+    },[props.projectList]);
 
     const toogleDropdown = (dpn) => (event) =>{
         switch(dpn){
@@ -62,8 +64,8 @@ export default function FirstLook (props) {
             setNewProjectNameError('Project name cannot be empty');
         }else{
             var found = false;
-            for (var i=0; i<props.user.projects.length; i++){
-                if (props.user.projects[i].name == newName){
+            for (var i=0; i<props.projectList.length; i++){
+                if (props.projectList[i].name == newName){
                     setNewProjectNameError('Project name already in use');
                     found = true;
                     break;
@@ -89,7 +91,7 @@ export default function FirstLook (props) {
 
     const startNewProject = (event) =>{
         if (newProjectNameError) return;
-        fetch(ServerRouteHTTPS+'project/'+props.user.account+'/add', {
+        fetch(ServerRouteHTTPS+'project/'+props.account+'/add', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -103,24 +105,24 @@ export default function FirstLook (props) {
             body: JSON.stringify({
                 projectName: newProject.name, 
                 projectDesc: newProject.description, 
-                loginSession: props.loginSession
+                //loginSession: props.loginSession
             }) // body data type must match "Content-Type" header
 
         }).then( res => res.json() ).then( res =>
             {
-                if (res.error!==undefined){
-                    console.log("Server error: "+res.message);
-                }else{
+                if (res.projectId!==undefined){
                     props.setProject(res);
-                    props.setUser({...props.user, projects: [...props.user.projects, {
+                    props.setProjectList([...props.projectList, {
                         name: res.name,
                         description: res.description,
                         version: res.version,
                         isPublished: res.isPublished,
                         id: res.projectId,
                         lastModified: Date.now()
-                    }]});
+                    }]);
                     props.openProjectEdition();
+                }else{
+                    console.log("Server error: "+res);
                 }
             }).catch(err=>{
             console.log("Error treating request: "+err);
@@ -132,9 +134,13 @@ export default function FirstLook (props) {
     }
     
     const goToEditProject = (projectRef) =>{
-        getUserProject(props.user.account, projectRef).then((project) =>{
-            props.setProject(project);
-            props.openProjectEdition();
+        getUserProject(props.account, projectRef).then((res) =>{
+            if (res.error!==undefined){
+                console.log("Server error: "+res.message);
+            }else{
+                props.setProject(res);
+                props.openProjectEdition();
+            }
         }).catch(err=>{
             console.log("Error treating request: "+err);
         }).catch(err=>{
@@ -208,7 +214,7 @@ export default function FirstLook (props) {
                 <div className='fl_recent_projects_flex'>
                     {recentProjects.map((project, index)=>{
                         return  <div key={index} className='fl_rp_card_container' style={{gridColumn: index+1}}>
-                                    <ProjectCard textSize={0} project={project} editClick = {() => goToEditProject(project.projectId)}/>
+                                    <ProjectCard textSize={0} project={project} editClick = {() => goToEditProject(project.id)}/>
                                 </div>
                     })}
                 </div>

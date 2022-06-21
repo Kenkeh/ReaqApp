@@ -50,7 +50,7 @@ export default function AttributeDefEdit (props) {
                 props.validateAttribDefEdition({...attribDef, values: integerValues});
                 break;
             default:
-                props.validateAttribDefEdition({...attribDef, values: ''});
+                props.validateAttribDefEdition({...attribDef, values: 'any string'});
                 break;
         }
         cancelAttribDefEdit();

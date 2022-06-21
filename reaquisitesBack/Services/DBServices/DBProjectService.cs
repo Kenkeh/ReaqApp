@@ -1419,7 +1419,7 @@ namespace reaquisites.Services.DB
         static internal void DeleteAllRelDefAttributeDefs(int relDefID){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "DELETE FROM reaquisites.\"RelationshipAttributeDefs\" where artefactdef = "+relDefID;
+                string query = "DELETE FROM reaquisites.\"RelationshipAttributeDefs\" where relationshipdef = "+relDefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -1486,7 +1486,7 @@ namespace reaquisites.Services.DB
         static internal void UpdateArtDefinition(int artDefID, string artDefName, string? artDefDescription, int artDefShape){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "UPDATE reaquisites.\"ArtefactDefinitions\" "+
+                string query = "UPDATE reaquisites.\"ArtefactDefs\" "+
                 "SET name = '"+artDefName+"', description = '"+artDefDescription+"', shape = "+artDefShape+
                 " where id = "+artDefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
@@ -1501,7 +1501,7 @@ namespace reaquisites.Services.DB
         static internal void UpdateRelDefinition(int relDefID, string relDefName, string? relDefDescription, int relDefShape){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "UPDATE reaquisites.\"RelationshipDefinitions\" "+
+                string query = "UPDATE reaquisites.\"RelationshipDefs\" "+
                 "SET name = '"+relDefName+"', description = '"+relDefDescription+"', shape = "+relDefShape+
                 " where id = "+relDefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
