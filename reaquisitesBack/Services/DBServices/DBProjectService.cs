@@ -581,6 +581,20 @@ namespace reaquisites.Services.DB
                 }
             }
         }
+        static internal void AddArtefactDefinition(int projectID, string artDefName, string? artDefDescription, int artDefShape, int refId){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "INSERT INTO reaquisites.\"ArtefactDefs\" (project, name, description, shape, ref) "+
+                "VALUES ("+projectID+", '"+artDefName+"', '"+artDefDescription+"', "+artDefShape+", "+refId+")";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
         static internal void AddArtefactAttributeDefinition(string artAttribDefName, int type, string artAttribDefDescription, string artAttribDefValues, int artDefID){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
@@ -601,6 +615,20 @@ namespace reaquisites.Services.DB
                 string query = "INSERT INTO reaquisites.\"RelationshipDefs\" (project, name, description, shape, ref) "+
                 "VALUES ("+projectID+", '"+relDefName+"', '"+relDefDescription+"', "+relDefShape+", "+
                 "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"RelationshipDefs\" where project="+projectID+"))";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+        static internal void AddRelationshipDefinition(int projectID, string relDefName, string? relDefDescription, int relDefShape, int refId){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "INSERT INTO reaquisites.\"RelationshipDefs\" (project, name, description, shape, ref) "+
+                "VALUES ("+projectID+", '"+relDefName+"', '"+relDefDescription+"', "+relDefShape+", "+refId+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -639,6 +667,20 @@ namespace reaquisites.Services.DB
                 }
             }
         }
+        static internal void AddArtefact(string artName, string? artDesc, int artDefID, int refId){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "INSERT INTO reaquisites.\"Artefacts\" (name, artefactdef, description, ref) "+
+                "VALUES ('"+artName+"', "+artDefID+", "+artDesc+", "+refId+")";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
         static internal void AddArtefactAttribute(int artID, int attributeDefID, string value){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
@@ -659,6 +701,20 @@ namespace reaquisites.Services.DB
                 string query = "INSERT INTO reaquisites.\"Relationships\" (parent, child, relationshipdef, description, ref) "+
                 "VALUES ("+parentID+", "+childID+", "+relDefID+", "+relDesc+", "+
                 "(SELECT CASE WHEN COUNT(1) > 0 THEN max(ref)+1 ELSE 0 END FROM reaquisites.\"Relationships\" where relationshipdef="+relDefID+"))";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+        static internal void AddRelationship(int relDefID, string? relDesc, int parentID, int childID, int refId){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "INSERT INTO reaquisites.\"Relationships\" (parent, child, relationshipdef, description, ref) "+
+                "VALUES ("+parentID+", "+childID+", "+relDefID+", "+relDesc+", "+refId+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;

@@ -1,0 +1,95 @@
+.artefactContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.adcUnselected{
+    height: 49px;
+}
+.adcSelected{
+    height: 200px;
+}
+
+
+
+.artefactHeadersContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: column;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.adhcSelected{
+    height: 70px;
+    min-height: 70px;
+}
+.adhcUnselected{
+    height: 47px;
+    min-height: 47px;
+}
+.artefactHeaders{
+    display: flex;
+    flex-direction: row;
+}
+.artefactValuesHeader{
+    height: 100%;
+    width: 100px;
+}
+.artefactDescHeader{
+    height: 100%;
+    width: calc(100% - 100px);
+}
+
+
+.artefactShowInfo{
+    height: 45px;
+    min-height: 45px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+}
+.artefactShowInfo :hover{
+    cursor: pointer;
+}
+.artefactShape{
+    height: 100%;
+    width: 100px;
+}
+.artefactName{
+    height: 100%;
+    width: calc(100% - 100px);
+}
+
+
+.artefactExtraInfo{
+    height: calc(100% - 65px);
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    text-align: center;
+}
+.artefactAttributesInfo{
+    height: 100%;
+    width: 100px;
+}
+.artefactDescInfo{
+    height: 100%;
+    width: calc(100% - 100px);
+}

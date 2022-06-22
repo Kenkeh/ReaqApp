@@ -19,14 +19,21 @@ export default function RelDefsEdit (props) {
     
 
     const addRelDef = (newRelDef) => {
+        var newRelDefId = 0;
+        props.project.relationshipDefs.forEach((relDef)=>{
+            if (relDef.id>newRelDefId) newRelDefId=relDef.id; 
+        });
+        var newRelDefWithRef = {...newRelDef,
+            id: newRelDefId+1
+        }
         const creationHistoryEntry = {
             elementType: 2,
             changeType: 1,
             changeDate: currentDate(),
-            changes: JSON.stringify(newRelDef)
+            changes: JSON.stringify(newRelDefWithRef)
         }
         props.setProject({...props.project, 
-            relationshipDefs: [...props.project.relationshipDefs, newRelDef], 
+            relationshipDefs: [...props.project.relationshipDefs, newRelDefWithRef], 
             historyEntries: [...props.project.historyEntries, creationHistoryEntry]
         });
         props.setProjectModified(true);

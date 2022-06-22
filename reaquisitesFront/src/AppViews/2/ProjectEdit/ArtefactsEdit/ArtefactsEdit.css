@@ -1,0 +1,89 @@
+.artefactEditorContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0px 0px;
+}
+.artefactEditorContainer > *{
+    width: 100%;
+}
+.artefactAddContainer{
+    height: 50px;
+}
+.dpa_open{
+    /* Firefox */
+    -moz-transform:rotate(0deg);
+    /* Safari and Chrome */
+    -webkit-transform:rotate(0deg);
+    /* Opera */
+    -o-transform:rotate(0deg);
+    /* IE9 */
+    -ms-transform:rotate(0deg);
+    transform: rotate(0deg);
+}
+.dpa_closed{
+    /* Firefox */
+    -moz-transform:rotate(-90deg);
+    /* Safari and Chrome */
+    -webkit-transform:rotate(-90deg);
+    /* Opera */
+    -o-transform:rotate(-90deg);
+    /* IE9 */
+    -ms-transform:rotate(-90deg);
+    transform: rotate(-90deg);
+}
+.artefactEditContainer{
+    border-radius: 5px;
+}
+.cadcOpen{
+    height: 100%;
+}
+.currentArtDefContainer > div{
+    margin: 5px;
+}
+.currentArtDefIconContainer{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.currentArtDefTitle{
+    height: 20px;
+}
+.currentArtDefValue{
+    height: 45px;
+}
+
+
+.animHeight{
+    
+    transition: height 500ms ease-out;
+    -moz-transition: height 500ms ease-out;
+    -o-transition: height 500ms ease-out;
+    -ms-transition: height 500ms ease-out;
+    -webkit-transition: height 500ms ease-out;
+}
+.adlcUp{
+    height: calc(100% - 100px);
+}
+.pePanelClosed{
+    height: 0px;
+    overflow: hidden;
+}
+.artefactListTitleContainer{
+    height: 50px;
+    display: grid;
+    grid-template-columns: 50px calc(100% - 100px) 50px;
+}
+.artefactListTitle{
+    font-weight: bold;
+}
+.artefactList{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}

@@ -45,7 +45,7 @@ export default function ArtDefEdit (props) {
         attributeDefinitions: []
     });
 
-    const [currentArtDefNameError, setCurrentArtDefNameError] = useState('Artefact Definition name cannot be empty');
+    const [currentArtDefNameError, setCurrentArtDefError] = useState('Artefact Definition name cannot be empty');
 
     const [selectedAttributeDef, setSelectedAttributeDef] = useState(-1);
     const [creatingAttribDef, setCreatingAttribDef] = useState(false);
@@ -61,7 +61,7 @@ export default function ArtDefEdit (props) {
     useEffect(() =>{
         if (props.artDefToEdit){
             setCurrentArtDef(props.artDefToEdit);
-            setCurrentArtDefNameError('');
+            setCurrentArtDefError('');
         }
     },[props.artDefToEdit]);
 
@@ -69,15 +69,20 @@ export default function ArtDefEdit (props) {
         switch (info){
             case 'name':
                 if (value==''){
-                    setCurrentArtDefNameError('Artefact Definition name cannot be empty');
-                }else if (props.otherArtDefs.find(artDef => artDef.name == value)){
-                    setCurrentArtDefNameError('Artefact Definition already exists');
+                    setCurrentArtDefError('Artefact Definition name cannot be empty');
+                }else if (props.otherArtDefs.find(artDef => artDef.name == value && artDef.shape == currentArtDef.shape)){
+                    setCurrentArtDefError('Artefact Definition already exists');
                 }else{
-                    setCurrentArtDefNameError('');
+                    setCurrentArtDefError('');
                 }
                 setCurrentArtDef({...currentArtDef, name: value});
                 break;
             case 'icon':
+                if (props.otherArtDefs.find(artDef => artDef.name == currentArtDef.name && artDef.shape == value)){
+                    setCurrentArtDefError('Artefact Definition already exists');
+                }else{
+                    setCurrentArtDefError('');
+                }
                 setCurrentArtDef({...currentArtDef, shape: value});
                 break;
             case 'description':
@@ -94,7 +99,7 @@ export default function ArtDefEdit (props) {
             description: '',
             attributeDefinitions: []
         });
-        setCurrentArtDefNameError('Artefact Definition name cannot be empty');
+        setCurrentArtDefError('Artefact Definition name cannot be empty');
     }
 
     const deleteAttribute = () =>{

@@ -14,7 +14,7 @@ public class Artefact {
         }
         else {
             Artefact toCompare = (Artefact)obj;
-            return Name == toCompare.Name && Definition.Equals(toCompare.Definition) && Attributes.All(
+            return Name == toCompare.Name && Definition.Equals(toCompare.Definition); /*&& Attributes.All(
                 att => {
                     return toCompare.Attributes.Contains(att);
                 }
@@ -22,12 +22,12 @@ public class Artefact {
                 att => {
                     return Attributes.Contains(att);
                 }
-            );
+            );*/
         }
     }
         
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name,Attributes,Definition);
+        return HashCode.Combine(Name,Definition);
     }
 }

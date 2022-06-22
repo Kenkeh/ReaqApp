@@ -1,7 +1,7 @@
 import { overTheme } from '../../../../../overTheme';
 import './RelDef.css';
 import Centerer from '../../../../../MiniTools/Centerer/Centerer';
-import { ArtefactIcons, cytoscapeArrowHeads } from '../../../../../AppConsts';
+import { cytoscapeArrowHeads } from '../../../../../AppConsts';
 import CJSArrowShow from '../RelDefEdit/CJSArrowShow/CJSArrowShow';
 
 

@@ -51,7 +51,7 @@ namespace reaquisites.Managers
             // ARTEFACT DEFINITIONS
             Dictionary<ArtefactDefinition, int> artDefs = new Dictionary<ArtefactDefinition, int>();
             foreach (ArtefactDefinition artDef in project.ArtefactDefs){
-                DBProjectService.AddArtefactDefinition(projectID,artDef.Name,artDef.Description,artDef.Shape);
+                DBProjectService.AddArtefactDefinition(projectID,artDef.Name,artDef.Description,artDef.Shape,artDef.ID);
                 int artDefID = DBProjectService.GetLastArtefactDefID(projectID);
                 if (artDefID<0) return -3;
                 foreach(AttributeDefinition artAttribDef in artDef.AttributeDefinitions){
@@ -66,7 +66,7 @@ namespace reaquisites.Managers
             // RELATIONSHIP DEFINITIONS
             Dictionary<RelationshipDefinition, int> relDefs = new Dictionary<RelationshipDefinition, int>();
             foreach (RelationshipDefinition relDef in project.RelationshipDefs){
-                DBProjectService.AddRelationshipDefinition(projectID, relDef.Name, relDef.Description, relDef.Shape);
+                DBProjectService.AddRelationshipDefinition(projectID, relDef.Name, relDef.Description, relDef.Shape, relDef.ID);
                 int relDefID = DBProjectService.GetLastRelationshipDefID(projectID);
                 if (relDefID<0) return -4;
                 foreach(AttributeDefinition artAttribDef in relDef.AttributeDefinitions){
@@ -82,7 +82,7 @@ namespace reaquisites.Managers
             Dictionary<Artefact, int> artefacts = new Dictionary<Artefact, int>();
             foreach (Artefact artefact in project.Artefacts){
                 int artDefID = artDefs[artefact.Definition];
-                DBProjectService.AddArtefact(artefact.Name, artefact.Description, artDefID);
+                DBProjectService.AddArtefact(artefact.Name, artefact.Description, artDefID, artefact.ID);
                 int artID = DBProjectService.GetLastArtefactID(projectID);
                 if (artID<0) return -5;
                 foreach (Attribute attrib in artefact.Attributes){
@@ -98,7 +98,7 @@ namespace reaquisites.Managers
                 int relDefID = relDefs[relation.Definition];
                 int parentID = artefacts[relation.Parent];
                 int childID = artefacts[relation.Child];
-                DBProjectService.AddRelationship(relDefID,relation.Description, parentID,childID);
+                DBProjectService.AddRelationship(relDefID,relation.Description, parentID,childID, relation.ID);
                 int relID = DBProjectService.GetLastRelationshipID(relDefID);
                 if (relID<0) return -6;
                 foreach (Attribute attrib in relation.Attributes){
@@ -331,7 +331,7 @@ namespace reaquisites.Managers
                                     {
                                         PropertyNameCaseInsensitive = true
                                     });
-                                DBProjectService.AddArtefactDefinition(userProject.Item1, artDefToCreate.Name, artDefToCreate.Description, artDefToCreate.Shape);
+                                DBProjectService.AddArtefactDefinition(userProject.Item1, artDefToCreate.Name, artDefToCreate.Description, artDefToCreate.Shape, artDefToCreate.ID);
                                 int artDefID = DBProjectService.GetLastArtefactDefID(userProject.Item1);
                                 foreach (AttributeDefinition attributeDef in artDefToCreate.AttributeDefinitions){
                                     DBProjectService.AddArtefactAttributeDefinition(attributeDef.Name, 
@@ -345,7 +345,7 @@ namespace reaquisites.Managers
                                     {
                                         PropertyNameCaseInsensitive = true
                                     });
-                                DBProjectService.AddRelationshipDefinition(userProject.Item1, relDefToCreate.Name, relDefToCreate.Description, relDefToCreate.Shape);
+                                DBProjectService.AddRelationshipDefinition(userProject.Item1, relDefToCreate.Name, relDefToCreate.Description, relDefToCreate.Shape, relDefToCreate.ID);
                                 int relDefID = DBProjectService.GetLastRelationshipDefID(userProject.Item1);
                                 foreach (AttributeDefinition attributeDef in relDefToCreate.AttributeDefinitions){
                                     DBProjectService.AddRelationshipAttributeDefinition(attributeDef.Name, 
@@ -360,7 +360,7 @@ namespace reaquisites.Managers
                                         PropertyNameCaseInsensitive = true
                                     });
                                 int artDefId = DBProjectService.GetArtefactDefID(userProject.Item1, artefactToCreate.Definition.ID);
-                                DBProjectService.AddArtefact(artefactToCreate.Name, artefactToCreate.Description, artDefId);
+                                DBProjectService.AddArtefact(artefactToCreate.Name, artefactToCreate.Description, artDefId, artefactToCreate.ID);
                                 int artID = DBProjectService.GetLastArtefactID(artDefId);
                                 foreach (Attribute attrib in artefactToCreate.Attributes){
                                     int attribDefID = DBProjectService.GetArtefactAttributeDefID(artDefId, attrib.Definition.Name);
@@ -379,7 +379,7 @@ namespace reaquisites.Managers
                                 int childID = DBProjectService.GetArtefactID(artDefChildId, relationshipToCreate.Child.ID);
                                 int artDefParentId = DBProjectService.GetArtefactDefID(userProject.Item1, relationshipToCreate.Parent.Definition.ID);
                                 int parentID = DBProjectService.GetArtefactID(artDefParentId, relationshipToCreate.Parent.ID);
-                                DBProjectService.AddRelationship(relDefId,relationshipToCreate.Description, parentID, childID);
+                                DBProjectService.AddRelationship(relDefId,relationshipToCreate.Description, parentID, childID, relationshipToCreate.ID);
                                 int relID = DBProjectService.GetLastRelationshipID(relDefId);
                                 foreach (Attribute attrib in relationshipToCreate.Attributes){
                                     int attribDefID = DBProjectService.GetRelationshipAttributeDefID(relDefId, attrib.Definition.Name);
@@ -412,7 +412,7 @@ namespace reaquisites.Managers
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)
-                                    DBProjectService.AddArtefactDefinition(userProject.Item1, artDefToUpdate.Name, artDefToUpdate.Description, artDefToUpdate.Shape);
+                                    DBProjectService.AddArtefactDefinition(userProject.Item1, artDefToUpdate.Name, artDefToUpdate.Description, artDefToUpdate.Shape, artDefToUpdate.ID);
                                     int newArtDefID = DBProjectService.GetLastArtefactDefID(userProject.Item1);
                                     foreach (AttributeDefinition attributeDef in artDefToUpdate.AttributeDefinitions){
                                         DBProjectService.AddArtefactAttributeDefinition(attributeDef.Name, 
@@ -440,7 +440,7 @@ namespace reaquisites.Managers
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)
-                                    DBProjectService.AddRelationshipDefinition(userProject.Item1, relDefToUpdate.Name, relDefToUpdate.Description, relDefToUpdate.Shape);
+                                    DBProjectService.AddRelationshipDefinition(userProject.Item1, relDefToUpdate.Name, relDefToUpdate.Description, relDefToUpdate.Shape, relDefToUpdate.ID);
                                     int newRelDefID = DBProjectService.GetLastRelationshipDefID(userProject.Item1);
                                     foreach (AttributeDefinition attributeDef in relDefToUpdate.AttributeDefinitions){
                                         DBProjectService.AddArtefactAttributeDefinition(attributeDef.Name, 
@@ -480,7 +480,7 @@ namespace reaquisites.Managers
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)
-                                    DBProjectService.AddArtefact(artToUpdate.Name,artToUpdate.Description, newArtefactArtDefID);
+                                    DBProjectService.AddArtefact(artToUpdate.Name,artToUpdate.Description, newArtefactArtDefID, artToUpdate.ID);
                                     foreach (Attribute attribute in artToUpdate.Attributes){
                                         int attribDefID = DBProjectService.GetArtefactAttributeDefID(artID, attribute.Definition.Name);
                                         DBProjectService.AddArtefactAttribute(artID, attribDefID, attribute.Value);
@@ -531,7 +531,7 @@ namespace reaquisites.Managers
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)
-                                    DBProjectService.AddRelationship(newRelationshipRelDefID, relToUpdate.Description, newParentID, newChildID);
+                                    DBProjectService.AddRelationship(newRelationshipRelDefID, relToUpdate.Description, newParentID, newChildID, relToUpdate.ID);
                                     foreach (Attribute attribute in relToUpdate.Attributes){
                                             int attribDefID = DBProjectService.GetRelationshipAttributeDefID(relID, attribute.Definition.Name);
                                             DBProjectService.AddRelationshipAttribute(relID, attribDefID, attribute.Value);

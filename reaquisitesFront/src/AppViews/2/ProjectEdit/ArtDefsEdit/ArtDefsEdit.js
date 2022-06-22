@@ -20,14 +20,21 @@ export default function ArtDefsEdit (props) {
     
 
     const addArtDef = (newArtDef) => {
+        var newArtDefId = 0;
+        props.project.artefactDefs.forEach((artDef)=>{
+            if (artDef.id>newArtDefId) newArtDefId=artDef.id; 
+        });
+        var newArtDefWithRef = {...newArtDef,
+            id: newArtDefId+1
+        }
         const creationHistoryEntry = {
             elementType: 1,
             changeType: 1,
             changeDate: currentDate(),
-            changes: JSON.stringify(newArtDef)
+            changes: JSON.stringify(newArtDefWithRef)
         }
         props.setProject({...props.project, 
-            artefactDefs: [...props.project.artefactDefs, newArtDef], 
+            artefactDefs: [...props.project.artefactDefs, newArtDefWithRef], 
             historyEntries: [...props.project.historyEntries, creationHistoryEntry]
         });
         props.setProjectModified(true);

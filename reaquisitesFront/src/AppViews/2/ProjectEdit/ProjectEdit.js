@@ -5,6 +5,7 @@ import { overTheme } from '../../../overTheme';
 import { Button } from '@mui/material';
 import ArtDefsEdit from './ArtDefsEdit/ArtDefsEdit';
 import RelDefsEdit from './RelDefsEdit/RelDefsEdit';
+import ArtefactsEdit from './ArtefactsEdit/ArtefactsEdit';
 
 
 export default function ProjectEdit (props) {
@@ -40,6 +41,14 @@ export default function ProjectEdit (props) {
                         />
             case 1:
                 return  <RelDefsEdit
+                            inactiveButtonStyle={elemsButtonsStyle} 
+                            activeButtonStyle={elemsButtonsStyleHiglighted}
+                            project={props.activeProject}
+                            setProject={props.setActiveProject}
+                            setProjectModified={props.setActiveProjectModified}
+                        />
+            case 2:
+                return  <ArtefactsEdit
                             inactiveButtonStyle={elemsButtonsStyle} 
                             activeButtonStyle={elemsButtonsStyleHiglighted}
                             project={props.activeProject}
