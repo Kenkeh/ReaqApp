@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { overTheme } from '../../../../../overTheme';
 import './ArtefactEdit.css';
-import { Button, TextField, Select } from '@mui/material';
+import { Button, TextField, Select, MenuItem } from '@mui/material';
+import { ArtefactIcons } from '../../../../../AppConsts';
+import Attribute from '../../Attribute/Attribute';
+import { currentDate } from '../../../../../AppConsts';
 
 
 export default function ArtefactEdit (props) {
@@ -14,39 +17,20 @@ export default function ArtefactEdit (props) {
         attributes: []
     });
 
-    const [currentArtefactNameError, setCurrentArtefactNameError] = useState('Artefact name cannot be empty');
+
+    const [currentArtefactError, setCurrentArtefactError] = useState('Artefact name cannot be empty');
+    
+
+
 
     useEffect(() =>{
         if (props.artefactToEdit){
             setCurrentArtefact(props.artefactToEdit);
-            setCurrentArtefactNameError('');
+            setCurrentArtefactError('');
         }
     },[props.artefactToEdit]);
 
-    const setArtefactInfo = (info, value) =>{
-        switch (info){
-            case 'name':
-                if (value==''){
-                    setCurrentArtefactNameError('Artefact name cannot be empty');
-                }else if (props.otherArtefacts.find(artefact => artefact.name == value && 
-                    (artefact.definition.name == currentArtefact.definition.name && artefact.definition.shape == currentArtefact.definition.shape))){
-                    setCurrentArtefactNameError('Artefact already exists');
-                }else{
-                    setCurrentArtefactNameError('');
-                }
-                setCurrentArtefact({...currentArtefact, name: value});
-                break;
-            case 'definition':
-                setCurrentArtefact({...currentArtefact, definition: value});
-                break;
-            case 'description':
-                setCurrentArtefact({...currentArtefact, description: value});
-                break;
-            case 'attributeValue':
-                setCurrentArtefact({...currentArtefact, description: value});
-                break;
-        }
-    }
+    
 
     const restartInfo = () =>{
         setCurrentArtefact({
@@ -56,7 +40,109 @@ export default function ArtefactEdit (props) {
             description: '',
             attributes: []
         });
-        setCurrentArtefactNameError('Artefact name cannot be empty');
+        setCurrentArtefactError('Artefact name cannot be empty');
+    }
+    
+    const defaultAttributeValue = (attribDef) =>{
+        switch (attribDef.type){
+            case 2:
+                return '';
+            default:
+                return ''+JSON.parse(attribDef.values)[0];
+            
+        }
+    }
+    const setAttributeValue = (index, value) =>{
+        var newAttributes = [...currentArtefact.attributes];
+        newAttributes[index] = {...newAttributes[index],
+            value: value
+        };
+        setCurrentArtefact({ ...currentArtefact,
+            attributes: newAttributes
+        })
+    }
+
+    const setArtefactInfo = (info, value) =>{
+        switch (info){
+            case 'name':
+                if (value==''){
+                    setCurrentArtefactError('Artefact name cannot be empty');
+                }else if (!currentArtefact.definition){
+                    setCurrentArtefactError('Artefact definition cannot be empty');
+                }else if (props.otherArtefacts.find(artefact => artefact.name == value && 
+                    (artefact.definition.name == currentArtefact.definition.name && artefact.definition.shape == currentArtefact.definition.shape))){
+                    setCurrentArtefactError('Artefact already exists');
+                }else {
+                    setCurrentArtefactError('');
+                }
+                setCurrentArtefact({...currentArtefact, name: value});
+                break;
+            case 'definition':
+                if (!value){
+                    setCurrentArtefactError('Artefact definition cannot be empty');
+                }else if (currentArtefact.name==''){
+                    setCurrentArtefactError('Artefact name cannot be empty');
+                }else if (props.otherArtefacts.find(artefact => artefact.name == currentArtefact.name && 
+                    (artefact.definition.name == value.name && artefact.definition.shape == value.shape))){
+                    setCurrentArtefactError('Artefact already exists');
+                }else {
+                    setCurrentArtefactError('');
+                }
+                if (currentArtefact.definition){
+                    if (value.id != currentArtefact.definition.id){
+                        var newArtefactDefaultAttributes = [];
+                        value.attributeDefinitions.forEach((attribDef) => {
+                            newArtefactDefaultAttributes.push({
+                                definition: attribDef,
+                                value: defaultAttributeValue(attribDef)
+                            });
+                        });
+                        setCurrentArtefact({...currentArtefact, definition: value, attributes: newArtefactDefaultAttributes});
+                    }
+                }else{
+                    var newArtefactDefaultAttributes = [];
+                    value.attributeDefinitions.forEach((attribDef) => {
+                        newArtefactDefaultAttributes.push({
+                            definition: attribDef,
+                            value: defaultAttributeValue(attribDef)
+                        });
+                    });
+                    setCurrentArtefact({...currentArtefact, definition: value, attributes: newArtefactDefaultAttributes});
+                }
+                break;
+            case 'description':
+                setCurrentArtefact({...currentArtefact, description: value});
+                break;
+            case 'attributeValue':
+                setCurrentArtefact({...currentArtefact, description: value});
+                break;
+        }
+        
+    }
+
+    const cancelArtefactEdit = () =>{
+        restartInfo();
+        props.cancelArtefactEdition();
+    }
+
+    const validateArtefactEdit = () =>{
+        if (props.artefactToEdit){
+            const editionHistoryEntry = {
+                elementType: 3,
+                elementId: currentArtefact.id,
+                changeType: 2,
+                changeDate: currentDate(),
+                changes: JSON.stringify({
+                    old: props.artefactToEdit,
+                    new: currentArtefact
+                })
+            }
+            props.validateArtefactEdition(currentArtefact, props.artefactToEditIndex, editionHistoryEntry);
+        }else{
+            props.validateArtefactEdition(currentArtefact);
+        }
+        restartInfo();
+        props.cancelArtefactEdition();
     }
 
     return (
@@ -66,9 +152,21 @@ export default function ArtefactEdit (props) {
                     Definition
                 </div>
                 <div className='currentArtefactValue'>
-                    <Select value={currentArtefact.definition}
-                    onChange={(event) => setArtefactInfo('icon', event.target.value)}>
-                        
+                    <Select 
+                        value={currentArtefact.definition || {}/*blank value, to avoid error of changing from undefined to not null*/}
+                        onChange={(event) => setArtefactInfo('definition', event.target.value)}
+                        error={!currentArtefact.definition || currentArtefactError == 'Artefact already exists'}
+                    >
+                        {props.avaliableArtDefs.map((artDef, index) =>{
+                            return  <MenuItem key={index} value={artDef}>
+                                        <div className='currentArtefactDefinitionItem'>
+                                            {ArtefactIcons[artDef.shape]}
+                                            <div className='currentArtefactDefinitionItemName'>
+                                                {artDef.name}
+                                            </div>
+                                        </div>
+                                    </MenuItem>
+                        })}
                     </Select>
                 </div>
             </div>
@@ -78,10 +176,10 @@ export default function ArtefactEdit (props) {
                 </div>
                 <div className='currentArtefactValue'>
                     <TextField 
-                    variant="outlined"
-                    value={currentArtefact.name}
-                    onChange={(event) => setArtefactInfo('name', event.target.value)}
-                    error={currentArtefactNameError != ''}
+                        variant="outlined"
+                        value={currentArtefact.name}
+                        onChange={(event) => setArtefactInfo('name', event.target.value)}
+                        error={currentArtefactError == 'Artefact name cannot be empty' || currentArtefactError == 'Artefact already exists'}
                     />
                 </div>
             </div>
@@ -91,9 +189,9 @@ export default function ArtefactEdit (props) {
                 </div>
                 <div className='currentArtefactValue'>
                     <TextField 
-                    variant="outlined"
-                    value={currentArtefact.description}
-                    onChange={(event) => setArtefactInfo('description', event.target.value)}
+                        variant="outlined"
+                        value={currentArtefact.description}
+                        onChange={(event) => setArtefactInfo('description', event.target.value)}
                     />
                 </div>
             </div>
@@ -102,7 +200,14 @@ export default function ArtefactEdit (props) {
                     Attributes
                 </div>
                 <div className='currentArtefactAttrList'>
-                    LISTA ATRIBUTOS
+                    {currentArtefact.definition && currentArtefact.attributes.map((attribute, index) =>{
+                        return  <Attribute 
+                                    key={index}
+                                    ind={index} 
+                                    attrib={attribute}
+                                    setAttribValue={setAttributeValue}
+                                />
+                    })}
                 </div>
             </div>
             <div className='currentArtefactCancelContainer'>
@@ -110,18 +215,18 @@ export default function ArtefactEdit (props) {
                 color='secondary'
                 variant='contained'
                 disableElevation={true}
-                onClick={null}
+                onClick={cancelArtefactEdit}
                 >
                     CANCEL
                 </Button>
             </div>
             <div className='currentArtefactCreateContainer'>
                 <Button
-                color={currentArtefactNameError=='' ? 'secondary' : 'error'} 
-                variant={currentArtefactNameError=='' ? 'contained' : 'outlined'}
-                onClick={currentArtefactNameError=='' ? null : null}
+                color={currentArtefactError=='' ? 'secondary' : 'error'} 
+                variant={currentArtefactError=='' ? 'contained' : 'outlined'}
+                onClick={currentArtefactError=='' ? validateArtefactEdit : null}
                 >
-                    {currentArtefactNameError != '' ? currentArtefactNameError : props.artefactToEdit ? 'UPDATE' : 'CREATE'}
+                    {currentArtefactError != '' ? currentArtefactError : props.artefactToEdit ? 'UPDATE' : 'CREATE'}
                 </Button>
             </div>
         </div>

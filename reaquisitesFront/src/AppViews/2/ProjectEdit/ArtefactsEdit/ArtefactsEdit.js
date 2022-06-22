@@ -20,14 +20,21 @@ export default function ArtefactsEdit (props) {
     
 
     const addArtefact = (newArtefact) => {
+        var newArtefactId = 0;
+        props.project.artefactDefs.forEach((artefact)=>{
+            if (artefact.id>newArtefactId) newArtefactId=artefact.id; 
+        });
+        var newArtefactWithRef = {...newArtefact,
+            id: newArtefactId+1
+        }
         const creationHistoryEntry = {
             elementType: 3,
             changeType: 1,
             changeDate: currentDate(),
-            changes: JSON.stringify(newArtefact)
+            changes: JSON.stringify(newArtefactWithRef)
         }
         props.setProject({...props.project, 
-            artefacts: [...props.project.artefacts, newArtefact], 
+            artefacts: [...props.project.artefacts, newArtefactWithRef], 
             historyEntries: [...props.project.historyEntries, creationHistoryEntry]
         });
         props.setProjectModified(true);
@@ -37,7 +44,7 @@ export default function ArtefactsEdit (props) {
         var artefacts = [...props.project.artefacts];
         const removedArtefact = artefacts.splice(selectedArtefact,1)[0];
         const deletionHistoryEntry = {
-            elementType: 1,
+            elementType: 3,
             elementId: removedArtefact.id,
             changeType: 3,
             changeDate: currentDate(),
@@ -90,12 +97,12 @@ export default function ArtefactsEdit (props) {
             <div className={currentArtefactPanel ? 'artefactEditContainer animHeight cadcOpen' : 'artefactEditContainer animHeight pePanelClosed'}
                 style={{backgroundColor: overTheme.palette.primary.dark}}>
                 <ArtefactEdit 
-                    otherArtefacts={editingArtefact ? props.project.artefactDefs.filter(artefact => artefact != editingArtefact) : props.project.artefactDefs}
+                    otherArtefacts={editingArtefact ? props.project.artefacts.filter(artefact => artefact != editingArtefact) : props.project.artefacts}
                     cancelArtefactEdition = { editingArtefact ? cancelArtefactEdit : cancelArtefactAdd}
                     validateArtefactEdition = { editingArtefact ? editArtefact : addArtefact }
                     artefactToEdit={editingArtefact}
                     artefactToEditIndex={selectedArtefact}
-                    avaliable
+                    avaliableArtDefs={props.project.artefactDefs}
                 />
             </div>
             <div className={currentArtefactPanel ? 'animHeight pePanelClosed' : 'animHeight adlcUp'}>

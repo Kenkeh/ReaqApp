@@ -44,10 +44,10 @@ export default function AttributeDefEdit (props) {
     const validateAttribDefEdit = () =>{
         switch (attribDef.type){
             case 0:
-                props.validateAttribDefEdition({...attribDef, values: enumValues});
+                props.validateAttribDefEdition({...attribDef, values: JSON.stringify(enumValues)});
                 break;
             case 1:
-                props.validateAttribDefEdition({...attribDef, values: integerValues});
+                props.validateAttribDefEdition({...attribDef, values: JSON.stringify(integerValues)});
                 break;
             default:
                 props.validateAttribDefEdition({...attribDef, values: 'any string'});

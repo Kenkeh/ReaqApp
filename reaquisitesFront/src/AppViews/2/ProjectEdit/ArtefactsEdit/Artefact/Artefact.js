@@ -9,16 +9,16 @@ export default function Artefact (props) {
 
     const artefactAttributeValuesParse = () =>{
         var finalString = '{ ';
-        for (var i=0; i<props.artefact.attributeDefinitions.length-1; i++){
-            finalString+=props.artefact.attributeDefinitions[i].name+', '
+        for (var i=0; i<props.artefact.definition.attributeDefinitions.length-1; i++){
+            finalString+=props.artefact.attributes[i].definition.name+': '+props.artefact.attributes[i].value+',\n'
         }
-        finalString += props.artefact.attributeDefinitions[props.artefact.attributeDefinitions.length-1].name +' }';
+        finalString += props.artefact.attributes[i].definition.name+': '+props.artefact.attributes[i].value +' }';
         return finalString;
     }
 
 
     return (
-        <div className={props.selected ? 'artefactContainer adcSelected' : 'artefactContainer adcUnselected'}
+        <div className={props.selected ? 'artefactContainer acSelected' : 'artefactContainer acUnselected'}
             style={props.selected ? {backgroundColor: overTheme.palette.primary.light} : {backgroundColor: overTheme.palette.secondary.dark}}>
             <div className={props.selected ? 'artefactHeadersContainer adhcSelected' : 'artefactHeadersContainer adhcUnselected'}>
                 <div className='artefactShowInfo'
@@ -29,9 +29,12 @@ export default function Artefact (props) {
                         props.select(props.ind);
                     }
                 }}>
-                    <div className='artefactShape'>
+                    <div className='artefactDefinition'>
                         <Centerer>
-                            {ArtefactIcons[props.artefact.shape]}
+                            {ArtefactIcons[props.artefact.definition.shape]}
+                        </Centerer>
+                        <Centerer>
+                            {props.artefact.definition.name}
                         </Centerer>
                     </div>
                     <div className='artefactName'>
@@ -57,7 +60,7 @@ export default function Artefact (props) {
             <div className='artefactExtraInfo'>
                 <div className='artefactAttributesInfo'>
                     <Centerer>
-                        {props.artefact.attributeDefinitions.length ? artefactAttributeValuesParse() : 'NO ATTRIBUTES'}
+                        {props.artefact.attributes.length ? artefactAttributeValuesParse() : 'NO ATTRIBUTES'}
                     </Centerer>
                 </div>
                 <div className='artefactDescInfo'>

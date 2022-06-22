@@ -10,10 +10,10 @@
     -webkit-transition: all 500ms ease-out;
     overflow: hidden;
 }
-.adcUnselected{
+.acUnselected{
     height: 49px;
 }
-.adcSelected{
+.acSelected{
     height: 200px;
 }
 
@@ -46,11 +46,11 @@
 }
 .artefactValuesHeader{
     height: 100%;
-    width: 100px;
+    width: 200px;
 }
 .artefactDescHeader{
     height: 100%;
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
 }
 
 
@@ -66,13 +66,24 @@
 .artefactShowInfo :hover{
     cursor: pointer;
 }
-.artefactShape{
+.artefactDefinition{
     height: 100%;
-    width: 100px;
+    width: 200px;
+    border: 1px solid gainsboro;
+    display: grid;
+    grid-template-columns: 40px 160px;
+}
+.artefactDefinitionName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .artefactName{
     height: 100%;
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -87,9 +98,9 @@
 }
 .artefactAttributesInfo{
     height: 100%;
-    width: 100px;
+    width: 200px;
 }
 .artefactDescInfo{
     height: 100%;
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
 }

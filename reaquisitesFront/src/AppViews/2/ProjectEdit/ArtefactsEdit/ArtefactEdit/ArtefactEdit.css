@@ -23,6 +23,20 @@
 .currentArtefactValue{
     height: 45px;
 }
+.currentArtefactDefinitionItem{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+.currentArtefactDefinitionItemName{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 
 .currentArtefactIconGrid{
     width: 400px;
@@ -78,6 +92,6 @@
     grid-row: 2;
     border-radius: 5px;
     border: 1px solid white;
-    overflow: hidden;
+    overflow: auto;
 }
 

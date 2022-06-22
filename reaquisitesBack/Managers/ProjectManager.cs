@@ -556,11 +556,23 @@ namespace reaquisites.Managers
                             break;
                         case 3:
                             //ARTEFACT
-                            DBProjectService.DeleteArtefact(userProject.Item1,lastHE.ElementId);
+                            Artefact artToDelete = JsonSerializer.Deserialize<Artefact>(lastHE.Changes, new JsonSerializerOptions 
+                                {
+                                    PropertyNameCaseInsensitive = true
+                                }
+                            );
+                            int artDefID = DBProjectService.GetArtefactDefID(userProject.Item1,artToDelete.Definition.ID);
+                            DBProjectService.DeleteArtefact(artDefID,lastHE.ElementId);
                             break;
                         case 4:
                             //RELATIONSHIP
-                            DBProjectService.DeleteRelationship(userProject.Item1,lastHE.ElementId);
+                            Relationship relToDelete = JsonSerializer.Deserialize<Relationship>(lastHE.Changes, new JsonSerializerOptions 
+                                {
+                                    PropertyNameCaseInsensitive = true
+                                }
+                            );
+                            int relDefID = DBProjectService.GetArtefactDefID(userProject.Item1,relToDelete.Definition.ID);
+                            DBProjectService.DeleteRelationship(relDefID,lastHE.ElementId);
                             break;
                         default:
                             break;
