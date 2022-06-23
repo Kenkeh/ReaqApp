@@ -1,0 +1,114 @@
+.currentRelationshipContainer{
+    height: 100%;
+    border-radius: 5px;
+    display: grid;
+    grid-template-rows: 75px 75px 75px calc(100% - 230px);
+    grid-template-columns: 40% 40% 20%;
+    overflow: hidden;
+    color: white;
+}
+.currentRelationshipContainer > div{
+    margin: 5px;
+}
+.currentRelationshipIconContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row:1;
+}
+
+.currentRelationshipTitle{
+    height: 20px;
+}
+.currentRelationshipValue{
+    height: 45px;
+}
+
+.currentRelationshipDefinitionItemContainer{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100px calc(100% - 105px);
+    grid-gap: 5px;
+}
+.currentRelationshipDefinitionItemName{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.currentRelationshipImplicateItemContainer{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 40px 100px calc(100% - 150px);
+    grid-gap: 5px;
+}
+.currentRelationshipImplicateItemName{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.currentRelationshipIconGrid{
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+
+.currentRelationshipParentContainer{
+    grid-column:1;
+    grid-row: 2;
+}
+.currentRelationshipChildContainer{
+    grid-column:2;
+    grid-row: 2;
+}
+
+.currentRelationshipDescContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 3;
+}
+.currentRelationshipCreateContainer{
+    grid-column: 3;
+    grid-row-start: 4;
+    grid-row-end: 5;
+}
+.currentRelationshipCancelContainer{
+    grid-column: 3;
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+.currentRelationshipAttrListContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 4;
+    display: grid;
+    grid-template-columns: 1fr 40px 40px;
+    grid-template-rows: 20px calc(100% - 25px);
+    row-gap: 5px;
+}
+.currentRelationshipAttrListTitle{
+    grid-column: 1;
+    grid-row: 1;
+}
+.currentRelationshipAttrDel{
+    grid-column: 2;
+    grid-row: 1;
+}
+.currentRelationshipAttrAdd{
+    grid-column: 3;
+    grid-row: 1;
+}
+.currentRelationshipAttrList{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row: 2;
+    border-radius: 5px;
+    border: 1px solid white;
+    overflow: auto;
+}
+

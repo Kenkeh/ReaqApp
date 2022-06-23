@@ -3,7 +3,7 @@
     border-radius: 5px;
     display: grid;
     grid-template-rows: 75px 75px calc(100% - 150px);
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: 20% 60% 20%;
     overflow: hidden;
     color: white;
 }

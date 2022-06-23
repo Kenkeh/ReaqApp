@@ -223,7 +223,7 @@ namespace reaquisites.Managers
                     Relationship rel = new Relationship();
                     rel.Definition = relDef.Item2;
                     rel.Parent = projectArtefacts[relation.Item2.Item1];
-                    rel.Parent = projectArtefacts[relation.Item2.Item2];
+                    rel.Child = projectArtefacts[relation.Item2.Item2];
                     rel.Description = relation.Item2.Item3;
                     rel.ID = relation.Item2.Item4;
                     rel.Attributes = new List<Attribute>();
@@ -503,12 +503,12 @@ namespace reaquisites.Managers
                                 
                                 int newParentDefID = DBProjectService.GetArtefactDefID(userProject.Item1, relToUpdate.Parent.Definition.ID);
                                 if (newParentDefID<0) return 7;
-                                int newParentID = DBProjectService.GetArtefactID(newParentDefID, relToUpdate.ID);
+                                int newParentID = DBProjectService.GetArtefactID(newParentDefID, relToUpdate.Parent.ID);
                                 if (newParentID<0) return 8;
 
                                 int newChildDefID = DBProjectService.GetArtefactDefID(userProject.Item1, relToUpdate.Child.Definition.ID);
                                 if (newChildDefID<0) return 9;
-                                int newChildID = DBProjectService.GetArtefactID(newChildDefID, relToUpdate.ID);
+                                int newChildID = DBProjectService.GetArtefactID(newChildDefID, relToUpdate.Child.ID);
                                 if (newChildID<0) return 10;
 
                                 int relID = DBProjectService.GetRelationshipID(oldRelationshipRelDefID, lastHE.ElementId);

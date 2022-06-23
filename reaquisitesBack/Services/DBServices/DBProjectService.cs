@@ -312,7 +312,7 @@ namespace reaquisites.Services.DB
             int artID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID+"order by ref desc limit 1";
+                string query = "SELECT id FROM reaquisites.\"Artefacts\" where artefactdef = "+artDefID+" order by ref desc limit 1";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -384,7 +384,7 @@ namespace reaquisites.Services.DB
             int relID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id FROM reaquisites.\"Relationships\" where artefactdef = "+relDefID+"order by ref desc limit 1";
+                string query = "SELECT id FROM reaquisites.\"Relationships\" where relationshipdef = "+relDefID+" order by ref desc limit 1";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -1604,7 +1604,7 @@ namespace reaquisites.Services.DB
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "UPDATE reaquisites.\"Relationships\" "+
-                "SET realtionshipdef = "+relDefID+", description = '"+artDescription+"', parent = "+parentID+", child = "+childID+
+                "SET relationshipdef = "+relDefID+", description = '"+artDescription+"', parent = "+parentID+", child = "+childID+
                 " where id = "+relID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
@@ -1619,7 +1619,7 @@ namespace reaquisites.Services.DB
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "UPDATE reaquisites.\"RelationshipAttributes\" "+
-                "SET value = '"+value+"' where relationshipattributedef = "+attributeDefID+" and artefact = "+relID;
+                "SET value = '"+value+"' where relationshipattributedef = "+attributeDefID+" and relationship = "+relID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;

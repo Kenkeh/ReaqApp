@@ -1,0 +1,132 @@
+.relationshipContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.acUnselected{
+    height: 49px;
+}
+.acSelected{
+    height: 200px;
+}
+
+
+
+.relationshipHeadersContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: column;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.adhcSelected{
+    height: 70px;
+    min-height: 70px;
+}
+.adhcUnselected{
+    height: 47px;
+    min-height: 47px;
+}
+.relationshipHeaders{
+    display: flex;
+    flex-direction: row;
+}
+.relationshipValuesHeader{
+    height: 100%;
+    width: 200px;
+}
+.relationshipDescHeader{
+    height: 100%;
+    width: calc(100% - 200px);
+}
+
+
+.relationshipShowInfo{
+    height: 45px;
+    min-height: 45px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+}
+.relationshipShowInfo :hover{
+    cursor: pointer;
+}
+.relationshipDefinition{
+    height: 100%;
+    width: 200px;
+    border: 1px solid gainsboro;
+    display: grid;
+    grid-template-columns: 100px 100px;
+}
+.relationshipDefinitionName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.relationshipImplicates{
+    height: 100%;
+    width: calc(100% - 200px);
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.relationshipArtefact{
+    height: 100%;
+    width: 100%;
+    border: 1px solid gainsboro;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 5px;
+}
+.relationshipArtefactDefinition{
+    height: 100%;
+    width: 100%;
+    border: 1px solid gainsboro;
+    display: grid;
+    grid-template-columns: 30px calc(100% -  30px);
+}
+.relationshipArtefactDefinitionName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.relationshipArtefactName{
+    height: 100%;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.relationshipExtraInfo{
+    height: calc(100% - 65px);
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    text-align: center;
+}
+.relationshipAttributesInfo{
+    height: 100%;
+    width: 200px;
+}
+.relationshipDescInfo{
+    height: 100%;
+    width: calc(100% - 200px);
+}

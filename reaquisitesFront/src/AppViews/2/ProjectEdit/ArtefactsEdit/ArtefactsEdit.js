@@ -21,7 +21,7 @@ export default function ArtefactsEdit (props) {
 
     const addArtefact = (newArtefact) => {
         var newArtefactId = 0;
-        props.project.artefactDefs.forEach((artefact)=>{
+        props.project.artefacts.forEach((artefact)=>{
             if (artefact.id>newArtefactId) newArtefactId=artefact.id; 
         });
         var newArtefactWithRef = {...newArtefact,

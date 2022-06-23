@@ -75,9 +75,11 @@ export default function Attribute (props) {
                         </div>
                         
             default:
-                return  <TextField>
-
-                        </TextField>
+                return  <TextField
+                            color='secondary'
+                            value={props.attrib.value}
+                            onChange={(event) => props.setAttribValue(props.ind, event.target.value)}
+                        />
         }
     }
 

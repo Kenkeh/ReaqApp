@@ -82,8 +82,7 @@ export default function ArtefactEdit (props) {
                     setCurrentArtefactError('Artefact definition cannot be empty');
                 }else if (currentArtefact.name==''){
                     setCurrentArtefactError('Artefact name cannot be empty');
-                }else if (props.otherArtefacts.find(artefact => artefact.name == currentArtefact.name && 
-                    (artefact.definition.name == value.name && artefact.definition.shape == value.shape))){
+                }else if (props.otherArtefacts.find(artefact => artefact.name == currentArtefact.name && artefact.definition.id == value.id)){
                     setCurrentArtefactError('Artefact already exists');
                 }else {
                     setCurrentArtefactError('');
