@@ -43,6 +43,7 @@
 .artefactHeaders{
     display: flex;
     flex-direction: row;
+    color: white;
 }
 .artefactValuesHeader{
     height: 100%;

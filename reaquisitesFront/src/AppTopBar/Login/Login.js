@@ -6,7 +6,7 @@ import  {overTheme} from '../../overTheme';
 import { Button, TextField, Chip } from '@mui/material';
 import logo from '../../Elements/images/logo192.png';
 import { userAuth, userProjectList } from './../../AppAPI';
-import { AppName } from '../../AppPaths';
+import { AppName } from '../../AppConsts';
 
 
 

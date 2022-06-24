@@ -120,6 +120,23 @@ export default function RelationshipsEdit (props) {
                         <ClearIcon style={ selectedRelationship==-1 ? {color: 'gray'} : {color: 'white'}}/>
                     </IconButton>
                 </div>
+                <div className='relationshipListHeadersContainer'>
+                    <Centerer>
+                        <div className='relationshipListHeader'>
+                            Definition
+                        </div>
+                    </Centerer>
+                    <Centerer>
+                        <div className='relationshipListHeader'>
+                            Parent
+                        </div>
+                    </Centerer>
+                    <Centerer>
+                        <div className='relationshipListHeader'>
+                            Child
+                        </div>
+                    </Centerer>
+                </div>
                 <div className='relationshipList' style={{backgroundColor: overTheme.palette.primary.dark}}>
                     {props.project.relationships.map((relationship, index) =>{
                         return  <Relationship 

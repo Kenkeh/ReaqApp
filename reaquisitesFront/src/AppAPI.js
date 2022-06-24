@@ -1,4 +1,4 @@
-import {ServerRouteHTTPS, ServerRouteHTTP, AppName} from './AppPaths';
+import {ServerRouteHTTPS, ServerRouteHTTP, AppName} from './AppConsts';
 
 export const userAuth = (credentials) => {
   return fetch(ServerRouteHTTPS+'user/auth', {

@@ -117,6 +117,18 @@ export default function RelDefsEdit (props) {
                         <ClearIcon style={ selectedRelDef==-1 ? {color: 'gray'} : {color: 'white'}}/>
                     </IconButton>
                 </div>
+                <div className='relDefListHeadersContainer'>
+                    <Centerer>
+                        <div className='relDefListHeader'>
+                            Shape
+                        </div>
+                    </Centerer>
+                    <Centerer>
+                        <div className='relDefListHeader'>
+                            Name
+                        </div>
+                    </Centerer>
+                </div>
                 <div className='relDefList' style={{backgroundColor: overTheme.palette.primary.dark}}>
                     {props.project.relationshipDefs.map((relDef, index) =>{
                         return  <RelDef 

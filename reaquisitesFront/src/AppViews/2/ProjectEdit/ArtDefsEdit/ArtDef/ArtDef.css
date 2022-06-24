@@ -43,6 +43,7 @@
 .artDefHeaders{
     display: flex;
     flex-direction: row;
+    color: white;
 }
 .artDefValuesHeader{
     height: 100%;

@@ -68,7 +68,8 @@ export default function RelationshipEdit (props) {
     const setRelationshipInfo = (info, value) =>{
         switch (info){
             case 'definition':
-                if (props.otherRelationships.find(relationship => (relationship.parent.id == currentRelationship.parent.id &&
+                if ((currentRelationship.parent && currentRelationship.child) &&
+                    props.otherRelationships.find(relationship => (relationship.parent.id == currentRelationship.parent.id &&
                     relationship.child.id == currentRelationship.child.id) && relationship.definition.id == value.id)){
                     setCurrentRelationshipError('Relationship already exists');
                 }else {
@@ -97,16 +98,22 @@ export default function RelationshipEdit (props) {
                 }
                 break;
             case 'parent':
-                if (props.otherRelationships.find(relationship => (relationship.parent.id == value.id &&
+                if ((currentRelationship.definition && currentRelationship.child) &&
+                    props.otherRelationships.find(relationship => (relationship.parent.id == value.id &&
                     relationship.child.id == currentRelationship.child.id) && relationship.definition.id == currentRelationship.definition.id)){
                     setCurrentRelationshipError('Relationship already exists');
+                }else {
+                    setCurrentRelationshipError('');
                 }
                 setCurrentRelationship({...currentRelationship, parent: value});
                 break;
             case 'child':
-                if (props.otherRelationships.find(relationship => (relationship.parent.id == currentRelationship.parent.id &&
+                if ((currentRelationship.definition && currentRelationship.parent) &&
+                    props.otherRelationships.find(relationship => (relationship.parent.id == currentRelationship.parent.id &&
                     relationship.child.id == value.id) && relationship.definition.id == currentRelationship.definition.id)){
                     setCurrentRelationshipError('Relationship already exists');
+                }else {
+                    setCurrentRelationshipError('');
                 }
                 setCurrentRelationship({...currentRelationship, child: value});
                 break;

@@ -118,6 +118,18 @@ export default function ArtDefsEdit (props) {
                         <ClearIcon style={ selectedArtDef==-1 ? {color: 'gray'} : {color: 'white'}}/>
                     </IconButton>
                 </div>
+                <div className='artDefListHeadersContainer'>
+                    <Centerer>
+                        <div className='artDefListHeader'>
+                            Shape
+                        </div>
+                    </Centerer>
+                    <Centerer>
+                        <div className='artDefListHeader'>
+                            Name
+                        </div>
+                    </Centerer>
+                </div>
                 <div className='artDefList' style={{backgroundColor: overTheme.palette.primary.dark}}>
                     {props.project.artefactDefs.map((artDef, index) =>{
                         return  <ArtDef 

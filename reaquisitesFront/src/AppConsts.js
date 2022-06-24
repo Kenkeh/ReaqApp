@@ -25,6 +25,12 @@ import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwo
 import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import WorkOffTwoToneIcon from '@mui/icons-material/WorkOffTwoTone';
 
+
+export const ServerRouteHTTPS = "https://localhost:7291/";
+export const ServerRouteHTTP = "http://localhost:5242/";
+export const AppName = "Reacytos";
+
+
 export const ArtefactIcons = [
     <TaskTwoToneIcon/>,
     <AddTaskTwoToneIcon/>,

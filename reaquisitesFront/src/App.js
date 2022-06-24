@@ -11,6 +11,7 @@ import MainSwitcher from './AppViews/MainSwitcher';
 import { BrowserRouter } from 'react-router-dom';
 import { getUserProject, saveProject, userProjectList } from './AppAPI';
 import LoadingFrame from './LoadingFrame/LoadingFrame';
+import { AppName } from './AppConsts';
 
 
 
@@ -62,6 +63,7 @@ export default function App() {
     }else{
       setLoadingInfo(0);
     }
+    document.title=AppName;
   },[]);
 
   const setUser = (user) =>{

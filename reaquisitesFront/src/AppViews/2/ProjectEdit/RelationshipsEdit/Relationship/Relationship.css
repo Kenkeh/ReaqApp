@@ -43,6 +43,7 @@
 .relationshipHeaders{
     display: flex;
     flex-direction: row;
+    color: white;
 }
 .relationshipValuesHeader{
     height: 100%;

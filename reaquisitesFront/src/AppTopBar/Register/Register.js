@@ -5,7 +5,7 @@ import Spinner from '../../MiniTools/Spinner/Spinner';
 import  {overTheme} from '../../overTheme';
 import { Button, TextField, Chip } from '@mui/material';
 import logo from '../../Elements/images/logo192.png';
-import {ServerRouteHTTPS, ServerRouteHTTP, AppName} from '../../AppPaths';
+import {ServerRouteHTTPS, ServerRouteHTTP, AppName} from '../../AppConsts';
 
 
 

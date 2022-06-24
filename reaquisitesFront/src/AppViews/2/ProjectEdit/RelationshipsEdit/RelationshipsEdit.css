@@ -80,6 +80,17 @@
 .relationshipListTitle{
     font-weight: bold;
 }
+.relationshipListHeadersContainer{
+    height: 30px;
+    display: grid;
+    grid-template-columns: 200px calc(50% - 100px) calc(50% - 100px);
+    color: white;
+}
+.relationshipListHeader{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .relationshipList{
     width: 100%;
     height: 100%;

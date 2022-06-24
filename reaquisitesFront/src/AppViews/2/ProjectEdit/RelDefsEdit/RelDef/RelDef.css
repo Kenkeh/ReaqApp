@@ -43,6 +43,7 @@
 .relDefHeaders{
     display: flex;
     flex-direction: row;
+    color: white;
 }
 .relDefValuesHeader{
     height: 100%;

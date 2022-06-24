@@ -4,7 +4,7 @@ import ArrowDropdownIcon from '@mui/icons-material/ArrowDropDown'
 import { useEffect, useState } from "react";
 import { overTheme } from '../../../overTheme';
 import './FirstLook.css';
-import { ServerRouteHTTPS } from '../../../AppPaths';
+import { ServerRouteHTTPS } from '../../../AppConsts';
 import ProjectCard from '../../../Elements/ProjectCard/ProjectCard';
 import { getUserProject } from '../../../AppAPI';
 

@@ -80,6 +80,17 @@
 .artDefListTitle{
     font-weight: bold;
 }
+.artDefListHeadersContainer{
+    height: 30px;
+    display: grid;
+    grid-template-columns: 100px calc(100% - 100px);
+    color: white;
+}
+.artDefListHeader{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .artDefList{
     width: 100%;
     height: 100%;

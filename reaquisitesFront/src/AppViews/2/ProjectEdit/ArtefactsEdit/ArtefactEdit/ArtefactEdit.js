@@ -19,6 +19,7 @@ export default function ArtefactEdit (props) {
 
 
     const [currentArtefactError, setCurrentArtefactError] = useState('Artefact name cannot be empty');
+    const [currentArtefactDefinitionIndex, setCurrentArtefactDefinitionIndex] = useState(0);
     
 
 
@@ -26,6 +27,7 @@ export default function ArtefactEdit (props) {
     useEffect(() =>{
         if (props.artefactToEdit){
             setCurrentArtefact(props.artefactToEdit);
+            setCurrentArtefactDefinitionIndex(props.avaliableArtDefs.findIndex((artDef) => artDef.id == props.artefactToEdit.definition.id));
             setCurrentArtefactError('');
         }
     },[props.artefactToEdit]);
@@ -112,9 +114,6 @@ export default function ArtefactEdit (props) {
             case 'description':
                 setCurrentArtefact({...currentArtefact, description: value});
                 break;
-            case 'attributeValue':
-                setCurrentArtefact({...currentArtefact, description: value});
-                break;
         }
         
     }
@@ -152,12 +151,14 @@ export default function ArtefactEdit (props) {
                 </div>
                 <div className='currentArtefactValue'>
                     <Select 
-                        value={currentArtefact.definition || {}/*blank value, to avoid error of changing from undefined to not null*/}
-                        onChange={(event) => setArtefactInfo('definition', event.target.value)}
+                        value={currentArtefactDefinitionIndex}
+                        onChange={(event) => {
+                            setCurrentArtefactDefinitionIndex(event.target.value);
+                            setArtefactInfo('definition', props.avaliableArtDefs[event.target.value]);}}
                         error={!currentArtefact.definition || currentArtefactError == 'Artefact already exists'}
                     >
                         {props.avaliableArtDefs.map((artDef, index) =>{
-                            return  <MenuItem key={index} value={artDef}>
+                            return  <MenuItem key={index} value={index}>
                                         <div className='currentArtefactDefinitionItem'>
                                             {ArtefactIcons[artDef.shape]}
                                             <div className='currentArtefactDefinitionItemName'>
