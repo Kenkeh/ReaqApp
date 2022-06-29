@@ -1,0 +1,94 @@
+.factorContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.fcUnselected{
+    height: 49px;
+}
+.fcSelected{
+    height: 200px;
+}
+
+
+.factorHeadersContainer{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: column;
+    transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    -ms-transition: all 500ms ease-out;
+    -webkit-transition: all 500ms ease-out;
+    overflow: hidden;
+}
+.fhcSelected{
+    height: 70px;
+    min-height: 70px;
+}
+.fhcUnselected{
+    height: 47px;
+    min-height: 47px;
+}
+.factorHeaders{
+    display: flex;
+    flex-direction: row;
+}
+.factorValuesHeader{
+    height: 100%;
+    width: 100px;
+}
+.factorDescHeader{
+    height: 100%;
+    width: calc(100% - 100px);
+}
+
+
+.factorShowInfo{
+    height: 45px;
+    min-height: 45px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+}
+.factorShowInfo :hover{
+    cursor: pointer;
+}
+.factorType{
+    height: 100%;
+    width: 100px;
+}
+.factorName{
+    height: 100%;
+    width: calc(100% - 100px);
+}
+
+
+.factorExtraInfo{
+    height: calc(100% - 65px);
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    text-align: center;
+}
+.factorValuesInfo{
+    height: 100%;
+    width: 100px;
+}
+.factorDescInfo{
+    height: 100%;
+    width: calc(100% - 100px);
+}

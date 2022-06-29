@@ -1,0 +1,77 @@
+.currentVisualizationContainer{
+    height: 100%;
+    border-radius: 5px;
+    display: grid;
+    grid-template-rows: 75px 75px calc(100% - 150px);
+    grid-template-columns: 40% 40% 20%;
+    overflow: hidden;
+    color: white;
+}
+.currentVisualizationContainer > div{
+    margin: 5px;
+}
+.currentVisualizationIconContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row:1;
+}
+
+.currentVisualizationTitle{
+    height: 20px;
+}
+.currentVisualizationValue{
+    height: 45px;
+}
+
+.currentVisualizationNameContainer{
+    grid-column:1;
+    grid-row: 1;
+}
+.currentVisualizationTemplateContainer{
+    grid-column:2;
+    grid-row: 1;
+}
+.currentVisualizationDescContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 2;
+}
+.currentVisualizationCreateContainer{
+    grid-column: 3;
+    grid-row: 3;
+}
+.currentVisualizationCancelContainer{
+    grid-column: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+.currentVisualizationAttrListContainer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 40px 40px;
+    grid-template-rows: 20px calc(100% - 25px);
+    row-gap: 5px;
+}
+.currentVisualizationAttrListTitle{
+    grid-column: 1;
+    grid-row: 1;
+}
+.currentVisualizationAttrDel{
+    grid-column: 2;
+    grid-row: 1;
+}
+.currentVisualizationAttrAdd{
+    grid-column: 3;
+    grid-row: 1;
+}
+.currentVisualizationAttrList{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row: 2;
+    border-radius: 5px;
+    border: 1px solid white;
+    overflow: auto;
+}
+

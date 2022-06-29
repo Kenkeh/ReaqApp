@@ -66,7 +66,7 @@
     -webkit-transition: height 500ms ease-out;
 }
 .rdlcUp{
-    height: calc(100% - 100px);
+    height: calc(100% - 50px);
 }
 .pePanelClosed{
     height: 0px;
@@ -93,7 +93,7 @@
 }
 .relDefList{
     width: 100%;
-    height: 100%;
+    height: calc(100% - 80px);
     display: flex;
     flex-direction: column;
     border-radius: 5px;

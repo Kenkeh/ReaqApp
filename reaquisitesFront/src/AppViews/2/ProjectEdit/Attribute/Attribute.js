@@ -15,7 +15,7 @@ export default function Attribute (props) {
         }else{
             setAttributeValues(JSON.parse(props.attrib.definition.values));
         }
-    },[]);
+    },[props.attrib]);
     
     const parseAttributeType = () =>{
         switch(props.attrib.definition.type){
@@ -29,12 +29,12 @@ export default function Attribute (props) {
     }
 
     const checkIntegerValue = (number) =>{
-        if (number<attributeValues[0]){
+        if (parseInt(number)<attributeValues[0]){
             props.setAttribValue(props.ind, ''+attributeValues[0]);
-        }else if (number>attributeValues[1]){
+        }else if (parseInt(number)>attributeValues[1]){
             props.setAttribValue(props.ind, ''+attributeValues[1]);
         }else{
-            props.setAttribValue(props.ind, parseInt(number));
+            props.setAttribValue(props.ind, ''+number);
         }
     }
 
@@ -57,17 +57,20 @@ export default function Attribute (props) {
                             <Centerer>
                                 <Slider 
                                     color='secondary'
-                                    value={parseInt(props.attrib.value)}
+                                    value={props.attrib.value}
                                     valueLabelDisplay={'auto'}
                                     min={attributeValues[0]}
                                     max={attributeValues[1]}
-                                    onChange={(event) => props.setAttribValue(props.ind, ''+event.target.value)}
+                                    onChange={
+                                        (event) => checkIntegerValue(''+event.target.value)
+                                    }
                                 />
                             </Centerer>
                             <Centerer>
                                 <TextField
-                                    value={parseInt(props.attrib.value)}
+                                    value={props.attrib.value}
                                     type='number'
+                                    color='secondary'
                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
                                     onChange={(event) => checkIntegerValue(event.target.value)}
                                 />

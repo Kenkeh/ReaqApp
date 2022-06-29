@@ -105,7 +105,7 @@ export default function ArtefactsEdit (props) {
                     avaliableArtDefs={props.project.artefactDefs}
                 />
             </div>
-            <div className={currentArtefactPanel ? 'animHeight pePanelClosed' : 'animHeight adlcUp'}>
+            <div className={currentArtefactPanel ? 'animHeight pePanelClosed' : 'animHeight alcUp'}>
                 <div className='artefactListTitleContainer'>
                     <IconButton disabled={selectedArtefact==-1} onClick={startEditingArtefact}>
                         <EditIcon style={ selectedArtefact==-1 ? {color: 'gray'} : {color: 'white'}}/>
@@ -118,6 +118,18 @@ export default function ArtefactsEdit (props) {
                     <IconButton disabled={selectedArtefact==-1} onClick={deleteArtefact}>
                         <ClearIcon style={ selectedArtefact==-1 ? {color: 'gray'} : {color: 'white'}}/>
                     </IconButton>
+                </div>
+                <div className='artefactListHeadersContainer'>
+                    <Centerer>
+                        <div className='artefactListHeader'>
+                            Definition
+                        </div>
+                    </Centerer>
+                    <Centerer>
+                        <div className='artefactListHeader'>
+                            Name
+                        </div>
+                    </Centerer>
                 </div>
                 <div className='artefactList' style={{backgroundColor: overTheme.palette.primary.dark}}>
                     {props.project.artefacts.map((artefact, index) =>{

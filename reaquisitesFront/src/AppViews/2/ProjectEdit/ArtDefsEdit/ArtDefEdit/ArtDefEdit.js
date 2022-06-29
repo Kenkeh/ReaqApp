@@ -78,7 +78,9 @@ export default function ArtDefEdit (props) {
                 setCurrentArtDef({...currentArtDef, name: value});
                 break;
             case 'icon':
-                if (props.otherArtDefs.find(artDef => artDef.name == currentArtDef.name && artDef.shape == value)){
+                if (currentArtDef.name==''){
+                    setCurrentArtDefError('Artefact Definition name cannot be empty');
+                }else if (props.otherArtDefs.find(artDef => artDef.name == currentArtDef.name && artDef.shape == value)){
                     setCurrentArtDefError('Artefact Definition already exists');
                 }else{
                     setCurrentArtDefError('');

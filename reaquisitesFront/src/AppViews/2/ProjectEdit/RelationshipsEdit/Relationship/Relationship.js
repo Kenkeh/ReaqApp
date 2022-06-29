@@ -33,7 +33,7 @@ export default function Relationship (props) {
                     <div className='relationshipDefinition'>
                         <CJSArrowShow 
                             selected={true} 
-                            index={props.ind} 
+                            index={'Rel'+props.ind} 
                             arrowType={cytoscapeArrowHeads[Math.floor(props.relation.definition.shape/2)]} 
                             fillType={props.relation.definition.shape%2==0 ? 'filled' : 'hollow'}
                         />
@@ -48,12 +48,16 @@ export default function Relationship (props) {
                                     {ArtefactIcons[props.relation.parent.definition.shape]}
                                 </Centerer>
                                 <Centerer>
-                                    {props.relation.parent.definition.name}
+                                    <div className='relationshipArtefactText'>
+                                        {props.relation.parent.definition.name}
+                                    </div>
                                 </Centerer>
                             </div>
                             <div className='relationshipArtefactName'>
                                 <Centerer>
-                                    {props.relation.parent.name}
+                                    <div className='relationshipArtefactText'>
+                                        {props.relation.parent.name}
+                                    </div>
                                 </Centerer>
                             </div>
                         </div>
@@ -63,12 +67,16 @@ export default function Relationship (props) {
                                     {ArtefactIcons[props.relation.child.definition.shape]}
                                 </Centerer>
                                 <Centerer>
-                                    {props.relation.child.definition.name}
+                                    <div className='relationshipArtefactText'>
+                                        {props.relation.child.definition.name}
+                                    </div>
                                 </Centerer>
                             </div>
                             <div className='relationshipArtefactName'>
                                 <Centerer>
-                                    {props.relation.child.name}
+                                    <div className='relationshipArtefactText'>
+                                        {props.relation.child.name}
+                                    </div>
                                 </Centerer>
                             </div>
                         </div>

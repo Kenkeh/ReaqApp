@@ -166,7 +166,7 @@ export default function RelationshipEdit (props) {
                                         <div className='currentRelationshipDefinitionItemContainer'>
                                             <CJSArrowShow 
                                                 selected={currentRelationship.definition && currentRelationship.definition.id==relDef.id} 
-                                                index={index} 
+                                                index={'RelDefEdit'+index} 
                                                 arrowType={cytoscapeArrowHeads[Math.floor(relDef.shape/2)]} 
                                                 fillType={relDef.shape%2==0 ? 'filled' : 'hollow'}
                                             />

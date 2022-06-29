@@ -406,9 +406,23 @@ namespace reaquisites.Managers
                                     DBProjectService.UpdateArtDefinition(artDefID,artDefToUpdate.Name,artDefToUpdate.Description,artDefToUpdate.Shape);
                                     //restauramos los atributos
                                     DBProjectService.DeleteAllArtDefAttributeDefs(artDefID);
+                                    List<(int, Artefact)> artDefArtefacts = DBProjectService.GetArtefactsForDefinition(artDefID);
                                     foreach (AttributeDefinition attributeDef in artDefToUpdate.AttributeDefinitions){
                                         DBProjectService.AddArtefactAttributeDefinition(attributeDef.Name, 
                                         attributeDef.Type, attributeDef.Description, attributeDef.Values, artDefID);
+                                        //ADD DEFAULT VALUES TO RELATED ARTEFACTS
+                                        int attribDefId = DBProjectService.GetArtefactAttributeDefID(artDefID, attributeDef.Name);
+                                        string value = "";
+                                        switch (attributeDef.Type){
+                                            case 2:
+                                                break;
+                                            default:
+                                                value = attributeDef.Values.Substring(1).Split(',')[0];
+                                                break;
+                                        }
+                                        foreach ((int, Artefact) artDefArtID in artDefArtefacts){
+                                            DBProjectService.AddArtefactAttribute(artDefArtID.Item1, attribDefId,value);
+                                        }
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)
@@ -434,9 +448,23 @@ namespace reaquisites.Managers
                                     DBProjectService.UpdateRelDefinition(relDefID,relDefToUpdate.Name,relDefToUpdate.Description,relDefToUpdate.Shape);
                                     //restauramos los atributos
                                     DBProjectService.DeleteAllRelDefAttributeDefs(relDefID);
+                                    List<(int, (int, int, string?, int))> relDefRelations = DBProjectService.GetRelationshipsForDefinition(relDefID);
                                     foreach (AttributeDefinition attributeDef in relDefToUpdate.AttributeDefinitions){
                                         DBProjectService.AddRelationshipAttributeDefinition(attributeDef.Name, 
                                         attributeDef.Type, attributeDef.Description, attributeDef.Values, relDefID);
+                                        //ADD DEFAULT VALUES TO RELATED RELATIONSHIPS
+                                        int attribDefId = DBProjectService.GetRelationshipAttributeDefID(relDefID, attributeDef.Name);
+                                        string value = "";
+                                        switch (attributeDef.Type){
+                                            case 2:
+                                                break;
+                                            default:
+                                                value = "0";
+                                                break;
+                                        }
+                                        foreach ((int, (int, int, string?, int)) artDefArtID in relDefRelations){
+                                            DBProjectService.AddArtefactAttribute(artDefArtID.Item1, attribDefId,value);
+                                        }
                                     }
                                 }else{
                                     //NO EXISTE (CREAMOS)

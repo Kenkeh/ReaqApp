@@ -5,5 +5,4 @@ public class Visualization {
     public List<ColorFactor> RelationshipColorFactors { get; set; }
     public List<SizeFactor> ArtefactSizeFactors { get; set; }
     public List<SizeFactor> RelationshipSizeFactors { get; set; }
-    public List<HistoryEntry> HistoryEntries { get; set; }
 }

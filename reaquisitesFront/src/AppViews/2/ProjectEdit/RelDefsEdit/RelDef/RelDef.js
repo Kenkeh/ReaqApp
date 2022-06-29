@@ -34,7 +34,7 @@ export default function RelDef (props) {
                         <Centerer>
                             <CJSArrowShow
                                 selected={true} 
-                                index={props.ind+cytoscapeArrowHeads.length*2+1} 
+                                index={'RelDef'+props.ind+cytoscapeArrowHeads.length*2+1} 
                                 arrowType={cytoscapeArrowHeads[Math.floor(props.relDef.shape/2)]} 
                                 fillType={props.relDef.shape%2 ? 'hollow' : 'filled'}
                             />

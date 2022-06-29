@@ -7,12 +7,15 @@ import ArtDefsEdit from './ArtDefsEdit/ArtDefsEdit';
 import RelDefsEdit from './RelDefsEdit/RelDefsEdit';
 import ArtefactsEdit from './ArtefactsEdit/ArtefactsEdit';
 import RelationshipsEdit from './RelationshipsEdit/RelationshipsEdit';
+import ViewsEdit from './ViewsEdit/ViewsEdit'
+import CJSGraph from '../../../Elements/CJSGraph/CJSGraph';
 
 
 export default function ProjectEdit (props) {
 
     const [activeLabel, setActiveLabel] = useState(undefined);
-
+    const [resetGraph, setResetGraph] = useState(false);
+    const [activeTemplate, setActiveTemplate] = useState(-1);
     
     const elemsButtonsStyleHiglighted = {
         borderRadius: '5px',
@@ -64,6 +67,16 @@ export default function ProjectEdit (props) {
                             setProject={props.setActiveProject}
                             setProjectModified={props.setActiveProjectModified}
                         />
+            case 4:
+                return  <ViewsEdit
+                            inactiveButtonStyle={elemsButtonsStyle} 
+                            activeButtonStyle={elemsButtonsStyleHiglighted}
+                            project={props.activeProject}
+                            setProject={props.setActiveProject}
+                            setProjectModified={props.setActiveProjectModified}
+                            activeVisualization={activeTemplate}
+                            setActiveVisualization={setActiveTemplate}
+                        />
             default:
                 return <></>
         }
@@ -71,7 +84,7 @@ export default function ProjectEdit (props) {
 
 
     return (
-        <div className='projectEditorBackgroud'>
+        <div className='projectEditorBackground'>
             <div className='projectEditionBackground' style={{backgroundColor: overTheme.palette.primary.light, borderColor: overTheme.palette.primary.light}}>
                 <div className='projectEditionLabels'>
                     <Button className='projectEditionLabel' 
@@ -114,6 +127,14 @@ export default function ProjectEdit (props) {
                     {elementEditionPanel(activeLabel)}
                 </div>
             </div>
+            {props.activeProject && 
+            <CJSGraph 
+                index={'Project'} 
+                project={props.activeProject} 
+                visualTemplate={props.activeProject.visualizations[activeTemplate]}
+                reset={resetGraph}
+            />
+            }
         </div>
     );
     

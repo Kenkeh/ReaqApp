@@ -1,0 +1,103 @@
+.factorEditContainer{
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 30% 20% 50%;
+    grid-template-rows: 55px 55px calc(100% - 170px) 55px;
+    gap: 5px;
+}
+
+.factorEditType{
+    grid-column: 1;
+    grid-row: 1;
+}
+.factorEditElement{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row: 1;
+}
+.factorEditAttrib{
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+.factorEditValues{
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.factorEditValuesAdder{
+    width: 100%;
+    height: 66px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: calc(100% - 69px) 64px;
+    gap: 5px;
+}
+.factorEditValuesAdderInteger{
+    height: 100%;
+    display: grid;
+    grid-template-columns: 76px calc(100% - 162px) 76px;
+    gap: 5px;
+}
+
+.factorEditAttrValueName{
+    height: 100%;
+    width: 100px;
+}
+.factorEditAttrValueNameText{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.factorEditAttrValuePicker{
+    margin: 5px;
+    height: calc(100% - 10px);
+    width: calc(100% - 110px);
+}
+.factorEditAttrValuePickerSize{
+    display: grid;
+    grid-template-columns: calc(100% - 85px) 80px;
+    gap: 5px;
+}
+
+.factorEditPointContainer{
+    width: 100%;
+    height: 70px;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 100px calc(100% - 174px) 64px;
+    gap: 5px;
+}
+.factorEditPointColor{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 10px calc(33% - 21px) 10px calc(33% - 21px) 10px calc(33% - 21px);
+}
+.factorEditPointSize{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 60px calc(100% - 135px) 65px;
+}
+
+
+.factorEditCancel{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+

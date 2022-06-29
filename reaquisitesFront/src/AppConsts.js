@@ -26,6 +26,33 @@ import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import WorkOffTwoToneIcon from '@mui/icons-material/WorkOffTwoTone';
 
 
+import TaskTwoToneImage from './Elements/images/icons/0.svg';
+import AddTaskTwoToneImage from './Elements/images/icons/1.svg';
+import TaskAltTwoToneImage from './Elements/images/icons/2.svg';
+import AssignmentTwoToneImage from './Elements/images/icons/3.svg';
+import PlaylistAddCheckTwoToneImage from './Elements/images/icons/4.svg';
+import AssignmentIndTwoToneImage from './Elements/images/icons/5.svg';
+import AssignmentReturnedTwoToneImage from './Elements/images/icons/6.svg';
+import AssignmentTurnedInTwoToneImage from './Elements/images/icons/7.svg';
+import AssignmentLateTwoToneImage from './Elements/images/icons/8.svg';
+import FormatListNumberedTwoToneImage from './Elements/images/icons/9.svg';
+import ListAltTwoToneImage from './Elements/images/icons/10.svg';
+import ErrorTwoToneImage from './Elements/images/icons/11.svg';
+import BrokenImageTwoToneImage from './Elements/images/icons/12.svg';
+import ThumbUpTwoToneImage from './Elements/images/icons/13.svg';
+import ClassTwoToneImage from './Elements/images/icons/14.svg';
+import AccountTreeTwoToneImage from './Elements/images/icons/15.svg';
+import AccessTimeTwoToneImage from './Elements/images/icons/16.svg';
+import TimelapseTwoToneImage from './Elements/images/icons/17.svg';
+import SentimentVerySatisfiedTwoToneImage from './Elements/images/icons/18.svg';
+import SentimentVeryDissatisfiedTwoToneImage from './Elements/images/icons/19.svg';
+import AssuredWorkloadTwoToneImage from './Elements/images/icons/20.svg';
+import GroupWorkTwoToneImage from './Elements/images/icons/21.svg';
+import WorkspacesTwoToneImage from './Elements/images/icons/22.svg';
+import WorkspacePremiumTwoToneImage from './Elements/images/icons/23.svg';
+import WorkTwoToneImage from './Elements/images/icons/24.svg';
+import WorkOffTwoToneImage from './Elements/images/icons/25.svg';
+
 export const ServerRouteHTTPS = "https://localhost:7291/";
 export const ServerRouteHTTP = "http://localhost:5242/";
 export const AppName = "Reacytos";
@@ -59,6 +86,15 @@ export const ArtefactIcons = [
     <WorkTwoToneIcon/>,
     <GroupWorkTwoToneIcon/>,
     <WorkOffTwoToneIcon/>
+]
+
+export const ArtefactIconImages = [
+    TaskTwoToneImage, AddTaskTwoToneImage, TaskAltTwoToneImage, AssignmentTwoToneImage, PlaylistAddCheckTwoToneImage,
+    AssignmentIndTwoToneImage, AssignmentReturnedTwoToneImage, AssignmentTurnedInTwoToneImage, AssignmentLateTwoToneImage,
+    FormatListNumberedTwoToneImage, ListAltTwoToneImage, ErrorTwoToneImage, BrokenImageTwoToneImage, ThumbUpTwoToneImage,
+    ClassTwoToneImage, AccountTreeTwoToneImage, AccessTimeTwoToneImage, TimelapseTwoToneImage, SentimentVerySatisfiedTwoToneImage,
+    SentimentVeryDissatisfiedTwoToneImage, AssuredWorkloadTwoToneImage, GroupWorkTwoToneImage, WorkspacesTwoToneImage,
+    WorkspacePremiumTwoToneImage, WorkTwoToneImage, GroupWorkTwoToneImage, WorkOffTwoToneImage
 ]
 
 export const currentDate = () =>{

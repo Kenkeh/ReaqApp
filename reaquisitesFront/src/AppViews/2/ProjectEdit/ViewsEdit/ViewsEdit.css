@@ -1,14 +1,14 @@
-.relationshipEditorContainer{
+.viewEditorContainer{
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     padding: 10px 0px 0px;
 }
-.relationshipEditorContainer > *{
+.viewEditorContainer > *{
     width: 100%;
 }
-.relationshipAddContainer{
+.viewAddContainer{
     height: 50px;
 }
 .dpa_open{
@@ -33,10 +33,10 @@
     -ms-transform:rotate(-90deg);
     transform: rotate(-90deg);
 }
-.relationshipEditContainer{
+.viewEditContainer{
     border-radius: 5px;
 }
-.crcOpen{
+.cvcOpen{
     height: 100%;
 }
 .currentArtDefContainer > div{
@@ -65,35 +65,35 @@
     -ms-transition: height 500ms ease-out;
     -webkit-transition: height 500ms ease-out;
 }
-.rlcUp{
-    height: calc(100% - 50px);
+.vlcUp{
+    height: calc(100% - 100px);
 }
 .pePanelClosed{
     height: 0px;
     overflow: hidden;
 }
-.relationshipListTitleContainer{
+.viewListTitleContainer{
     height: 50px;
     display: grid;
-    grid-template-columns: 50px calc(100% - 100px) 50px;
+    grid-template-columns: 50px 50px calc(100% - 200px) 50px 50px;
 }
-.relationshipListTitle{
+.viewListTitle{
     font-weight: bold;
 }
-.relationshipListHeadersContainer{
+.viewListHeadersContainer{
     height: 30px;
     display: grid;
-    grid-template-columns: 200px calc(50% - 100px) calc(50% - 100px);
+    grid-template-columns: 200px calc(100% - 200px);
     color: white;
 }
-.relationshipListHeader{
+.viewListHeader{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.relationshipList{
+.viewList{
     width: 100%;
-    height: calc(100% - 80px);
+    height: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
