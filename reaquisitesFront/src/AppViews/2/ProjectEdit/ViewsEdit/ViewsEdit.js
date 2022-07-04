@@ -30,7 +30,7 @@ export default function ViewsEdit (props) {
             id: newViewId+1
         }
         const creationHistoryEntry = {
-            elementType: 4,
+            elementType: 5,
             changeType: 1,
             changeDate: currentDate(),
             changes: JSON.stringify(newRelationshipWithRef)
@@ -46,7 +46,7 @@ export default function ViewsEdit (props) {
         var visualizations = [...props.project.visualizations];
         const removedRelationship = visualizations.splice(selectedView,1)[0];
         const deletionHistoryEntry = {
-            elementType: 4,
+            elementType: 5,
             elementId: removedRelationship.id,
             changeType: 3,
             changeDate: currentDate(),

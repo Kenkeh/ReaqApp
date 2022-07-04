@@ -7,7 +7,7 @@ import { ArtefactIconImages, cytoscapeArrowHeads, ArtefactIcons } from '../../Ap
 
 export default function CJSGraph(props){
 
-  const cytoscapeLayouts = ['breadthfirst', 'dagre', 'concentric'];
+  const cytoscapeLayouts = ['dagre', 'breadthfirst', 'concentric'];
 
   cytoscape.use(dagre);
   useEffect(()=>{

@@ -46,7 +46,8 @@ namespace reaquisites.Managers
             int projectID = DBProjectService.GetLastProjectID(userID);
             if (projectID<0) return -2;
 
-            Dictionary<AttributeDefinition, int> attribDefs = new Dictionary<AttributeDefinition, int>();
+            List<(int, List<(string, int)>)> artDefAttribDefs = new List<(int, List<(string, int)>)>();
+            List<(int, List<(string, int)>)> relDefAttribDefs = new List<(int, List<(string, int)>)>();
             
             // ARTEFACT DEFINITIONS
             Dictionary<ArtefactDefinition, int> artDefs = new Dictionary<ArtefactDefinition, int>();
@@ -54,12 +55,13 @@ namespace reaquisites.Managers
                 DBProjectService.AddArtefactDefinition(projectID,artDef.Name,artDef.Description,artDef.Shape,artDef.ID);
                 int artDefID = DBProjectService.GetLastArtefactDefID(projectID);
                 if (artDefID<0) return -3;
+                List<(string, int)> attribs = new List<(string, int)>();
                 foreach(AttributeDefinition artAttribDef in artDef.AttributeDefinitions){
                     DBProjectService.AddArtefactAttributeDefinition(artAttribDef.Name, artAttribDef.Type, artAttribDef.Description,artAttribDef.Values,artDefID);
                     int artAttribDefID = DBProjectService.GetArtefactAttributeDefID(artDefID, artAttribDef.Name);
-                    attribDefs.Add(artAttribDef,artAttribDefID);
+                    attribs.Add((artAttribDef.Name, artAttribDefID));
                 }
-
+                artDefAttribDefs.Add((artDefID, attribs));
                 artDefs.Add(artDef,artDefID);
             }
 
@@ -69,12 +71,13 @@ namespace reaquisites.Managers
                 DBProjectService.AddRelationshipDefinition(projectID, relDef.Name, relDef.Description, relDef.Shape, relDef.ID);
                 int relDefID = DBProjectService.GetLastRelationshipDefID(projectID);
                 if (relDefID<0) return -4;
+                List<(string, int)> attribs = new List<(string, int)>();
                 foreach(AttributeDefinition artAttribDef in relDef.AttributeDefinitions){
                     DBProjectService.AddRelationshipAttributeDefinition(artAttribDef.Name, artAttribDef.Type, artAttribDef.Description,artAttribDef.Values, relDefID);
                     int artAttribDefID = DBProjectService.GetRelationshipAttributeDefID(relDefID, artAttribDef.Name);
-                    attribDefs.Add(artAttribDef,artAttribDefID);
+                    attribs.Add((artAttribDef.Name, artAttribDefID));
                 }
-
+                relDefAttribDefs.Add((relDefID, attribs));
                 relDefs.Add(relDef,relDefID);
             }
             
@@ -86,7 +89,8 @@ namespace reaquisites.Managers
                 int artID = DBProjectService.GetLastArtefactID(projectID);
                 if (artID<0) return -5;
                 foreach (Attribute attrib in artefact.Attributes){
-                    int attributeDefID = attribDefs[attrib.Definition];
+                    int attributeDefID = artDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == artDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == attrib.Definition.Name;}).Item2;
                     DBProjectService.AddArtefactAttribute(artID,attributeDefID,attrib.Value);
                 }
 
@@ -102,7 +106,8 @@ namespace reaquisites.Managers
                 int relID = DBProjectService.GetLastRelationshipID(relDefID);
                 if (relID<0) return -6;
                 foreach (Attribute attrib in relation.Attributes){
-                    int attributeDefID = attribDefs[attrib.Definition];
+                    int attributeDefID = relDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == relDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == attrib.Definition.Name;}).Item2;
                     DBProjectService.AddRelationshipAttribute(relID, attributeDefID, attrib.Value);
                 }
             }
@@ -110,51 +115,59 @@ namespace reaquisites.Managers
 
             //VISUALIZATION TEMPLATES
             foreach (Visualization visual in project.Visualizations){
-                DBProjectService.AddVisualizationTemplate(visual.Name,visual.Description,projectID);
+                DBProjectService.AddVisualizationTemplate(visual.Name,visual.Description,projectID, visual.ID);
                 int visualID = DBProjectService.GetVisualizationID(projectID, visual.Name);
                 if (visualID<0) return -7;
 
                 //ARTEFACT COLOR FACTOR
-                foreach (ColorFactor colorFactor in visual.ArtefactColorFactors){
-                    int attribDefID = attribDefs[colorFactor.Definition];
+                foreach (ArtefactColorFactor colorFactor in visual.ArtefactColorFactors){
+                    int artDefID = DBProjectService.GetArtefactDefID(projectID, colorFactor.ElementDefinition.ID);
+                    int attribDefID = artDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == artDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == colorFactor.AttributeDefinition.Name;}).Item2;
                     DBProjectService.AddArtefactColorFactor(attribDefID, visualID, colorFactor.Weight);
                     int colorFactorID = DBProjectService.GetArtefactColorFactorID(visualID,attribDefID);
                     if (colorFactorID<0) return -8;
-                    foreach (KeyValuePair<string, System.Drawing.Color> points in colorFactor.Values){
-                        DBProjectService.AddArtefactColorFactorValue(colorFactorID, points.Key, points.Value.R, points.Value.G, points.Value.B, points.Value.A);
+                    foreach ((string, (int, int, int)) points in colorFactor.Values){
+                        DBProjectService.AddArtefactColorFactorValue(colorFactorID, points.Item1, (byte)points.Item2.Item1, (byte)points.Item2.Item2, (byte)points.Item2.Item3, 1);
                     }
                 }
 
                 //RELATIONSHIP COLOR FACTOR
-                foreach (ColorFactor colorFactor in visual.RelationshipColorFactors){
-                    int attribDefID = attribDefs[colorFactor.Definition];
+                foreach (RelationshipColorFactor colorFactor in visual.RelationshipColorFactors){
+                    int relDefID = DBProjectService.GetRelationshipDefID(projectID, colorFactor.ElementDefinition.ID);
+                    int attribDefID = relDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == relDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == colorFactor.AttributeDefinition.Name;}).Item2;
                     DBProjectService.AddRelationshipColorFactor(attribDefID,visualID,colorFactor.Weight);
                     int colorFactorID = DBProjectService.GetRelationshipColorFactorID(visualID,attribDefID);
                     if (colorFactorID<0) return -9;
-                    foreach (KeyValuePair<string, System.Drawing.Color> points in colorFactor.Values){
-                        DBProjectService.AddRelationshipColorFactorValue(colorFactorID,points.Key,points.Value.R,points.Value.G,points.Value.B,points.Value.A);
+                    foreach ((string, (int, int, int)) points in colorFactor.Values){
+                        DBProjectService.AddRelationshipColorFactorValue(colorFactorID, points.Item1, (byte)points.Item2.Item1, (byte)points.Item2.Item2, (byte)points.Item2.Item3, 1);
                     }
                 }
                 
                 //ARTEFACT SIZE FACTOR
-                foreach (SizeFactor sizeFactor in visual.ArtefactSizeFactors){
-                    int attribDefID = attribDefs[sizeFactor.Definition];
+                foreach (ArtefactSizeFactor sizeFactor in visual.ArtefactSizeFactors){
+                    int artDefID = DBProjectService.GetArtefactDefID(projectID, sizeFactor.ElementDefinition.ID);
+                    int attribDefID = artDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == artDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == sizeFactor.AttributeDefinition.Name;}).Item2;
                     DBProjectService.AddArtefactSizeFactor(attribDefID,visualID,sizeFactor.Weight);
                     int sizeFactorID = DBProjectService.GetArtefactSizeFactorID(visualID,attribDefID);
                     if (sizeFactorID<0) return -10;
-                    foreach (KeyValuePair<string, int> points in sizeFactor.Values){
-                        DBProjectService.AddArtefactSizeFactorValue(sizeFactorID,points.Key,points.Value);
+                    foreach ((string, int) points in sizeFactor.Values){
+                        DBProjectService.AddArtefactSizeFactorValue(sizeFactorID,points.Item1,points.Item2);
                     }
                 }
 
                 //RELATIONSHIP SIZE FACTOR
-                foreach (SizeFactor sizeFactor in visual.RelationshipSizeFactors){
-                    int attribDefID = attribDefs[sizeFactor.Definition];
+                foreach (RelationshipSizeFactor sizeFactor in visual.RelationshipSizeFactors){
+                    int relDefID = DBProjectService.GetRelationshipDefID(projectID, sizeFactor.ElementDefinition.ID);
+                    int attribDefID = relDefAttribDefs.Where((attrs) =>
+                        attrs.Item1 == relDefID).ElementAt(0).Item2.Find((attr) =>{ return attr.Item1 == sizeFactor.AttributeDefinition.Name;}).Item2;
                     DBProjectService.AddRelationshipSizeFactor(attribDefID,visualID,sizeFactor.Weight);
                     int sizeFactorID = DBProjectService.GetRelationshipSizeFactorID(visualID,attribDefID);
                     if (sizeFactorID<0) return -11;
-                    foreach (KeyValuePair<string, int> points in sizeFactor.Values){
-                        DBProjectService.AddRelationshipSizeFactorValue(sizeFactorID,points.Key,points.Value);
+                    foreach ((string, int) points in sizeFactor.Values){
+                        DBProjectService.AddRelationshipSizeFactorValue(sizeFactorID,points.Item1,points.Item2);
                     }
                 }
             }
@@ -182,16 +195,19 @@ namespace reaquisites.Managers
             theProject.Visualizations = new List<Visualization>();
 
             Dictionary<int, Artefact> projectArtefacts = new Dictionary<int, Artefact>();
-            Dictionary<int, AttributeDefinition> projectArtAttributeDefs = new Dictionary<int, AttributeDefinition>();
-            Dictionary<int, AttributeDefinition> projectRelAttributeDefs = new Dictionary<int, AttributeDefinition>();
+            Dictionary<int, Dictionary<int, AttributeDefinition>> projectArtAttributeDefs = new Dictionary<int, Dictionary<int, AttributeDefinition>>();
+            Dictionary<int, Dictionary<int, AttributeDefinition>> projectRelAttributeDefs = new Dictionary<int, Dictionary<int, AttributeDefinition>>();
+            Dictionary<int, ArtefactDefinition> projectArtDefs = new Dictionary<int, ArtefactDefinition>();
+            Dictionary<int, RelationshipDefinition> projectRelDefs = new Dictionary<int, RelationshipDefinition>();
 
-            List<(int, ArtefactDefinition)> projectArtDefs = DBProjectService.GetProjectArtefactDefs(projectID);
-            foreach ((int, ArtefactDefinition) artDef in  projectArtDefs){
+            List<(int, ArtefactDefinition)> projectArtDefsFromDB = DBProjectService.GetProjectArtefactDefs(projectID);
+            foreach ((int, ArtefactDefinition) artDef in  projectArtDefsFromDB){
 
                 Dictionary<int, AttributeDefinition> artAttribDefs = DBProjectService.GetArtefactDefAttributeDefs(artDef.Item1);
                 artDef.Item2.AttributeDefinitions = new List<AttributeDefinition>();
+                projectArtAttributeDefs.Add(artDef.Item1, new Dictionary<int, AttributeDefinition>());
                 foreach (KeyValuePair<int, AttributeDefinition> attribDef in artAttribDefs){
-                    projectArtAttributeDefs.Add(attribDef.Key,attribDef.Value);
+                    projectArtAttributeDefs[artDef.Item1].Add(attribDef.Key,attribDef.Value);
                     artDef.Item2.AttributeDefinitions.Add(attribDef.Value);
                 }
                 List<(int, Artefact)> artefactsForDef = DBProjectService.GetArtefactsForDefinition(artDef.Item1);
@@ -207,15 +223,17 @@ namespace reaquisites.Managers
                     theProject.Artefacts.Add(artDefArtefact.Item2);
                 }
                 theProject.ArtefactDefs.Add(artDef.Item2);
+                projectArtDefs.Add(artDef.Item1,artDef.Item2);
             }
 
-            List<(int, RelationshipDefinition)> projectRelDefs = DBProjectService.GetProjectRelationshipDefs(projectID);
-            foreach ((int, RelationshipDefinition) relDef in  projectRelDefs){
+            List<(int, RelationshipDefinition)> projectRelDefsFromDB = DBProjectService.GetProjectRelationshipDefs(projectID);
+            foreach ((int, RelationshipDefinition) relDef in  projectRelDefsFromDB){
 
                 Dictionary<int, AttributeDefinition> relAttribDefs = DBProjectService.GetRelationshipDefAttributeDefs(relDef.Item1);
                 relDef.Item2.AttributeDefinitions = new List<AttributeDefinition>();
+                projectRelAttributeDefs.Add(relDef.Item1, new Dictionary<int, AttributeDefinition>());
                 foreach (KeyValuePair<int, AttributeDefinition> attribDef in relAttribDefs){
-                    projectRelAttributeDefs.Add(attribDef.Key,attribDef.Value);
+                    projectRelAttributeDefs[relDef.Item1].Add(attribDef.Key,attribDef.Value);
                     relDef.Item2.AttributeDefinitions.Add(attribDef.Value);
                 }
                 List<(int, (int,int,string?,int))> relsForDef = DBProjectService.GetRelationshipsForDefinition(relDef.Item1);
@@ -234,64 +252,87 @@ namespace reaquisites.Managers
                     }
                     theProject.Relationships.Add(rel);
                 }
-
                 theProject.RelationshipDefs.Add(relDef.Item2);
+                projectRelDefs.Add(relDef.Item1, relDef.Item2);
             }
             
             List<(int, Visualization)> projectVisualizations = DBProjectService.GetProjectVisualizations(projectID);
             foreach ((int, Visualization) vis in projectVisualizations){
                 int visualID = vis.Item1;
                 Visualization visual = vis.Item2;
-                visual.ArtefactColorFactors = new List<ColorFactor>();
-                visual.ArtefactSizeFactors = new List<SizeFactor>();
-                visual.RelationshipColorFactors = new List<ColorFactor>();
-                visual.RelationshipSizeFactors = new List<SizeFactor>();
+                visual.ArtefactColorFactors = new List<ArtefactColorFactor>();
+                visual.ArtefactSizeFactors = new List<ArtefactSizeFactor>();
+                visual.RelationshipColorFactors = new List<RelationshipColorFactor>();
+                visual.RelationshipSizeFactors = new List<RelationshipSizeFactor>();
 
 
-                List<(int, (ColorFactor,int))> artColorFactors = DBProjectService.GetArtColorFactorsForVisual(visualID);
-                foreach ((int, (ColorFactor,int)) cF in artColorFactors){
+                List<(int, (ArtefactColorFactor,int))> artColorFactors = DBProjectService.GetArtColorFactorsForVisual(visualID);
+                foreach ((int, (ArtefactColorFactor,int)) cF in artColorFactors){
                     int colorFactorID = cF.Item1;
-                    ColorFactor colorFactor = cF.Item2.Item1;
+                    ArtefactColorFactor colorFactor = cF.Item2.Item1;
                     int attribDefID = cF.Item2.Item2;
-
-                    colorFactor.Definition = projectArtAttributeDefs[attribDefID];
+                    foreach (int artDefID in projectArtAttributeDefs.Keys){
+                        if (projectArtAttributeDefs[artDefID][attribDefID] != null){
+                            colorFactor.ElementDefinition = projectArtDefs[artDefID];
+                            colorFactor.AttributeDefinition = projectArtAttributeDefs[artDefID][attribDefID];
+                            break;
+                        }
+                    }
                     colorFactor.Values = DBProjectService.GetArtColorFactorValues(colorFactorID);
 
                     visual.ArtefactColorFactors.Add(colorFactor);
                 }
 
-                List<(int, (SizeFactor,int))> artSizeFactors = DBProjectService.GetArtSizeFactorsForVisual(visualID);
-                foreach ((int, (SizeFactor,int)) sF in artSizeFactors){
+                List<(int, (ArtefactSizeFactor,int))> artSizeFactors = DBProjectService.GetArtSizeFactorsForVisual(visualID);
+                foreach ((int, (ArtefactSizeFactor,int)) sF in artSizeFactors){
                     int colorFactorID = sF.Item1;
-                    SizeFactor sizeFactor = sF.Item2.Item1;
+                    ArtefactSizeFactor sizeFactor = sF.Item2.Item1;
                     int attribDefID = sF.Item2.Item2;
 
-                    sizeFactor.Definition = projectArtAttributeDefs[attribDefID];
+                    foreach (int artDefID in projectArtAttributeDefs.Keys){
+                        if (projectArtAttributeDefs[artDefID][attribDefID] != null){
+                            sizeFactor.ElementDefinition = projectArtDefs[artDefID];
+                            sizeFactor.AttributeDefinition = projectArtAttributeDefs[artDefID][attribDefID];
+                            break;
+                        }
+                    }
                     sizeFactor.Values = DBProjectService.GetArtSizeFactorValues(colorFactorID);
 
                     visual.ArtefactSizeFactors.Add(sizeFactor);
                 }
 
                 
-                List<(int, (ColorFactor,int))> relColorFactors = DBProjectService.GetRelColorFactorsForVisual(visualID);
-                foreach ((int, (ColorFactor,int)) cF in relColorFactors){
+                List<(int, (RelationshipColorFactor,int))> relColorFactors = DBProjectService.GetRelColorFactorsForVisual(visualID);
+                foreach ((int, (RelationshipColorFactor,int)) cF in relColorFactors){
                     int colorFactorID = cF.Item1;
-                    ColorFactor colorFactor = cF.Item2.Item1;
+                    RelationshipColorFactor colorFactor = cF.Item2.Item1;
                     int attribDefID = cF.Item2.Item2;
 
-                    colorFactor.Definition = projectRelAttributeDefs[attribDefID];
+                    foreach (int relDefID in projectRelAttributeDefs.Keys){
+                        if (projectRelAttributeDefs[relDefID][attribDefID] != null){
+                            colorFactor.ElementDefinition = projectRelDefs[relDefID];
+                            colorFactor.AttributeDefinition = projectRelAttributeDefs[relDefID][attribDefID];
+                            break;
+                        }
+                    }
                     colorFactor.Values = DBProjectService.GetRelColorFactorValues(colorFactorID);
 
                     visual.RelationshipColorFactors.Add(colorFactor);
                 }
 
-                List<(int, (SizeFactor,int))> relSizeFactors = DBProjectService.GetRelSizeFactorsForVisual(visualID);
-                foreach ((int, (SizeFactor,int)) sF in relSizeFactors){
+                List<(int, (RelationshipSizeFactor,int))> relSizeFactors = DBProjectService.GetRelSizeFactorsForVisual(visualID);
+                foreach ((int, (RelationshipSizeFactor,int)) sF in relSizeFactors){
                     int colorFactorID = sF.Item1;
-                    SizeFactor sizeFactor = sF.Item2.Item1;
+                    RelationshipSizeFactor sizeFactor = sF.Item2.Item1;
                     int attribDefID = sF.Item2.Item2;
 
-                    sizeFactor.Definition = projectRelAttributeDefs[attribDefID];
+                    foreach (int relDefID in projectRelAttributeDefs.Keys){
+                        if (projectRelAttributeDefs[relDefID][attribDefID] != null){
+                            sizeFactor.ElementDefinition = projectRelDefs[relDefID];
+                            sizeFactor.AttributeDefinition = projectRelAttributeDefs[relDefID][attribDefID];
+                            break;
+                        }
+                    }
                     sizeFactor.Values = DBProjectService.GetRelSizeFactorValues(colorFactorID);
 
                     visual.RelationshipSizeFactors.Add(sizeFactor);
@@ -385,6 +426,9 @@ namespace reaquisites.Managers
                                     int attribDefID = DBProjectService.GetRelationshipAttributeDefID(relDefId, attrib.Definition.Name);
                                     DBProjectService.AddRelationshipAttribute(relID, attribDefID, attrib.Value);
                                 }
+                                break;
+                            case 5:
+                                //VISUALIZATION
                                 break;
                             default:
                                 break;

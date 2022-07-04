@@ -70,7 +70,7 @@ export default function ViewEdit (props) {
                 setCurrentView({...currentView, description: value});
                 break;
             case 'template':
-                setCurrentView({...currentView, template: value});
+                setCurrentView({...currentView, graphTemplate: value});
                 break;
                 
         }
@@ -155,16 +155,16 @@ export default function ViewEdit (props) {
     const removeFactor = () =>{
         if (selectedFactor >= currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length + currentView.relationshipColorFactors.length){
             var newRelSizeFactors = [...currentView.relationshipSizeFactors];
-            newRelSizeFactors.splice(selectedFactor-currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length + currentView.relationshipColorFactors.length,1);
+            newRelSizeFactors.splice(selectedFactor-(currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length + currentView.relationshipColorFactors.length),1);
             setCurrentView({...currentView, relationshipSizeFactors: newRelSizeFactors});
         }else if (selectedFactor >= currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length){
-            var newRelSizeFactors = [...currentView.relationshipColorFactors];
-            newRelSizeFactors.splice(selectedFactor-currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length,1);
-            setCurrentView({...currentView, relationshipColorFactors: newRelSizeFactors});
+            var newRelColorFactors = [...currentView.relationshipColorFactors];
+            newRelColorFactors.splice(selectedFactor-(currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length),1);
+            setCurrentView({...currentView, relationshipColorFactors: newRelColorFactors});
         }else if (selectedFactor >= currentView.artefactColorFactors.length ){
-            var newArtColorFactors = [...currentView.artefactSizeFactors];
-            newArtColorFactors.splice(selectedFactor-currentView.artefactColorFactors.length,1);
-            setCurrentView({...currentView, artefactSizeFactors: newArtColorFactors});
+            var newArtSizeFactors = [...currentView.artefactSizeFactors];
+            newArtSizeFactors.splice(selectedFactor-currentView.artefactColorFactors.length,1);
+            setCurrentView({...currentView, artefactSizeFactors: newArtSizeFactors});
         }else{
             var newArtColorFactors = [...currentView.artefactColorFactors];
             newArtColorFactors.splice(selectedFactor,1);
@@ -199,10 +199,10 @@ export default function ViewEdit (props) {
                         onChange={(event) => setVisualizationInfo('template', event.target.value)}
                     >
                         <MenuItem value={0}>
-                            breadthfirst
+                            dagre
                         </MenuItem>
                         <MenuItem value={1}>
-                            dagre
+                            breadthfirst
                         </MenuItem>
                         <MenuItem value={2}>
                             concentric
