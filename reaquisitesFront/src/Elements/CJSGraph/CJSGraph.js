@@ -60,17 +60,17 @@ export default function CJSGraph(props){
       }
       if (props.visualTemplate){
 
-        const colorFound = props.visualTemplate.artefactColorFactors.filter((factor) =>factor.element.elem.id == node.data.definition.id);
+        const colorFound = props.visualTemplate.artefactColorFactors.filter((factor) =>factor.elementDefinition.id == node.data.definition.id);
         colorFound.forEach((factor)=>{
           var elemValue = 'rgb(255, 255, 255)';
           var found = false;
           node.data.attributes.forEach((attribute)=>{
-            if (attribute.definition.name==factor.definition.name){
+            if (attribute.definition.name==factor.attributeDefinition.name){
               switch (attribute.definition.type){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -78,7 +78,7 @@ export default function CJSGraph(props){
                 case 1:
                   factor.values.forEach((value) =>{
                     if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -86,7 +86,7 @@ export default function CJSGraph(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -101,17 +101,17 @@ export default function CJSGraph(props){
         });
 
 
-        const sizeFound = props.visualTemplate.artefactSizeFactors.filter((factor) =>factor.element.elem.id == node.data.definition.id);
+        const sizeFound = props.visualTemplate.artefactSizeFactors.filter((factor) =>factor.elementDefinition.id == node.data.definition.id);
         sizeFound.forEach((factor)=>{
           var elemValue = '1';
           var found = false;
           node.data.attributes.forEach((attribute)=>{
-            if (attribute.definition.name==factor.definition.name){
+            if (attribute.definition.name==factor.attributeDefinition.name){
               switch (attribute.definition.type){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });
@@ -119,7 +119,7 @@ export default function CJSGraph(props){
                 case 1:
                   factor.values.forEach((value) =>{
                     if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });
@@ -127,7 +127,7 @@ export default function CJSGraph(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });
@@ -161,17 +161,17 @@ export default function CJSGraph(props){
       }
       if (props.visualTemplate){
 
-        const colorFound = props.visualTemplate.relationshipColorFactors.filter((factor) =>factor.element.elem.id == relation.data.definition.id);
+        const colorFound = props.visualTemplate.relationshipColorFactors.filter((factor) =>factor.elementDefinition.id == relation.data.definition.id);
         colorFound.forEach((factor)=>{
           var elemValue = 'rgb(255, 255, 255)';
           var found = false;
           relation.data.attributes.forEach((attribute)=>{
-            if (attribute.definition.name==factor.definition.name){
+            if (attribute.definition.name==factor.attributeDefinition.name){
               switch (attribute.definition.type){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -179,7 +179,7 @@ export default function CJSGraph(props){
                 case 1:
                   factor.values.forEach((value) =>{
                     if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -187,7 +187,7 @@ export default function CJSGraph(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.value+')';
+                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -203,17 +203,17 @@ export default function CJSGraph(props){
         });
 
 
-        const sizeFound = props.visualTemplate.relationshipSizeFactors.filter((factor) =>factor.element.elem.id == relation.data.definition.id);
+        const sizeFound = props.visualTemplate.relationshipSizeFactors.filter((factor) =>factor.elementDefinition.id == relation.data.definition.id);
         sizeFound.forEach((factor)=>{
           var elemValue = '1';
           var found = false;
           relation.data.attributes.forEach((attribute)=>{
-            if (attribute.definition.name==factor.definition.name){
+            if (attribute.definition.name==factor.attributeDefinition.name){
               switch (attribute.definition.type){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });
@@ -221,7 +221,7 @@ export default function CJSGraph(props){
                 case 1:
                   factor.values.forEach((value) =>{
                     if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });
@@ -229,7 +229,7 @@ export default function CJSGraph(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = value.value;
+                      elemValue = value.size;
                       found = true;
                     }
                   });

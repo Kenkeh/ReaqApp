@@ -58,16 +58,16 @@ export default function View (props) {
             <div className='visualizationExtraInfo'>
                 <div className='visualizationAttributesInfo'>
                     {props.visualization.artefactColorFactors.map((factor, index)=>{
-                        return  <div key={index} className='visualizationRelateds'>{factor.element.name+' COLOR: '+factor.definition.name}</div>
+                        return  <div key={index} className='visualizationRelateds'>{factor.elementDefinition.name+' COLOR: '+factor.attributeDefinition.name}</div>
                     })}
                     {props.visualization.artefactSizeFactors.map((factor, index)=>{
-                        return  <div key={index} className='visualizationRelateds'>{factor.element.name+' SIZE: '+factor.definition.name}</div>
+                        return  <div key={index} className='visualizationRelateds'>{factor.elementDefinition.name+' SIZE: '+factor.attributeDefinition.name}</div>
                     })}
                     {props.visualization.relationshipColorFactors.map((factor, index)=>{
-                        return  <div key={index} className='visualizationRelateds'>{factor.element.name+' COLOR: '+factor.definition.name}</div>
+                        return  <div key={index} className='visualizationRelateds'>{factor.elementDefinition.name+' COLOR: '+factor.attributeDefinition.name}</div>
                     })}
                     {props.visualization.relationshipSizeFactors.map((factor, index)=>{
-                        return  <div key={index} className='visualizationRelateds'>{factor.element.name+' SIZE: '+factor.definition.name}</div>
+                        return  <div key={index} className='visualizationRelateds'>{factor.elementDefinition.name+' SIZE: '+factor.attributeDefinition.name}</div>
                     })}
                 </div>
                 <div className='visualizationDescInfo'>

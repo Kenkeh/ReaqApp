@@ -103,25 +103,25 @@ export default function ViewEdit (props) {
     }
 
     const addFactor = (factor) =>{
-        if (factor.element.type == 1){
+        if (factor.elementType > 0){
             if (factor.type == 0){
                 setCurrentView({...currentView,
                     relationshipColorFactors: [...currentView.relationshipColorFactors, {
-                        interpolated: false,
-                        element: factor.element,
-                        definition: factor.attribute,
-                        values: factor.values,
-                        weight: 1
+                        elementDefinition: factor.elementDefinition,
+                        attributeDefinition: factor.attributeDefinition,
+                        interpolated: factor.interpolated,
+                        weight: factor.weight,
+                        values: factor.values
                     }]
                 });
             }else{
                 setCurrentView({...currentView,
                     relationshipSizeFactors: [...currentView.relationshipSizeFactors, {
-                        interpolated: false,
-                        element: factor.element,
-                        definition: factor.attribute,
-                        values: factor.values,
-                        weight: 1
+                        elementDefinition: factor.elementDefinition,
+                        attributeDefinition: factor.attributeDefinition,
+                        interpolated: factor.interpolated,
+                        weight: factor.weight,
+                        values: factor.values
                     }]
                 });
 
@@ -130,21 +130,21 @@ export default function ViewEdit (props) {
             if (factor.type == 0){
                 setCurrentView({...currentView,
                     artefactColorFactors: [...currentView.artefactColorFactors, {
-                        interpolated: false,
-                        element: factor.element,
-                        definition: factor.attribute,
-                        values: factor.values,
-                        weight: 1
+                        elementDefinition: factor.elementDefinition,
+                        attributeDefinition: factor.attributeDefinition,
+                        interpolated: factor.interpolated,
+                        weight: factor.weight,
+                        values: factor.values
                     }]
                 });
             }else{
                 setCurrentView({...currentView,
                     artefactSizeFactors: [...currentView.artefactSizeFactors, {
-                        interpolated: false,
-                        element: factor.element,
-                        definition: factor.attribute,
-                        values: factor.values,
-                        weight: 1
+                        elementDefinition: factor.elementDefinition,
+                        attributeDefinition: factor.attributeDefinition,
+                        interpolated: factor.interpolated,
+                        weight: factor.weight,
+                        values: factor.values
                     }]
                 });
 
@@ -253,6 +253,7 @@ export default function ViewEdit (props) {
                                     ind={index} 
                                     factor={factor}
                                     type={0}
+                                    elementType={0}
                                     select={setSelectedFactor}
                                     selected={selectedFactor == index}
                                     />
@@ -262,6 +263,7 @@ export default function ViewEdit (props) {
                                     ind={index + currentView.artefactColorFactors.length} 
                                     factor={factor}
                                     type={1}
+                                    elementType={0}
                                     select={setSelectedFactor}
                                     selected={selectedFactor == index + currentView.artefactColorFactors.length}
                                     />
@@ -271,6 +273,7 @@ export default function ViewEdit (props) {
                                     ind={index + currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length} 
                                     factor={factor}
                                     type={0}
+                                    elementType={1}
                                     select={setSelectedFactor}
                                     selected={selectedFactor == index + currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length}
                                     />
@@ -282,6 +285,7 @@ export default function ViewEdit (props) {
                                         + currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length + currentView.relationshipColorFactors.length} 
                                     factor={factor}
                                     type={1}
+                                    elementType={1}
                                     select={setSelectedFactor}
                                     selected={selectedFactor == index  
                                         + currentView.artefactColorFactors.length + currentView.artefactSizeFactors.length + currentView.relationshipColorFactors.length}

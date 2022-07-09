@@ -11,11 +11,11 @@ export default function FactorEdit (props) {
 
     const [factor, setFactor] = useState({
         type: 0,
-        element: {
-            elem: {},
-            type: 0
-        },
-        attribute: {},
+        elementType: 0,
+        elementDefinition: {},
+        attributeDefinition: {},
+        interpolated: false,
+        weight: 1,
         values: []
     });
 
@@ -32,11 +32,11 @@ export default function FactorEdit (props) {
     const restartInfo = () =>{
         setFactor({
             type: 0,
-            element: {
-                elem: {},
-                type: 0
-            },
-            attribute: {},
+            elementType: 0,
+            elementDefinition: {},
+            attributeDefinition: {},
+            interpolated: false,
+            weight: 1,
             values: []
         });
     }
@@ -51,22 +51,22 @@ export default function FactorEdit (props) {
                 setFactor({...factor, type: value, values: []});
                 break;
             case 'element':
-                setFactor({...factor, element: value, attribute: value.elem.attributeDefinitions[0], values: []});
+                setFactor({...factor, elementDefinition: value.elem, elementType: value.type, attributeDefinition: value.elem.attributeDefinitions[0], values: []});
                 break;
             case 'attribute':
-                setFactor({...factor, attribute: value, values: []});
+                setFactor({...factor, attributeDefinition: value, values: []});
                 break;
         }
         setFactorValuesError(false);
-        if (factor.element.elem.description && factor.attribute.name){
-            if (factor.element.type==1){
+        if (factor.elementDefinition.description && factor.attributeDefinition.name){
+            if (factor.elementType==1){
                 if (props.relationshipFactors.find((fact) => 
-                fact.element.elem.id == factor.element.elem.id && fact.attribute.name == factor.attribute.name)){
+                fact.elementDefinition.id == factor.elementDefinition.id && fact.attribute.name == factor.attributeDefinition.name)){
                     setFactorError(true);
                 }
             }else{
                 if (props.artefactFactors.find((fact) => 
-                fact.element.elem.id == factor.element.elem.id && fact.attribute.name == factor.attribute.name)){
+                fact.elementDefinition.id == factor.elementDefinition.id && fact.attribute.name == factor.attributeDefinition.name)){
                     setFactorError(true);
                 }
             }
@@ -77,7 +77,7 @@ export default function FactorEdit (props) {
         var errorFound = false;
         var valuesToSearch = factor.values;
         if (newValues) valuesToSearch = newValues;
-        switch (factor.attribute.type){
+        switch (factor.attributeDefinition.type){
             case 0:
                 for (var iR=0; iR<valuesToSearch.length; iR++){
                     for (var jR=iR+1; jR<valuesToSearch.length; jR++){
@@ -118,9 +118,9 @@ export default function FactorEdit (props) {
 
     const addNewFactorValue = () =>{
 
-        switch (factor.attribute.type){
+        switch (factor.attributeDefinition.type){
             case 0:
-                const keyValueEnum = JSON.parse(factor.attribute.values)[currentEnumValue];
+                const keyValueEnum = JSON.parse(factor.attributeDefinition.values)[currentEnumValue];
                 if (factor.values.find((value) => value.key == keyValueEnum)){
                     setFactorValuesError(true);
                 }else{
@@ -128,10 +128,10 @@ export default function FactorEdit (props) {
                 }
                 if (factor.type == 0){
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, value: [255, 255, 255]}]});
+                        { key: keyValueEnum, R: 255, G: 255, B: 255, A: 1}]});
                 }else{
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, value: 1}]});
+                        { key: keyValueEnum, size: 1}]});
                 }
                 break;
             case 1:
@@ -139,16 +139,16 @@ export default function FactorEdit (props) {
                 if (factor.values.find((value) => 
                     (value.key[0] <= keyValueRange[0] && value.key[1] >= keyValueRange[0])
                     || (value.key[0] <= keyValueRange[1] && value.key[1] >= keyValueRange[1]))){
-                        setFactorValuesError(true);
-                    }else{
-                        checkFactorValuesError();
-                    }
+                    setFactorValuesError(true);
+                }else{
+                    checkFactorValuesError();
+                }
                 if (factor.type == 0){
                     setFactor({...factor, values: [...factor.values, 
-                        {key: keyValueRange, value: [255, 255, 255]}]});
+                        { key: keyValueEnum, R: 255, G: 255, B: 255, A: 1}]});
                 }else{
                     setFactor({...factor, values: [...factor.values, 
-                        {key: keyValueRange, value: 1}]});
+                        { key: keyValueEnum, size: 1}]});
                 }
                 break;
             case 2:
@@ -159,10 +159,10 @@ export default function FactorEdit (props) {
                 }
                 if (factor.type == 0){
                     setFactor({...factor, values: [...factor.values, 
-                        {key: currentStringValue, value: [255, 255, 255]}]});
+                        { key: keyValueEnum, R: 255, G: 255, B: 255, A: 1}]});
                 }else{
                     setFactor({...factor, values: [...factor.values, 
-                        {key: currentStringValue, value: 1}]});
+                        { key: keyValueEnum, size: 1}]});
                 }
                 break;
 
@@ -174,11 +174,24 @@ export default function FactorEdit (props) {
         if (type==0){
             if (value>255) value = 255;
             else if (value<0) value = 0;
-            newValues[index].value[index2] = value;
+            switch(index2){
+                case 0: 
+                    newValues[index].R = value;
+                    break;
+                case 1: 
+                    newValues[index].G = value;
+                    break;
+                case 2: 
+                    newValues[index].B = value;
+                    break;
+                case 3: 
+                    newValues[index].A = value;
+                    break;
+            }
         }else{
             if (value>100) value = 100;
             else if (value<1) value = 1;
-            newValues[index].value = value;
+            newValues[index].size = value;
         }
         setFactor({...factor, values: newValues});
     }
@@ -215,19 +228,13 @@ export default function FactorEdit (props) {
                         setCurrentElementIndex(ind);
                         setCurrentAttributeIndex(0);
                         if (ind>=props.avaliableArtDefs.filter((artDef) => artDef.attributeDefinitions.length>0).length){
-                            checkFactor('element',{
-                                elem: props.avaliableRelDefs.filter(
-                                    (relDef) => relDef.attributeDefinitions.length>0)[ind-props.avaliableArtDefs.filter(
-                                        (artDef) => artDef.attributeDefinitions.length>0).length],
-                                type: 1
-                                }
+                            checkFactor('element', {elem: props.avaliableRelDefs.filter(
+                                (relDef) => relDef.attributeDefinitions.length>0)[ind-props.avaliableArtDefs.filter(
+                                    (artDef) => artDef.attributeDefinitions.length>0).length], type: 1}
                             );
                         }else{
-                            checkFactor('element',{
-                                elem: props.avaliableArtDefs.filter(
-                                    (artDef) => artDef.attributeDefinitions.length>0)[ind],
-                                type: 0
-                            });
+                            checkFactor('element',{elem: props.avaliableArtDefs.filter(
+                                (artDef) => artDef.attributeDefinitions.length>0)[ind], type:0});
                         }
                     }}
                 >
@@ -266,11 +273,11 @@ export default function FactorEdit (props) {
                     onChange={(event) => {
                         const ind = event.target.value;
                         setCurrentAttributeIndex(ind);
-                        checkFactor('attribute', factor.element.elem.attributeDefinitions[ind]);
+                        checkFactor('attribute', factor.elementDefinition.attributeDefinitions[ind]);
                     }}
                 >
-                    {factor.element.elem.id &&
-                    factor.element.elem.attributeDefinitions.map((attribDef, index) =>{
+                    {factor.elementDefinition.id &&
+                    factor.elementDefinition.attributeDefinitions.map((attribDef, index) =>{
                         return  <MenuItem key={index} value={index}>
                                     <div className='currentArtefactDefinitionItem'>
                                         {attribDef.type == 0 ? 'ENUMERATE' :
@@ -286,15 +293,15 @@ export default function FactorEdit (props) {
                 </Select>
             </div>
             <div className='factorEditValues'>
-                {factor.attribute.name &&
+                {factor.attributeDefinition.name &&
                 <>
                     <div className='factorEditValuesAdder'>
-                        {factor.attribute.type == 0 ?
+                        {factor.attributeDefinition.type == 0 ?
                             <Select
                                 value={currentEnumValue}
                                 onChange={(event) => setCurrentEnumValue(event.target.value)}
                             >
-                                {JSON.parse(factor.attribute.values).map((value, index) =>{
+                                {JSON.parse(factor.attributeDefinition.values).map((value, index) =>{
                                     return  <MenuItem key={index} value={index}>
                                                 <Centerer>
                                                     {value}
@@ -302,7 +309,7 @@ export default function FactorEdit (props) {
                                             </MenuItem>
                                 })}
                             </Select>
-                        : factor.attribute.type == 1 ?
+                        : factor.attributeDefinition.type == 1 ?
                             <div className='factorEditValuesAdderInteger'>
                                 <Centerer>
                                     <TextField
@@ -312,8 +319,8 @@ export default function FactorEdit (props) {
                                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
                                         onChange={(event) => {
                                             const newValue = parseInt(event.target.value);
-                                            if (newValue<parseInt(JSON.parse(factor.attribute.values)[0])){
-                                                setCurrentRangeValue([JSON.parse(factor.attribute.values)[0], currentRangeValue[1]]);
+                                            if (newValue<parseInt(JSON.parse(factor.attributeDefinition.values)[0])){
+                                                setCurrentRangeValue([JSON.parse(factor.attributeDefinition.values)[0], currentRangeValue[1]]);
                                             }else{
                                                 setCurrentRangeValue([newValue, currentRangeValue[1]]);
                                             }
@@ -326,8 +333,8 @@ export default function FactorEdit (props) {
                                     value={currentRangeValue}
                                     valueLabelDisplay="auto"
                                     onChange={(event) => setCurrentRangeValue(event.target.value)}
-                                    min={parseInt(JSON.parse(factor.attribute.values)[0])}
-                                    max={parseInt(JSON.parse(factor.attribute.values)[1])}
+                                    min={parseInt(JSON.parse(factor.attributeDefinition.values)[0])}
+                                    max={parseInt(JSON.parse(factor.attributeDefinition.values)[1])}
                                     />
                                 </Centerer>
                                 <Centerer>
@@ -338,8 +345,8 @@ export default function FactorEdit (props) {
                                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
                                         onChange={(event) => {
                                             const newValue = parseInt(event.target.value);
-                                            if (newValue>parseInt(JSON.parse(factor.attribute.values)[1])){
-                                                setCurrentRangeValue([currentRangeValue[0], JSON.parse(factor.attribute.values)[1]]);
+                                            if (newValue>parseInt(JSON.parse(factor.attributeDefinition.values)[1])){
+                                                setCurrentRangeValue([currentRangeValue[0], JSON.parse(factor.attributeDefinition.values)[1]]);
                                             }else{
                                                 setCurrentRangeValue([currentRangeValue[0], newValue]);
                                             }
@@ -381,7 +388,7 @@ export default function FactorEdit (props) {
                                                     color='secondary'
                                                     type='number'
                                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
-                                                    value={value.value[0]}
+                                                    value={value.R}
                                                     onChange={(event) => editFactorValue(index, parseInt(event.target.value), 0, 0)}
                                                 />
                                             </Centerer>
@@ -394,7 +401,7 @@ export default function FactorEdit (props) {
                                                     type='number'
                                                     color='secondary'
                                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
-                                                    value={value.value[1]}
+                                                    value={value.G}
                                                     onChange={(event) => editFactorValue(index, parseInt(event.target.value), 0, 1)}
                                                 />
                                             </Centerer>
@@ -407,7 +414,7 @@ export default function FactorEdit (props) {
                                                     type='number'
                                                     color='secondary'
                                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
-                                                    value={value.value[2]}
+                                                    value={value.B}
                                                     onChange={(event) => editFactorValue(index, parseInt(event.target.value), 0, 2)}
                                                 />
                                             </Centerer>
@@ -435,7 +442,7 @@ export default function FactorEdit (props) {
                                                     type='number'
                                                     color='secondary'
                                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]+' }}
-                                                    value={value.value}
+                                                    value={value.size}
                                                     onChange={(event) => editFactorValue(index, parseInt(event.target.value), 1)}
                                                 />
                                             </Centerer>
@@ -443,7 +450,7 @@ export default function FactorEdit (props) {
                                     }
                                     <Button
                                     variant='contained' 
-                                    style={value.value.length ? {color: 'black', backgroundColor: 'rgb('+value.value[0]+', '+value.value[1]+', '+value.value[2]+')'}
+                                    style={value.R ? {color: 'black', backgroundColor: 'rgb('+value.R+', '+value.G+', '+value.B+')'}
                                     : {color: 'black', backgroundColor: overTheme.palette.error.main}}
                                     disableElevation={true}
                                     onClick={() => deleteFactorValue(index)}

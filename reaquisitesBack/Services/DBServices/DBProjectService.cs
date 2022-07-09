@@ -408,7 +408,7 @@ namespace reaquisites.Services.DB
             int artAttribID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id FROM reaquisites.\"RelationshipAttributes\" where artefact = "+relID+" AND artefactattributedef = "+relAttribDefID+"";
+                string query = "SELECT id FROM reaquisites.\"RelationshipAttributes\" where relationship = "+relID+" AND relationshipattributedef = "+relAttribDefID+"";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -429,11 +429,11 @@ namespace reaquisites.Services.DB
             return artAttribID;
         }
 
-        static internal int GetVisualizationID(int projectID, string visualizationName){
+        static internal int GetVisualizationID(int projectID, int visualRefID){
             int visualizationID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID+" AND name = '"+visualizationName+"'";
+                string query = "SELECT id FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID+" AND ref = "+visualRefID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -501,6 +501,32 @@ namespace reaquisites.Services.DB
             }
             return artColorFactorID;
         }
+        static internal int GetLastArtefactColorFactorID(int attribDefID, int visualID){
+            int id = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id FROM reaquisites.\"ArtefactColorFactors\" where artefactattributedef = "
+                +attribDefID+" and visualizationtemplate = "+visualID+ " order by ref desc limit 1";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return id;
+                        }
+                        while (reader.Read())
+                        {
+                            id = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return id;
+        }
+
         static internal int GetRelationshipColorFactorID(int visualizationID, int attribDefID){
             int relColorFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
@@ -525,6 +551,32 @@ namespace reaquisites.Services.DB
             }
             return relColorFactorID;
         }
+        static internal int GetLastRelationshipColorFactorID(int attribDefID, int visualID){
+            int id = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id FROM reaquisites.\"RelationshipColorFactors\" where relationshipattributedef = "
+                +attribDefID+" and visualizationtemplate = "+visualID+ " order by ref desc limit 1";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return id;
+                        }
+                        while (reader.Read())
+                        {
+                            id = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return id;
+        }
+
         static internal int GetArtefactSizeFactorID(int visualizationID, int attribDefID){
             int artSizeFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
@@ -549,6 +601,32 @@ namespace reaquisites.Services.DB
             }
             return artSizeFactorID;
         }
+        static internal int GetLastArtefactSizeFactorID(int attribDefID, int visualID){
+            int id = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id FROM reaquisites.\"ArtefactSizeFactors\" where artefactattributedef = "
+                +attribDefID+" and visualizationtemplate = "+visualID+ " order by ref desc limit 1";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return id;
+                        }
+                        while (reader.Read())
+                        {
+                            id = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return id;
+        }
+
         static internal int GetRelationshipSizeFactorID(int visualizationID, int attribDefID){
             int relSizeFactorID = -1;
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
@@ -573,6 +651,32 @@ namespace reaquisites.Services.DB
             }
             return relSizeFactorID;
         }
+        static internal int GetLastRelationshipSizeFactorID(int attribDefID, int visualID){
+            int id = -1;
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "SELECT id FROM reaquisites.\"RelationshipSizeFactors\" where relationshipattributedef = "
+                +attribDefID+" and visualizationtemplate = "+visualID+ " order by ref desc limit 1";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows){
+                            return id;
+                        }
+                        while (reader.Read())
+                        {
+                            id = (int)reader[0];
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return id;
+        }
+
 
         //ADD ELEMENTS
         static internal void AddProject(int userID, string projectName, string projectDescription, bool projectIsPublished, bool projectIsTemplate, string version){
@@ -762,11 +866,11 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddVisualizationTemplate(string visualName, string visualDescription, int projectID, int refID){
+        static internal void AddVisualizationTemplate(string visualName, string visualDescription, int projectID, int refID, int graph){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"VisualizationTemplates\" (name, description, project, ref) "+
-                "VALUES ( "+visualName+", "+visualDescription+", "+projectID+", "+refID+")";
+                string query = "INSERT INTO reaquisites.\"VisualizationTemplates\" (name, description, project, ref, graphTemplate) "+
+                "VALUES ( '"+visualName+"', '"+visualDescription+"', "+projectID+", "+refID+", "+graph+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -776,11 +880,11 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddArtefactColorFactor(int attribDefID, int visualID, float weight){
+        static internal void AddArtefactColorFactor(int attribDefID, int visualID, float weight, bool interpolate){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"ArtefactColorFactors\" (artefactattributedef, visualizationtemplate, weight) "+
-                "VALUES ( "+attribDefID+", "+visualID+", "+weight+")";
+                string query = "INSERT INTO reaquisites.\"ArtefactColorFactors\" (artefactattributedef, visualizationtemplate, weight, interpolate) "+
+                "VALUES ( "+attribDefID+", "+visualID+", "+weight+", "+interpolate+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -793,7 +897,7 @@ namespace reaquisites.Services.DB
         static internal void AddArtefactColorFactorValue(int colorFactorID, string defvalue, byte R, byte G, byte B, byte A){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"ArtefactColorFactorValues\" (colorfactor, defvalue, r, g, b, a) "+
+                string query = "INSERT INTO reaquisites.\"ArtefactColorFactorValues\" (artefactcolorfactor, defvalue, r, g, b, a) "+
                 "VALUES ( "+colorFactorID+", '"+defvalue+"', "+R+", "+G+", "+B+", "+A+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
@@ -804,11 +908,11 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddRelationshipColorFactor(int attribDefID, int visualID, float weight){
+        static internal void AddRelationshipColorFactor(int attribDefID, int visualID, float weight, bool interpolate){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipColorFactors\" (relationshiptattributedef, visualizationtemplate, weight) "+
-                "VALUES ( "+attribDefID+", "+visualID+", "+weight+")";
+                string query = "INSERT INTO reaquisites.\"RelationshipColorFactors\" (relationshiptattributedef, visualizationtemplate, weight, interpolate) "+
+                "VALUES ( "+attribDefID+", "+visualID+", "+weight+", "+interpolate+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -821,7 +925,7 @@ namespace reaquisites.Services.DB
         static internal void AddRelationshipColorFactorValue(int colorFactorID, string defvalue, byte R, byte G, byte B, byte A){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipColorFactorValues\" (colorfactor, defvalue, r, g, b, a) "+
+                string query = "INSERT INTO reaquisites.\"RelationshipColorFactorValues\" (relationshipcolorfactor, defvalue, r, g, b, a) "+
                 "VALUES ( "+colorFactorID+", '"+defvalue+"', "+R+", "+G+", "+B+", "+A+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
@@ -832,11 +936,11 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddArtefactSizeFactor(int attribDefID, int visualID, float weight){
+        static internal void AddArtefactSizeFactor(int attribDefID, int visualID, float weight, bool interpolate){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"ArtefactSizeFactors\" (artefactattributedef, visualizationtemplate, weight) "+
-                "VALUES ( "+attribDefID+", "+visualID+", "+weight+")";
+                string query = "INSERT INTO reaquisites.\"ArtefactSizeFactors\" (artefactattributedef, visualizationtemplate, weight, interpolate) "+
+                "VALUES ( "+attribDefID+", "+visualID+", "+weight+", "+interpolate+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -849,7 +953,7 @@ namespace reaquisites.Services.DB
         static internal void AddArtefactSizeFactorValue(int sizeFactorID, string defvalue, float value){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"ArtefactSizeFactorValues\" (colorfactor, defvalue, value) "+
+                string query = "INSERT INTO reaquisites.\"ArtefactSizeFactorValues\" (artefactcolorfactor, defvalue, value) "+
                 "VALUES ( "+sizeFactorID+", '"+defvalue+"', "+value+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
@@ -860,11 +964,11 @@ namespace reaquisites.Services.DB
                 }
             }
         }
-        static internal void AddRelationshipSizeFactor(int attribDefID, int visualID, float weight){
+        static internal void AddRelationshipSizeFactor(int attribDefID, int visualID, float weight, bool interpolate){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipSizeFactors\" (relationshipattributedef, visualizationtemplate, weight) "+
-                "VALUES ( "+attribDefID+", "+visualID+", "+weight+")";
+                string query = "INSERT INTO reaquisites.\"RelationshipSizeFactors\" (relationshipattributedef, visualizationtemplate, weight, interpolate) "+
+                "VALUES ( "+attribDefID+", "+visualID+", "+weight+", "+interpolate+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -877,7 +981,7 @@ namespace reaquisites.Services.DB
         static internal void AddRelationshipSizeFactorValue(int sizeFactorID, string defvalue, float value){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipSizeFactorValues\" (colorfactor, defvalue, value) "+
+                string query = "INSERT INTO reaquisites.\"RelationshipSizeFactorValues\" (relationshipcolorfactor, defvalue, value) "+
                 "VALUES ( "+sizeFactorID+", '"+defvalue+"', "+value+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
@@ -1203,7 +1307,7 @@ namespace reaquisites.Services.DB
             List<(int, Visualization)> projectVisuals = new List<(int, Visualization)>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, name, description FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID;
+                string query = "SELECT id, name, description, graphtemplate, ref FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -1219,6 +1323,8 @@ namespace reaquisites.Services.DB
                             Visualization visual = new Visualization();
                             visual.Name = reader[1].ToString();
                             visual.Description = reader[2].ToString();
+                            visual.GraphTemplate = (int)reader[3];
+                            visual.ID = (int) reader[4];
                             projectVisuals.Add((id, visual));
                         }
                     }
@@ -1256,8 +1362,8 @@ namespace reaquisites.Services.DB
             }
             return visualColorFactors;
         }
-        static internal List<(string, (int, int, int))> GetArtColorFactorValues(int colorFactorID){
-            List<(string, (int, int, int))> colorFactorValues = new List<(string, (int, int, int))>();
+        static internal List<ColorFactorValue> GetArtColorFactorValues(int colorFactorID){
+            List<ColorFactorValue> colorFactorValues = new List<ColorFactorValue>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "SELECT defvalue, r, g, b, a FROM reaquisites.\"ArtefactColorFactorValues\" where artefactcolorfactor = "+colorFactorID;
@@ -1272,13 +1378,14 @@ namespace reaquisites.Services.DB
                         }
                         while (reader.Read())
                         {
-                            string defvalue = reader[0].ToString();
-                            int r = (int)reader[1];
-                            int g = (int)reader[2];
-                            int b = (int)reader[3];
-                            int a = (int)reader[4];
+                            ColorFactorValue cfv = new ColorFactorValue();
+                            cfv.Key = reader[0].ToString();
+                            cfv.R = (int)reader[1];
+                            cfv.G = (int)reader[2];
+                            cfv.B = (int)reader[3];
+                            cfv.A = (int)reader[4];
 
-                            colorFactorValues.Add((defvalue, (r,g,b)));
+                            colorFactorValues.Add(cfv);
                         }
                     }
                     con.Close();
@@ -1315,8 +1422,8 @@ namespace reaquisites.Services.DB
             }
             return visualSizeFactors;
         }
-        static internal List<(string, int)> GetArtSizeFactorValues(int sizeFactorID){
-            List<(string, int)> sizeFactorValues = new List<(string, int)>();
+        static internal List<SizeFactorValue> GetArtSizeFactorValues(int sizeFactorID){
+            List<SizeFactorValue> sizeFactorValues = new List<SizeFactorValue>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "SELECT defvalue, value FROM reaquisites.\"ArtefactSizeFactorValues\" where artefactsizefactor = "+sizeFactorID;
@@ -1331,10 +1438,11 @@ namespace reaquisites.Services.DB
                         }
                         while (reader.Read())
                         {
-                            string defvalue = reader[0].ToString();
-                            int value = (int)reader[1];
+                            SizeFactorValue sfv = new SizeFactorValue();
+                            sfv.Key = reader[0].ToString();
+                            sfv.size = (int)reader[1];
 
-                            sizeFactorValues.Add((defvalue, value));
+                            sizeFactorValues.Add(sfv);
                         }
                     }
                     con.Close();
@@ -1371,8 +1479,8 @@ namespace reaquisites.Services.DB
             }
             return visualColorFactors;
         }
-        static internal List<(string, (int, int, int))> GetRelColorFactorValues(int colorFactorID){
-            List<(string, (int, int, int))> colorFactorValues = new List<(string, (int, int, int))>();
+        static internal List<ColorFactorValue> GetRelColorFactorValues(int colorFactorID){
+            List<ColorFactorValue> colorFactorValues = new List<ColorFactorValue>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "SELECT defvalue, r, g, b, a FROM reaquisites.\"RelationshipColorFactorValues\" where relationshipcolorfactor = "+colorFactorID;
@@ -1387,13 +1495,14 @@ namespace reaquisites.Services.DB
                         }
                         while (reader.Read())
                         {
-                            string defvalue = reader[0].ToString();
-                            int r = (int)reader[1];
-                            int g = (int)reader[2];
-                            int b = (int)reader[3];
-                            int a = (int)reader[4];
+                            ColorFactorValue cfv = new ColorFactorValue();
+                            cfv.Key = reader[0].ToString();
+                            cfv.R = (int)reader[1];
+                            cfv.G = (int)reader[2];
+                            cfv.B = (int)reader[3];
+                            cfv.A= (int)reader[4];
 
-                            colorFactorValues.Add((defvalue, (r,g,b)));
+                            colorFactorValues.Add(cfv);
                         }
                     }
                     con.Close();
@@ -1405,7 +1514,7 @@ namespace reaquisites.Services.DB
             List<(int, (RelationshipSizeFactor,int))> visualSizeFactors = new List<(int, (RelationshipSizeFactor,int))>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "SELECT id, interpolate, weight, artefactattributedef FROM reaquisites.\"RelationshipSizeFactors\" where visualizationtemplate = "+visualID;
+                string query = "SELECT id, interpolate, weight, relationshipattributedef FROM reaquisites.\"RelationshipSizeFactors\" where visualizationtemplate = "+visualID;
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -1430,8 +1539,8 @@ namespace reaquisites.Services.DB
             }
             return visualSizeFactors;
         }
-        static internal List<(string, int)> GetRelSizeFactorValues(int sizeFactorID){
-            List<(string, int)> sizeFactorValues = new List<(string, int)>();
+        static internal List<SizeFactorValue> GetRelSizeFactorValues(int sizeFactorID){
+            List<SizeFactorValue> sizeFactorValues = new List<SizeFactorValue>();
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
                 string query = "SELECT defvalue, value FROM reaquisites.\"RelationshipSizeFactorValues\" where relationshipsizefactor = "+sizeFactorID;
@@ -1446,10 +1555,11 @@ namespace reaquisites.Services.DB
                         }
                         while (reader.Read())
                         {
-                            string defvalue = reader[0].ToString();
-                            int value = (int)reader[1];
+                            SizeFactorValue sfv = new SizeFactorValue();
+                            sfv.Key = reader[0].ToString();
+                            sfv.size = (int)reader[1];
 
-                            sizeFactorValues.Add((defvalue, value));
+                            sizeFactorValues.Add(sfv);
                         }
                     }
                     con.Close();
@@ -1564,6 +1674,58 @@ namespace reaquisites.Services.DB
             }
         }
 
+        static internal void DeleteVisualization(int projectID, int visualRefID){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "DELETE FROM reaquisites.\"VisualizationTemplates\" where project = "+projectID+" and ref = "+visualRefID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+        static internal void DeleteAllVisualizationFactors(int visualID){
+            
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "DELETE FROM reaquisites.\"ArtefactColorFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                query = "DELETE FROM reaquisites.\"RelationshipColorFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                query = "DELETE FROM reaquisites.\"ArtefactSizeFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                query = "DELETE FROM reaquisites.\"RelationshipSizeFactors\" where visualizationtemplate = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+
         //UPDATE ELEMENTS
         static internal void UpdateArtDefinition(int artDefID, string artDefName, string? artDefDescription, int artDefShape){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
@@ -1654,6 +1816,20 @@ namespace reaquisites.Services.DB
             }
         }
 
-
+        static internal void UpdateVisualization(int visualID, string visualName, string? visualDescription, int graph){
+            using (NpgsqlConnection con = new NpgsqlConnection(connString))
+            {
+                string query = "UPDATE reaquisites.\"VisualizationTemplates\" "+
+                "SET name = '"+visualName+"', description = '"+visualDescription+"'"+", graphTemplate = "+graph+
+                " where id = "+visualID;
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
     }
 }

@@ -8,21 +8,21 @@ import CJSArrowShow from '../../RelDefsEdit/RelDefEdit/CJSArrowShow/CJSArrowShow
 export default function Factor (props) {
     
     const  factorElement = () => {
-        if (props.factor.element.elem.parent){
+        if (props.elementType>0){
             return  <>
                         <div className='relDefShape'>
                             <Centerer>
                                 <CJSArrowShow
                                     selected={true} 
                                     index={'RelDefFactor'+props.ind+cytoscapeArrowHeads.length*2+1} 
-                                    arrowType={cytoscapeArrowHeads[Math.floor(props.factor.element.elem.shape/2)]} 
-                                    fillType={props.factor.element.elem.shape%2 ? 'hollow' : 'filled'}
+                                    arrowType={cytoscapeArrowHeads[Math.floor(props.factor.elementDefinition.shape/2)]} 
+                                    fillType={props.factor.elementDefinition.shape%2 ? 'hollow' : 'filled'}
                                 />
                             </Centerer>
                         </div>
                         <div className='relDefName'>
                             <Centerer>
-                                {props.factor.element.elem.name}
+                                {props.factor.elementDefinition.name}
                             </Centerer>
                         </div>
                     </>
@@ -30,12 +30,12 @@ export default function Factor (props) {
             return  <>
                         <div className='artDefShape'>
                             <Centerer>
-                                {ArtefactIcons[props.factor.element.elem.shape]}
+                                {ArtefactIcons[props.factor.elementDefinition.shape]}
                             </Centerer>
                         </div>
                         <div className='artDefName'>
                             <Centerer>
-                                {props.factor.element.elem.name}
+                                {props.factor.elementDefinition.name}
                             </Centerer>
                         </div>
                     </>
@@ -82,7 +82,7 @@ export default function Factor (props) {
             <div className='factorExtraInfo'>
                 <div className='factorValuesInfo'>
                     <Centerer>
-                        {props.factor.definition.name}
+                        {props.factor.attributeDefinition.name}
                     </Centerer>
                 </div>
                 <div className='factorDescInfo'>
@@ -90,8 +90,8 @@ export default function Factor (props) {
                         {props.factor.values.map((value, index) =>{
                             return  <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
                                         {value.key+': '}
-                                        <div style={props.type==0 ? {backgroundColor: 'rgb('+value.value[0]+', '+value.value[1]+', '+value.value[2]+')'} : {}}>
-                                            {''+value.value}
+                                        <div style={props.type==0 ? {backgroundColor: 'rgb('+value.R+', '+value.G+', '+value.B+')'} : {}}>
+                                            {props.type==0 ? value.R + ' - '+value.G+' - '+value.B : value.size}
                                         </div>
                                     </div>
                         })}

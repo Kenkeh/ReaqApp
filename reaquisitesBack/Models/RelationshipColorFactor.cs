@@ -2,7 +2,7 @@ public class RelationshipColorFactor {
     public bool Interpolated { get; set; }
     public AttributeDefinition AttributeDefinition { get; set; }
     public RelationshipDefinition ElementDefinition { get; set; }
-    public List<(string, (int, int, int))> Values { get; set; }
+    public List<ColorFactorValue> Values { get; set; }
     public float Weight { get; set; }
 
     
@@ -27,8 +27,8 @@ public class RelationshipColorFactor {
     public override int GetHashCode()
     {
         int hash = HashCode.Combine(Interpolated, ElementDefinition.ID, AttributeDefinition.Name, Weight);
-        foreach ((string, (int, int, int)) value in Values)
-            hash = HashCode.Combine(hash,value.Item1, value.Item2.Item1, value.Item2.Item2, value.Item2.Item3);
+        foreach (ColorFactorValue value in Values)
+            hash = HashCode.Combine(hash,value.Key, value.R, value.G, value.B, value.A);
         return hash;
     }
 }

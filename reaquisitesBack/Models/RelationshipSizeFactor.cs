@@ -2,7 +2,7 @@ public class RelationshipSizeFactor {
     public bool Interpolated { get; set; }
     public AttributeDefinition AttributeDefinition { get; set; }
     public RelationshipDefinition ElementDefinition { get; set; }
-    public List<(string, int)> Values { get; set; }
+    public List<SizeFactorValue> Values { get; set; }
     public float Weight { get; set; }
 
     public override bool Equals(Object? obj)
@@ -26,8 +26,8 @@ public class RelationshipSizeFactor {
     public override int GetHashCode()
     {
         int hash = HashCode.Combine(Interpolated, ElementDefinition.ID, AttributeDefinition.Name, Weight);
-        foreach ((string, int) value in Values)
-            hash = HashCode.Combine(hash,value.Item1, value.Item2);
+        foreach (SizeFactorValue value in Values)
+            hash = HashCode.Combine(hash,value.Key, value.size);
         return hash;
     }
 }
