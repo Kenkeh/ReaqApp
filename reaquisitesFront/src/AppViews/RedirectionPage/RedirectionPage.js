@@ -14,7 +14,7 @@ export default function RedirectionPage(props) {
   
   var timeoutIntervalID = 0;
 
-  const [redirectionTimeout,setRedirectionTimeout] = useState(10);
+  const [redirectionTimeout,setRedirectionTimeout] = useState(5);
 
   const redirectIntervalTimer = () => {
     setRedirectionTimeout(redirectionTimeout-1);

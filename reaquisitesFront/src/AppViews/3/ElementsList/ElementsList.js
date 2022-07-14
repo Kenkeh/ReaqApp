@@ -1,6 +1,5 @@
 import ArtefactElement from './ArtefactElement/ArtefactElement';
 import './ElementsList.css';
-import Artefact from '../../2/ProjectEdit/ArtefactsEdit/Artefact/Artefact'
 
 
 
@@ -14,12 +13,12 @@ export default function ElementsList(props) {
       </div>
       <div className='elementList'>
         {props.artefacts && props.artefacts.map((artefact,index) =>{
-          return  <Artefact 
+          return  <ArtefactElement
                     key={index} 
                     artefact={artefact} 
                     selected={ props.selectedArtefact == artefact.id} 
                     ind={index}
-                    select={props.focusOnArtefact}
+                    focusOn={props.focusOnArtefact}
                   />
         })}
       </div>

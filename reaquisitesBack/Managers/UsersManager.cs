@@ -54,7 +54,7 @@ namespace reaquisites.Managers
                     newUser.EMail = registerInfo.UserEmail;
                     
                     //encrypt pass
-                    string saltedPass = saltString(registerInfo.UserPassword, registerInfo.UserName);
+                    string saltedPass = saltString(registerInfo.UserPassword, registerInfo.AccountName);
                     string encodedPass = encodeString(saltedPass);
                     DBUserService.Add(newUser, encodedPass);
                     registerTickets.Remove(registerInfo);
@@ -98,7 +98,7 @@ namespace reaquisites.Managers
                 }
             }
             if (userFound!=null){
-                string saltedPass = saltString(logPass,userFound.Nick);
+                string saltedPass = saltString(logPass,userFound.Account);
                 string encodedPass = encodeString(saltedPass);
                 string userPass = DBUserService.GetUserPass(userID);
                 if (userPass == encodedPass){

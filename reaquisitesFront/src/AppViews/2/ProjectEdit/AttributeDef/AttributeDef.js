@@ -27,7 +27,8 @@ export default function AttributeDef (props) {
                 finalString += values[values.length-1] + ' }';
                 return finalString;
             case 1:
-                return 'Range ['+props.attribDef.values[0]+' - '+props.attribDef.values[1]+']';
+
+                return 'Range '+props.attribDef.values;
             default:
                 return 'Any string';
         }

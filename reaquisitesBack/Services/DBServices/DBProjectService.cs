@@ -911,7 +911,7 @@ namespace reaquisites.Services.DB
         static internal void AddRelationshipColorFactor(int attribDefID, int visualID, float weight, bool interpolate){
             using (NpgsqlConnection con = new NpgsqlConnection(connString))
             {
-                string query = "INSERT INTO reaquisites.\"RelationshipColorFactors\" (relationshiptattributedef, visualizationtemplate, weight, interpolate) "+
+                string query = "INSERT INTO reaquisites.\"RelationshipColorFactors\" (relationshipattributedef, visualizationtemplate, weight, interpolate) "+
                 "VALUES ( "+attribDefID+", "+visualID+", "+weight+", "+interpolate+")";
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query))
                 {

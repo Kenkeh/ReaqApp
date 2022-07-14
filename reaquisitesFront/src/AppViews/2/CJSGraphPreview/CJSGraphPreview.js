@@ -70,7 +70,7 @@ export default function CJSGraphPreview(props){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -78,7 +78,7 @@ export default function CJSGraphPreview(props){
                 case 1:
                   factor.values.forEach((value) =>{
                     if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -86,7 +86,7 @@ export default function CJSGraphPreview(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -118,7 +118,8 @@ export default function CJSGraphPreview(props){
                   break;
                 case 1:
                   factor.values.forEach((value) =>{
-                    if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
+                    const keyNumber = JSON.parse(value.key);
+                    if (keyNumber[0] <= attribute.value && keyNumber[1] >= attribute.value){
                       elemValue = value.size;
                       found = true;
                     }
@@ -171,15 +172,16 @@ export default function CJSGraphPreview(props){
                 case 0:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
                   break;
                 case 1:
                   factor.values.forEach((value) =>{
-                    if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                    const keyNumber = JSON.parse(value.key);
+                    if (keyNumber[0] <= attribute.value && keyNumber[1] >= attribute.value){
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -187,7 +189,7 @@ export default function CJSGraphPreview(props){
                 case 2:
                   factor.values.forEach((value) =>{
                     if (value.key == attribute.value){
-                      elemValue = 'rgb('+value.r+', '+value.g+', '+value.b+')';
+                      elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
                   });
@@ -253,18 +255,18 @@ export default function CJSGraphPreview(props){
     });
 
     var elems = [];
-    if (artefacts){
-      if (artefacts.length){
+    if (artefacts.length>0){
+      if (artefacts.length>1){
         elems = [...elems,...artefacts];
       }else{
-        elems = [...elems, artefacts];
+        elems = [...elems, artefacts[0]];
       }
     }
-    if (relationships){
-      if (relationships.length){
+    if (relationships.length>0){
+      if (relationships.length>1){
         elems = [...elems,...relationships];
       }else{
-        elems = [...elems, relationships];
+        elems = [...elems, relationships[0]];
       }
     }
 

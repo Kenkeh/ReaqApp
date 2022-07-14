@@ -552,8 +552,8 @@ namespace reaquisites.Managers
                                                 value = "0";
                                                 break;
                                         }
-                                        foreach ((int, (int, int, string?, int)) artDefArtID in relDefRelations){
-                                            DBProjectService.AddArtefactAttribute(artDefArtID.Item1, attribDefId,value);
+                                        foreach ((int, (int, int, string?, int)) relDefRelationID in relDefRelations){
+                                            DBProjectService.AddRelationshipAttribute(relDefRelationID.Item1, attribDefId,value);
                                         }
                                     }
                                 }else{
@@ -561,7 +561,7 @@ namespace reaquisites.Managers
                                     DBProjectService.AddRelationshipDefinition(userProject.Item1, relDefToUpdate.Name, relDefToUpdate.Description, relDefToUpdate.Shape, relDefToUpdate.ID);
                                     int newRelDefID = DBProjectService.GetLastRelationshipDefID(userProject.Item1);
                                     foreach (AttributeDefinition attributeDef in relDefToUpdate.AttributeDefinitions){
-                                        DBProjectService.AddArtefactAttributeDefinition(attributeDef.Name, 
+                                        DBProjectService.AddRelationshipAttributeDefinition(attributeDef.Name, 
                                         attributeDef.Type, attributeDef.Description, attributeDef.Values, newRelDefID);
                                     }
                                 }

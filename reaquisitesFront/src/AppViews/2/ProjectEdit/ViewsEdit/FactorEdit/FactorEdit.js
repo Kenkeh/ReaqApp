@@ -145,10 +145,10 @@ export default function FactorEdit (props) {
                 }
                 if (factor.type == 0){
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, R: 255, G: 255, B: 255, A: 1}]});
+                        { key: JSON.stringify(keyValueRange), R: 255, G: 255, B: 255, A: 1}]});
                 }else{
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, size: 1}]});
+                        { key: JSON.stringify(keyValueRange), size: 1}]});
                 }
                 break;
             case 2:
@@ -159,10 +159,10 @@ export default function FactorEdit (props) {
                 }
                 if (factor.type == 0){
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, R: 255, G: 255, B: 255, A: 1}]});
+                        { key: currentStringValue, R: 255, G: 255, B: 255, A: 1}]});
                 }else{
                     setFactor({...factor, values: [...factor.values, 
-                        { key: keyValueEnum, size: 1}]});
+                        { key: currentStringValue, size: 1}]});
                 }
                 break;
 
@@ -450,7 +450,7 @@ export default function FactorEdit (props) {
                                     }
                                     <Button
                                     variant='contained' 
-                                    style={value.R ? {color: 'black', backgroundColor: 'rgb('+value.R+', '+value.G+', '+value.B+')'}
+                                    style={value.R !=undefined ? {color: 'black', backgroundColor: 'rgb('+value.R+', '+value.G+', '+value.B+')'}
                                     : {color: 'black', backgroundColor: overTheme.palette.error.main}}
                                     disableElevation={true}
                                     onClick={() => deleteFactorValue(index)}
