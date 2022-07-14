@@ -77,7 +77,8 @@ export default function CJSGraphPreview(props){
                   break;
                 case 1:
                   factor.values.forEach((value) =>{
-                    if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
+                    const keyNumber = JSON.parse(value.key);
+                    if (keyNumber[0] <= attribute.value && keyNumber[1] >= attribute.value){
                       elemValue = value.R!=undefined ? 'rgb('+value.R+', '+value.G+', '+value.B+')' : 'rgb('+value.r+', '+value.g+', '+value.b+')';
                       found = true;
                     }
@@ -222,7 +223,8 @@ export default function CJSGraphPreview(props){
                   break;
                 case 1:
                   factor.values.forEach((value) =>{
-                    if (value.key[0] <= attribute.value && value.key[1] >= attribute.value){
+                    const keyNumber = JSON.parse(value.key);
+                    if (keyNumber[0] <= attribute.value && keyNumber[1] >= attribute.value){
                       elemValue = value.size;
                       found = true;
                     }
