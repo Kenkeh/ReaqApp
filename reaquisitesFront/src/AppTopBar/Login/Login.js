@@ -70,10 +70,18 @@ export default function Login(props) {
     setLogginPhaseText('Checking credentials...');
 
     userAuth({logName: logginName, logPass: password}).then( res => {
-      if (res.error){
+      if (res.error!=undefined){
         setLogginPhase(0);
-        setPasswordError(true);
-        setLogginNameErrorText(res.message);
+        switch (res.error){
+          case 0:
+            setPasswordError(true);
+            setPasswordErrorText(res.message);
+            break;
+          case 1:
+            setLogginNameError(true);
+            setLogginNameErrorText(res.message);
+            break;
+        }
       }else{
         setLogginPhase(2);
         props.setUser(res);

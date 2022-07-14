@@ -1,0 +1,8 @@
+.artefactElemContainer{
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    width: 100%;
+    height: 100px;
+    min-height: 100px;
+    color: white;
+}

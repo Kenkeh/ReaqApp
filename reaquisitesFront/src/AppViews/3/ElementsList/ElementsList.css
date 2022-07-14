@@ -1,0 +1,15 @@
+.elementListContainer{
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    display: grid;
+    grid-template-rows: 100px calc(100% - 105px);
+    grid-template-columns: 100%;
+    gap: 5px;
+}
+
+.elementList{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+}

@@ -5,7 +5,8 @@ import RejIcon from '../Elements/images/red_cancel.png';
 import RedirectionPage from './RedirectionPage/RedirectionPage';
 import LandingArea from './1/LandingArea/LandingArea';
 import FirstLook from './1/FirstLook/FirstLook';
-import ProjecEdit from './2/ProjectEdit/ProjectEdit';
+import ProjectEdit from './2/ProjectEdit/ProjectEdit';
+import ProjectVisualization from './3/ProjectVisualization';
 
 
 
@@ -24,13 +25,19 @@ export default function MainSwitcher(props) {
                   setProject={props.setProject} 
                   currentProject={props.project}
                   openProjectEdition={() => props.setPageNumber(2)}
+                  openProjectVisualization={() => props.setPageNumber(3)}
                 />
       case 2: 
-        return <ProjecEdit
-                activeProject = {props.project}
-                setActiveProject = {props.setProject}
-                setActiveProjectModified = {props.setProjectEdited}
-              />
+        return  <ProjectEdit
+                  activeProject = {props.project}
+                  setActiveProject = {props.setProject}
+                  setActiveProjectModified = {props.setProjectEdited}
+                />
+      case 3: 
+        return  <ProjectVisualization
+                  project = {props.project}
+                />
+                    
     }
   }
 

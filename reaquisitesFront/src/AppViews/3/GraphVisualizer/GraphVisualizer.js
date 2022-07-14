@@ -1,16 +1,24 @@
-import React, { useEffect } from "react";
+import './GraphVisualizer.css';
+import React, { useEffect, useState } from "react";
 import cytoscape from "cytoscape";
 import dagre from 'cytoscape-dagre';
-import './CJSGraph.css';
-import { ArtefactIconImages, cytoscapeArrowHeads, ArtefactIcons } from '../../AppConsts';
+import { ArtefactIconImages, cytoscapeArrowHeads } from '../../../AppConsts';
 
 
-export default function CJSGraph(props){
-
+export default function GraphVisualizer(props) {
   const cytoscapeLayouts = ['dagre', 'breadthfirst', 'concentric'];
+
+  const [cjsGraph, setCJSGraph] = useState(null); // container to render in
+
+  const [cjsGraphFocus, setCJSGraphFocus] = useState(-1);
+
 
   cytoscape.use(dagre);
   useEffect(()=>{
+    if (!props.project) return;
+    var newCjsGraph;
+    if (cjsGraph == null) newCjsGraph = cytoscape({container: document.getElementById('csjGraphContainerVisualizer')});
+    else newCjsGraph = cjsGraph;
     const artefacts = props.project.artefacts.map((artefact) =>{
       return {
         group: 'nodes',
@@ -270,8 +278,15 @@ export default function CJSGraph(props){
 
     var graph = props.visualTemplate ? props.visualTemplate.graphTemplate : 0;
 
-    var cy = cytoscape({
-      container: document.getElementById('csjGraphContainer'+props.index), // container to render in
+    newCjsGraph.add(elems);
+    newCjsGraph.style([...artefactStyles, ...relationshipStyles]);
+    newCjsGraph.layout({name: cytoscapeLayouts[graph]}).run();
+
+    setCJSGraph(newCjsGraph);
+
+    
+    /*cjsGraph = cytoscape({
+      container: document.getElementById('csjGraphContainerVisualizer'), // container to render in
       elements: elems,
     
       style: [ 
@@ -284,15 +299,94 @@ export default function CJSGraph(props){
         name: cytoscapeLayouts[graph]
       }
     
-    });
+    });*/
 
 
-  },[props.project, props.reset, props.visualTemplate]);
+  },[props.project, props.reset, props.visualTemplate,props.focusedArtefact]);
+
+  useEffect(()=>{
+    if (cjsGraph!=null){
+      const allEles = cjsGraph.elements('node');
+      if (props.focusedArtefact>=0){
+        const newElem = cjsGraph.$id('a'+props.focusedArtefact);
+        const goInNewAnimation = cjsGraph.animation({
+          fit:{
+            eles: newElem
+          },
+          center:{
+            eles: newElem
+          },
+          duration: 1000,
+          easing: 'ease-in',
+          queue: true
+        });
+        if (cjsGraphFocus>=0){
+          const oldElem = cjsGraph.$id('a'+cjsGraphFocus);
+          const goInOldAnimation = cjsGraph.animation({
+            fit:{
+              eles: oldElem
+            },
+            center:{
+              eles: oldElem
+            },
+            duration: 1000,
+            easing: 'ease-out',
+            queue: true
+          });
+          goInOldAnimation.reverse().play().promise('complete').then(()=> goInNewAnimation.play());
+          //const goOutOldAnimation = goInOldAnimation.reverse();
+          //cjsGraph.animate(goOutOldAnimation);
+          //cjsGraph.animate(goInNewAnimation);
+          /*cjsGraph.animate({
+            center:{
+              eles: oldElem
+            },
+            zoom: 10,
+            duration: 1000,
+            queue: true
+          });
+          cjsGraph.animate({
+            fit:{
+              eles: newElem
+            },
+            center:{
+              eles: newElem
+            },
+            duration: 1000,
+            queue: true
+          });
+          */
+        }else{
+          cjsGraph.animate(goInNewAnimation);
+          /*cjsGraph.animate({
+            fit:{
+              eles: newElem
+            },
+            center:{
+              eles: newElem
+            },
+            duration: 1000,
+            queue: true
+          });
+          */
+        }
+      }else{
+        cjsGraph.animate({
+          fit:{
+            eles: allEles
+          },
+          duration: 1000,
+          queue: true
+        });
+      }
+      setCJSGraphFocus(props.focusedArtefact);
+    }
+  }, [props.focusedArtefact]);
 
     
 
   return (
-    <div id={'csjGraphContainer'+props.index} className='csjGraphContainerFull'>
+    <div id='csjGraphContainerVisualizer' className='csjGraphContainerVisualizer'>
     </div>
   );
 }

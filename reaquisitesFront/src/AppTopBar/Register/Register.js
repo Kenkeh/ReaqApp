@@ -299,7 +299,7 @@ export default function Register(props) {
           
           <div className="register_form_field_container">
             <Centerer>
-              <span>Regístrate aquí bajo tu cuenta y riesgo.</span>
+              <span>Use an active e-mail as it will be used for validation</span>
             </Centerer>
           </div>
 

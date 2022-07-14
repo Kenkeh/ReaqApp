@@ -1,0 +1,11 @@
+.projectVisualizationContainer{
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    background-color: black;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: 100%;
+}

@@ -14,7 +14,7 @@ namespace reaquisites.Managers
         {
             smtpClient = new SmtpClient("smtp.gmail.com");
             smtpClient.Port = 587;
-            smtpClient.Credentials = new NetworkCredential("reaquisites@gmail.com", "Alenac77");
+            smtpClient.Credentials = new NetworkCredential("reaquisites@gmail.com", "nqkbbyijmeseeonc");
             smtpClient.EnableSsl = true;
         }
 

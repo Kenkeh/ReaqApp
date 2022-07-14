@@ -73,22 +73,26 @@ export default function View (props) {
                 <div className='visualizationDescInfo'>
                     {props.visualization.artefactColorFactors.map((factor, index)=>{
                         return  <div key={index} className='visualizationRelateds'>{factor.values.map((value, index2)=>{
-                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.value+'}'}</div>
+                                    return <div key={index2} style={{display: 'inline', backgroundColor: 'rgb('+ value.r +', '+value.g+', '+value.b+')'}}>
+                                                {'{point: '+value.key+', value: '+ value.r +' - '+value.g+' - '+value.b+'}'}
+                                            </div>
                                 })}</div>
                     })}
                     {props.visualization.artefactSizeFactors.map((factor, index)=>{
                         return  <div key={index} className='visualizationRelateds'>{factor.values.map((value, index2)=>{
-                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.value+'}'}</div>
+                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.size+'}'}</div>
                                 })}</div>
                     })}
                     {props.visualization.relationshipColorFactors.map((factor, index)=>{
                         return  <div key={index} className='visualizationRelateds'>{factor.values.map((value, index2)=>{
-                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.value+'}'}</div>
+                                    return <div key={index2} style={{display: 'inline', backgroundColor: 'rgb('+ value.r +', '+value.g+', '+value.b+')'}}>
+                                        {'{point: '+value.key+', value: '+ value.r +' - '+value.g+' - '+value.b+'}'}
+                                    </div>
                                 })}</div>
                     })}
                     {props.visualization.relationshipSizeFactors.map((factor, index)=>{
                         return  <div key={index} className='visualizationRelateds'>{factor.values.map((value, index2)=>{
-                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.value+'}'}</div>
+                                    return <div key={index2} style={{display: 'inline'}}>{'{point: '+value.key+', value: '+value.size+'}'}</div>
                                 })}</div>
                     })}
                 </div>

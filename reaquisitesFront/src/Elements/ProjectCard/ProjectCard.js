@@ -32,7 +32,7 @@ export default function ProjectCard(props){
             </div>
             <div className="projectCardVisualizeButton">
                 <Centerer>
-                    <IconButton sx={{color: 'white'}}>
+                    <IconButton sx={{color: 'white'}} onClick={props.viewClick}>
                         <Visibility/>
                     </IconButton>
                 </Centerer>

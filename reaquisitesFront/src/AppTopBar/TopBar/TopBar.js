@@ -112,6 +112,36 @@ export default function TopBar(props){
                     BACK
                   </Button>
                 </>;
+      case 3:
+        return  <>
+                  <Button 
+                    variant='contained' 
+                    style={{position: "absolute", left: 5, top: 5, bottom: 5, width: "140px", fontSize: "8px", fontWeight: "bold",
+                      display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                    color="secondary"
+                    disableElevation
+                  >
+                    {props.project ? props.project.name : 'Loading...'}
+                  </Button>
+                  <Button 
+                    variant='contained' 
+                    style={{position: "absolute", right: 5, top: 5, bottom: 5, width: "70px", fontSize: "10px", fontWeight: "bold"}}
+                    color="secondary"
+                    disableElevation
+                    onClick={props.tooglePanel(3)}
+                  >
+                    USER
+                  </Button>
+                  <Button 
+                    variant='contained' 
+                    style={{position: "absolute", right: 80, top: 5, bottom: 5, width: "70px", fontSize: "10px", fontWeight: "bold"}}
+                    color="secondary"
+                    disableElevation
+                    onClick={() => props.setCurrentView(1)}
+                  >
+                    BACK
+                  </Button>
+                </>;
       default:
         return <></>;
     }

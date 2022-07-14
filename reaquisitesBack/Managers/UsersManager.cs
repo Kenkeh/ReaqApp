@@ -91,7 +91,7 @@ namespace reaquisites.Managers
             User userFound = null;
             int userID = -1;
             foreach (KeyValuePair<User, int> user in allUsers){
-                if (user.Key.Nick == logName || user.Key.EMail == logName){
+                if (user.Key.Account == logName || user.Key.EMail == logName){
                     userFound=user.Key;
                     userID = user.Value;
                     break;

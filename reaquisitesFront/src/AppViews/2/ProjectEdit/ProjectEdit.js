@@ -8,7 +8,7 @@ import RelDefsEdit from './RelDefsEdit/RelDefsEdit';
 import ArtefactsEdit from './ArtefactsEdit/ArtefactsEdit';
 import RelationshipsEdit from './RelationshipsEdit/RelationshipsEdit';
 import ViewsEdit from './ViewsEdit/ViewsEdit'
-import CJSGraph from '../../../Elements/CJSGraph/CJSGraph';
+import CJSGraphPreview from '../CJSGraphPreview/CJSGraphPreview';
 
 
 export default function ProjectEdit (props) {
@@ -128,7 +128,7 @@ export default function ProjectEdit (props) {
                 </div>
             </div>
             {props.activeProject && 
-            <CJSGraph 
+            <CJSGraphPreview 
                 index={'Project'} 
                 project={props.activeProject} 
                 visualTemplate={props.activeProject.visualizations[activeTemplate]}

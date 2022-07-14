@@ -150,6 +150,23 @@ export default function FirstLook (props) {
         });
     }
 
+    const goToViewProject = (projectRef) =>{
+        getUserProject(props.account, projectRef).then((res) =>{
+            if (res.error!==undefined){
+                console.log("Server error: "+res.message);
+            }else{
+                props.setProject(res);
+                props.openProjectVisualization();
+            }
+        }).catch(err=>{
+            console.log("Error treating request: "+err);
+        }).catch(err=>{
+            console.log("Error parsing request: "+err);
+        }).catch(err=>{
+            console.log("Error on request: "+err);
+        });
+    }
+
     return (
         <div className="first_look_grid">
             <Button size="large" color='primary' variant={showNewProject ? 'contained' : 'outlined'} onClick={toogleDropdown(0)} 
@@ -214,7 +231,8 @@ export default function FirstLook (props) {
                 <div className='fl_recent_projects_flex'>
                     {recentProjects.map((project, index)=>{
                         return  <div key={index} className='fl_rp_card_container' style={{gridColumn: index+1}}>
-                                    <ProjectCard textSize={0} project={project} editClick = {() => goToEditProject(project.id)}/>
+                                    <ProjectCard textSize={0} project={project} 
+                                        editClick = {() => goToEditProject(project.id)} viewClick={() => goToViewProject(project.id)}/>
                                 </div>
                     })}
                 </div>
